@@ -10,55 +10,44 @@ namespace MurderousPursuitHack
 {
     class HackSettingsManager : MonoBehaviour
     {
-        //Window
-        public Rect WindowRect = new Rect(10, 10, 200, 30);
-        public bool ShowOptions = false;
-        Text wh;
+        public static bool WallhackEnabled = true;
+        public static bool LocalPlayerInfo = false;
+        public static bool DebugInfo = false;
+
+        Vector2 startingPos = new Vector2(10f, 100f);
+        Vector2 size = new Vector2(300, 150);
+        const float yMargin = 25f;
 
         public void OnGUI()
         {
-            WindowRect = GUILayout.Window(0, WindowRect, DoMyWindow, "Loaded successfully", GUILayout.Width(200), GUILayout.MaxHeight(100));
+            GUI.Window(0, new Rect(startingPos, size), DoMyWindow, "Cheat manager");
+        }
+
+        private void DoMyWindow(int windowID)
+        {
+            //Position related to window
+            WallhackEnabled = GUI.Toggle(new Rect(startingPos.x, yMargin, size.x, yMargin), WallhackEnabled, " Toggle Wallhack [F1]");
+            LocalPlayerInfo = GUI.Toggle(new Rect(startingPos.x, 2 * yMargin, size.x, yMargin), LocalPlayerInfo, " Local player info [F2]");
+            DebugInfo = GUI.Toggle(new Rect(startingPos.x, 3 * yMargin, size.x, yMargin), DebugInfo, " Debug info [F3]");
         }
 
         public void Start()
         {
-            //Application.Quit();
-            //wh = GetComponent<Text>();
-            //wh.text = "TEST";
         }
 
         public void Update()
         {
-
+            if (Input.GetKeyDown(KeyCode.F1))
+                WallhackEnabled = !WallhackEnabled;
+            else if (Input.GetKeyDown(KeyCode.F2))
+                LocalPlayerInfo = !LocalPlayerInfo;
+            else if (Input.GetKeyDown(KeyCode.F3))
+                DebugInfo = !DebugInfo;
         }
 
         public void OnEnable()
         {
 
-        }
-
-        private void DoMyWindow(int windowID)
-        {
-            //GUILayout.BeginVertical();
-            //ShowOptions = GUILayout.Toggle(ShowOptions, "Show options");
-            //GUI.TextArea(new Rect(0, 0, 50, 100), "TEST");
-            //GUILayout.TextArea("SADASD");
-            //GUILayout.Label("Wallhack");
-            //GUILayout.Label("Wallhack");
-            //GUILayout.Label("Wallhack");
-            //GUILayout.Label("Wallhack");
-            //if (ShowOptions)
-            //{
-            //    GUILayout.Label("Wallhack");
-            //    //WallhackManager.Draw();
-            //}
-            //GUILayout.EndVertical();
-
-            // Make a very long rect that is 20 pixels tall.
-            // This will make the window be resizable by the top
-            // title bar - no matter how wide it gets.
-            //GUI.DragWindow(new Rect(0, 0, 10000, 200));
-            //GUI.DragWindow();
         }
     }
 }

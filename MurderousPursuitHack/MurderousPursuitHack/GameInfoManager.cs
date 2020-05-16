@@ -41,7 +41,7 @@ namespace MurderousPursuitHack
         public void Update()
         {
             FindReferences();
-            if(playerManager != null && gameManager != null && quarryManager != null && gameManager.IsGameRunning())
+            if (playerManager != null && gameManager != null && quarryManager != null && gameManager.IsGameRunning())
             {
                 LocalPlayerId = playerManager.GetLocalPlayer().PlayerID;
                 UpdateHunterList();
@@ -70,7 +70,7 @@ namespace MurderousPursuitHack
                 (typeof(XPlayer).GetField("characterMovement", fieldGet).GetValue(p));
             Transform characterTransform = (Transform)(typeof(XCharacterMovement).GetField("characterTransform", fieldGet).GetValue(xCharacterMovement));
             var collider = xCharacterMovement.GetComponent<Collider>();
-            PlayerInfo.Add(new PlayerInfo()
+            var currentPlayer = new PlayerInfo()
             {
                 Name = p.name,
                 IsLocalPlayer = xCharacterMovement.isLocalPlayer,
@@ -82,7 +82,9 @@ namespace MurderousPursuitHack
                 Size = collider.bounds.size,
                 CharacterAbilities = xCharacterMovement.Abilities,
                 Collider = collider,
-            });
+            };
+            currentPlayer.OnScreenPosition = Camera.main.WorldToScreenPoint(currentPlayer.Position);
+            PlayerInfo.Add(currentPlayer);
         }
 
         private void FindReferences()

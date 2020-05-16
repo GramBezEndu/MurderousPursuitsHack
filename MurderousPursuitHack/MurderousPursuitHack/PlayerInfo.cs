@@ -20,6 +20,8 @@ namespace MurderousPursuitHack
         public bool IsHunterForLocal;
         public bool IsQuarryForLocal;
         public Vector3 Position = Vector3.zero;
+        //We need vector3 to check Z (behind camera)
+        public Vector3 OnScreenPosition = Vector3.zero;
         public Vector3 Velocity = Vector3.zero;
         public Vector3 Size = Vector3.zero;
         public CharacterAbilities CharacterAbilities;
@@ -41,9 +43,6 @@ namespace MurderousPursuitHack
             MethodInfo getLoadoutMethod = CharacterAbilities.GetType().GetMethod("GetCurrentLoadout",
                 BindingFlags.NonPublic | BindingFlags.Instance);
             LoadoutAbilityType[] loadoutAbilities = (LoadoutAbilityType[])(getLoadoutMethod.Invoke(CharacterAbilities, null));
-            //(LoadoutAbilityType[])
-            //            (typeof(CharacterAbilities).GetMethod("GetCurrentLoadout");
-            //var loadoutAbilities = CharacterAbilities.GetCurrentLoadout();
             for (int i = 0; i < loadoutAbilities.Length; i++)
             {
                 builder.Append(String.Format("Loadout ability {0}: {1}\n", i, loadoutAbilities[i]));
