@@ -19,7 +19,7 @@ namespace MurderousPursuitHack
         Vector2 size = new Vector2(300, 320);
         const float yMargin = 25f;
         public static float[] SpeedhackMultipliers;
-        public static int CurrentMultiplier = 2; //1f
+        public static int CurrentMultiplier = 3; //1f
 
         public void OnGUI()
         {
@@ -72,11 +72,11 @@ namespace MurderousPursuitHack
 
         private float[] GeneratePossibleMultipliers()
         {
-            float min = 0.5f;
-            float max = 4f;
-            float step = 0.25f;
+            float min = 0.4f;
+            float max = 5f;
+            float step = 0.2f;
             List<float> results = new List<float>();
-            for(int i = 0; i < max; i++)
+            while(min < max)
             {
                 results.Add(min);
                 min += step;
