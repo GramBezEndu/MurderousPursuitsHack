@@ -37,15 +37,15 @@ namespace MurderousPursuitHack
                 if (HackSettingsManager.WallhackEnabled)
                     DrawWallhack();
                 if (HackSettingsManager.LocalPlayerInfo)
-                    DisplayLocalPlayerInfo(gameInfoManager.PlayerInfo.Find(x => x.IsLocalPlayer = true));
+                    DisplayLocalPlayerInfo(gameInfoManager.Players.Find(x => x.IsLocalPlayer = true));
             }
         }
 
         private void DrawWallhack()
         {
-            foreach (var p in gameInfoManager.PlayerInfo)
+            foreach (var p in gameInfoManager.Players)
             {
-                //Unity returns
+                //Unity returns Vector3.zero when out off screen
                 if (p.OnScreenPosition != Vector3.zero && p.OnScreenPosition.z >= 0)
                 {
                     if (p.IsHunterForLocal)
@@ -65,14 +65,14 @@ namespace MurderousPursuitHack
         {
             if (p.IsLocalPlayer)
             {
-                GUI.Label(new Rect(1700, 0, 200, 800), p.ToString());
+                GUI.Label(new Rect(Screen.width - 150, 0, 150, 800), p.ToString());
             }
         }
 
         private void DrawDebugInfo()
         {
             GUI.Label(new Rect(0, 30, 400, 30), "DEBUG - Current scene: " + SceneManager.GetActiveScene().name);
-            GUI.Label(new Rect(0, 60, 400, 30), "DEBUG - Player count: " + gameInfoManager.PlayerInfo.Count);
+            GUI.Label(new Rect(0, 60, 400, 30), "DEBUG - Player count: " + gameInfoManager.Players.Count);
         }
     }
 }

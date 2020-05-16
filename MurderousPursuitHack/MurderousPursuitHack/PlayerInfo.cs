@@ -1,4 +1,5 @@
 ﻿using ProjectX.Abilities;
+using ProjectX.Player;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,15 @@ namespace MurderousPursuitHack
         public static Color Hunter = Color.red;
         public static Color Quarry = Color.blue;
 
+        //Base values
+        public static float defaultRunMoveSpeed = 0f;
+        public static float defaultFastWalkMoveSpeed = 0f;
+        public static float nimbleRunMoveSpeed = 0f;
+        public static float nimbleFastWalkMoveSpeed = 0f;
+        public static float runMoveSpeed = 0f;
+        public static float fastWalkMoveSpeed = 0f;
+        public static float walkMoveSpeed = 0f;
+
         public string Name;
         public bool IsLocalPlayer;
         public bool IsHunterForLocal;
@@ -27,6 +37,7 @@ namespace MurderousPursuitHack
         public CharacterAbilities CharacterAbilities;
         //TODO: Add XPlayerPerk (perk in general, search for it)
         public Collider Collider;
+        public XCharacterMovement CharacterMovement;
 
         public override string ToString()
         {
