@@ -36,6 +36,8 @@ namespace MurderousPursuitHack
         public Vector3 Velocity = Vector3.zero;
         public Vector3 Size = Vector3.zero;
         public CharacterAbilities CharacterAbilities;
+        public XPlacePieBomb PieBombAbility;
+        public XFlash Flash;
         public XPlayerPerk PlayerPerk;
         public Collider Collider;
         public XCharacterMovement CharacterMovement;
@@ -50,15 +52,6 @@ namespace MurderousPursuitHack
             builder.Append("Pos: " + Position + '\n');
             builder.Append("Velocity: " + Velocity + '\n');
             builder.Append("Size: " + Size + '\n');
-            builder.Append("Enabled abilities: " + '\n');
-            //protected - used reflection
-            MethodInfo getLoadoutMethod = CharacterAbilities.GetType().GetMethod("GetCurrentLoadout",
-                BindingFlags.NonPublic | BindingFlags.Instance);
-            LoadoutAbilityType[] loadoutAbilities = (LoadoutAbilityType[])(getLoadoutMethod.Invoke(CharacterAbilities, null));
-            for (int i = 0; i < loadoutAbilities.Length; i++)
-            {
-                builder.Append(String.Format("Loadout ability {0}: {1}\n", i, loadoutAbilities[i]));
-            }
             builder.Append(String.Format("Perk: {0}", PlayerPerk.CurrentPerk));
 
             return builder.ToString();

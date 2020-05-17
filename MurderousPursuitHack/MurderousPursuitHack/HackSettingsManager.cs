@@ -15,11 +15,12 @@ namespace MurderousPursuitHack
         public static bool LocalPlayerInfo = false;
         public static bool DebugInfo = false;
         public static bool Speedhack = false;
+        public static bool ZeroExposure = false;
         public static float[] SpeedhackMultipliers;
         public static int CurrentMultiplier = 3; //1f
 
         Vector2 startingPos = new Vector2(10f, 100f);
-        Vector2 size = new Vector2(300, 320);
+        Vector2 size = new Vector2(300, 450);
         const float yMargin = 25f;
 
         public void OnGUI()
@@ -51,6 +52,13 @@ namespace MurderousPursuitHack
             Speedhack = GUI.Toggle(new Rect(startingPos.x, 11 * yMargin, size.x * 0.4f, yMargin), Speedhack, String.Format("Speedhack: {0}", Math.Round(SpeedhackMultipliers[CurrentMultiplier], 3)));
             CurrentMultiplier = (int)GUI.HorizontalSlider(new Rect(startingPos.x + size.x * 0.45f, 11 * yMargin + 5, size.x * 0.4f, yMargin),
                 CurrentMultiplier, 0, SpeedhackMultipliers.Length - 1);
+
+            GUI.Label(new Rect(startingPos.x, 12 * yMargin, size.x - 2 * startingPos.x, yMargin), "OTHERS");
+            ZeroExposure = GUI.Toggle(new Rect(startingPos.x, 13 * yMargin, size.x - 2 * startingPos.x, yMargin), ZeroExposure, " Zero exposure [F5]");
+
+            GUI.Label(new Rect(startingPos.x, 14 * yMargin, size.x - 2 * startingPos.x, yMargin), "ABILITIES");
+            GUI.Button(new Rect(startingPos.x, 15 * yMargin, size.x - 2 * startingPos.x, yMargin), "Place Pie Bomb [F6]");
+            GUI.Button(new Rect(startingPos.x, 16 * yMargin, size.x - 2 * startingPos.x, yMargin), "Flash [F7]");
         }
 
         public void Start()
@@ -68,6 +76,8 @@ namespace MurderousPursuitHack
                 LocalPlayerInfo = !LocalPlayerInfo;
             else if (Input.GetKeyDown(KeyCode.F4))
                 DebugInfo = !DebugInfo;
+            else if (Input.GetKeyDown(KeyCode.F5))
+                ZeroExposure = !ZeroExposure;
         }
 
         public void OnEnable()

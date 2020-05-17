@@ -1,4 +1,5 @@
-﻿using ProjectX.CoreGameLoop;
+﻿using ProjectX.Abilities;
+using ProjectX.CoreGameLoop;
 using ProjectX.Player;
 using System;
 using System.Collections.Generic;
@@ -32,6 +33,8 @@ namespace MurderousPursuitHack
         private PlayerManager playerManager;
         private QuarryManager quarryManager;
         private GameManager gameManager;
+        private ExposureManager exposureManager;
+        private Dictionary<uint, ExposureManager.PlayerExposure> exposure;
 
         public void Start()
         {
@@ -41,7 +44,7 @@ namespace MurderousPursuitHack
         public void Update()
         {
             FindReferences();
-            if (playerManager != null && gameManager != null && quarryManager != null && gameManager.IsGameRunning())
+            if (playerManager != null && gameManager != null && quarryManager != null && exposureManager != null && gameManager.IsGameRunning())
             {
                 LocalPlayerId = playerManager.GetLocalPlayer().PlayerID;
                 UpdateHunterList();
@@ -66,6 +69,7 @@ namespace MurderousPursuitHack
                     PlayerInfo.walkMoveSpeed = (float)(typeof(XCharacterMovement).GetField("walkMoveSpeed", fieldGet).GetValue(Players[0].CharacterMovement));
                 }
 
+                //TODO: Could be event trigerred (better performance)
                 //Update speedhack value
                 if (HackSettingsManager.Speedhack)
                 {
@@ -87,7 +91,6 @@ namespace MurderousPursuitHack
                     (typeof(XCharacterMovement)).GetField("walkMoveSpeed", fieldGet).SetValue(local.CharacterMovement,
                         HackSettingsManager.SpeedhackMultipliers[HackSettingsManager.CurrentMultiplier] * PlayerInfo.walkMoveSpeed);
                 }
-                //TODO: Could be event trigerred (better performance)
                 //Disable speedhack -> restore values
                 else
                 {
@@ -103,6 +106,9 @@ namespace MurderousPursuitHack
                     (typeof(XCharacterMovement)).GetField("walkMoveSpeed", fieldGet).SetValue(local.CharacterMovement, PlayerInfo.walkMoveSpeed);
                 }
 
+                if (HackSettingsManager.ZeroExposure)
+                    exposure[LocalPlayerId].exposure = 0f;
+
                 //Input
                 if (Input.GetKeyDown(KeyCode.Keypad1))
                 {
@@ -111,6 +117,14 @@ namespace MurderousPursuitHack
                 else if(Input.GetKeyDown(KeyCode.Keypad2))
                 {
                     TeleportLocalPlayerToHunter();
+                }
+                else if (Input.GetKeyDown(KeyCode.F6))
+                {
+                    StartPlacePieBomb();
+                }
+                else if (Input.GetKeyDown(KeyCode.F7))
+                {
+                    Flash();
                 }
             }
         }
@@ -137,12 +151,15 @@ namespace MurderousPursuitHack
                 IsLocalPlayer = xCharacterMovement.isLocalPlayer,
                 IsHunterForLocal = CurrentHunters.Contains(p.PlayerID) ? true : false,
                 IsQuarryForLocal = p.PlayerID == CurrentQuarry ? true : false,
-                //Note: use characterTransform.position (not transform.position [maybe the other one will work too, dunno])
+                //Note: use characterTransform.position (not transform.position)
                 Position = characterTransform.position,
                 Velocity = xCharacterMovement.Velocity,
                 Size = collider.bounds.size,
                 CharacterMovement = xCharacterMovement,
                 CharacterAbilities = xCharacterMovement.Abilities,
+                PieBombAbility = (XPlacePieBomb)Array.Find(xCharacterMovement.Abilities.Abilities, x => x is XPlacePieBomb),
+                Flash = (XFlash)Array.Find(xCharacterMovement.Abilities.Abilities, x => x is XFlash),
+                /*(XPlacePieBomb)xCharacterMovement.Abilities.Abilities.SingleOrDefault(x => x is XPlacePieBomb),*/
                 PlayerPerk = p.PlayerPerk,
                 Collider = collider,
             };
@@ -155,6 +172,8 @@ namespace MurderousPursuitHack
             playerManager = PlayerManager.Instance;
             gameManager = GameManager.Instance;
             quarryManager = gameManager.QuarryManager;
+            exposureManager = ExposureManager.Instance;
+            exposure = (Dictionary<uint, ExposureManager.PlayerExposure>)(typeof(ExposureManager)).GetField("exposure", fieldGet).GetValue(exposureManager);
         }
 
         private void TeleportLocalPlayer(Vector3 pos)
@@ -179,6 +198,29 @@ namespace MurderousPursuitHack
             var target = Players.Find(x => x.IsHunterForLocal);
             if (target != null)
                 TeleportLocalPlayer(target.Position);
+        }
+
+        public void StartPlacePieBomb()
+        {
+            var local = Players.Find(x => x.IsLocalPlayer);
+            if (local != null)
+            {
+                //Enable activity otherwise it won't start if it was not equipped
+                local.PieBombAbility.enabled = true;
+                local.CharacterAbilities.ClientTryStartAbility(local.PieBombAbility, true);
+                local.PieBombAbility.ResetCooldown();
+            }
+        }
+
+        public void Flash()
+        {
+            var local = Players.Find(x => x.IsLocalPlayer);
+            if (local != null)
+            {
+                local.Flash.enabled = true;
+                local.CharacterAbilities.ClientTryStartAbility(local.Flash, true);
+                local.Flash.ResetCooldown();
+            }
         }
     }
 }
