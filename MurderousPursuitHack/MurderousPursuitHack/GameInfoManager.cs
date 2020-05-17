@@ -143,6 +143,7 @@ namespace MurderousPursuitHack
                 Size = collider.bounds.size,
                 CharacterMovement = xCharacterMovement,
                 CharacterAbilities = xCharacterMovement.Abilities,
+                PlayerPerk = p.PlayerPerk,
                 Collider = collider,
             };
             currentPlayer.OnScreenPosition = Camera.main.WorldToScreenPoint(currentPlayer.Position);

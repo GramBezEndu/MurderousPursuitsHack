@@ -1,4 +1,5 @@
 ﻿using ProjectX.Abilities;
+using ProjectX.Perks;
 using ProjectX.Player;
 using System;
 using System.Collections.Generic;
@@ -35,7 +36,7 @@ namespace MurderousPursuitHack
         public Vector3 Velocity = Vector3.zero;
         public Vector3 Size = Vector3.zero;
         public CharacterAbilities CharacterAbilities;
-        //TODO: Add XPlayerPerk (perk in general, search for it)
+        public XPlayerPerk PlayerPerk;
         public Collider Collider;
         public XCharacterMovement CharacterMovement;
 
@@ -49,7 +50,7 @@ namespace MurderousPursuitHack
             builder.Append("Pos: " + Position + '\n');
             builder.Append("Velocity: " + Velocity + '\n');
             builder.Append("Size: " + Size + '\n');
-            builder.Append("Active abilities: " + '\n');
+            builder.Append("Enabled abilities: " + '\n');
             //protected - used reflection
             MethodInfo getLoadoutMethod = CharacterAbilities.GetType().GetMethod("GetCurrentLoadout",
                 BindingFlags.NonPublic | BindingFlags.Instance);
@@ -58,6 +59,7 @@ namespace MurderousPursuitHack
             {
                 builder.Append(String.Format("Loadout ability {0}: {1}\n", i, loadoutAbilities[i]));
             }
+            builder.Append(String.Format("Perk: {0}", PlayerPerk.CurrentPerk));
 
             return builder.ToString();
         }

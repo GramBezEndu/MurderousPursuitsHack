@@ -65,7 +65,7 @@ namespace MurderousPursuitHack
         {
             if (p.IsLocalPlayer)
             {
-                GUI.Label(new Rect(Screen.width - 150, 0, 150, 800), p.ToString());
+                GUI.Label(new Rect(Screen.width - 180, 0, 180, 800), p.ToString());
             }
         }
 
