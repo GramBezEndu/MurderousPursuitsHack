@@ -59,6 +59,7 @@ namespace MurderousPursuitHack
             GUI.Label(new Rect(startingPos.x, 14 * yMargin, size.x - 2 * startingPos.x, yMargin), "ABILITIES");
             GUI.Button(new Rect(startingPos.x, 15 * yMargin, size.x - 2 * startingPos.x, yMargin), "Place Pie Bomb [F6]");
             GUI.Button(new Rect(startingPos.x, 16 * yMargin, size.x - 2 * startingPos.x, yMargin), "Flash [F7]");
+            GUI.Button(new Rect(startingPos.x, 17 * yMargin, size.x - 2 * startingPos.x, yMargin), "Disrupt [F8]");
         }
 
         public void Start()

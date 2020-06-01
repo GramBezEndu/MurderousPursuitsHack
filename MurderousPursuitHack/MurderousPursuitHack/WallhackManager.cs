@@ -1,5 +1,6 @@
 ﻿using ProjectX.Camera;
 using ProjectX.Characters;
+using ProjectX.CoreGameLoop;
 using ProjectX.Levels;
 using ProjectX.Player;
 using System;
@@ -32,12 +33,15 @@ namespace MurderousPursuitHack
             GUI.color = Color.yellow;
             if (HackSettingsManager.DebugInfo)
                 DrawDebugInfo();
-            if (gameInfoManager.IsGameInProgress)
+            if (GameManager.Instance != null)
             {
-                if (HackSettingsManager.WallhackEnabled)
-                    DrawWallhack();
-                if (HackSettingsManager.LocalPlayerInfo)
-                    DisplayLocalPlayerInfo(gameInfoManager.Players.Find(x => x.IsLocalPlayer = true));
+                if (GameManager.Instance.IsGameRunning())
+                {
+                    if (HackSettingsManager.WallhackEnabled)
+                        DrawWallhack();
+                    if (HackSettingsManager.LocalPlayerInfo)
+                        DisplayLocalPlayerInfo(gameInfoManager.Players.Find(x => x.IsLocalPlayer = true));
+                }
             }
         }
 
