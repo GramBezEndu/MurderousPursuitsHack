@@ -11,6 +11,7 @@ namespace MurderousPursuitHack
             Loader.Load.AddComponent<HackSettingsManager>();
             Loader.Load.AddComponent<GameInfoManager>();
             Loader.Load.AddComponent<WallhackManager>();
+            Loader.Load.AddComponent<SpeedhackManager>();
             UnityEngine.Object.DontDestroyOnLoad(Loader.Load);
         }
 

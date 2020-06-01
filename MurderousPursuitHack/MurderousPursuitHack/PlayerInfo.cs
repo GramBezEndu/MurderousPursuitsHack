@@ -18,13 +18,13 @@ namespace MurderousPursuitHack
         public static Color Quarry = Color.blue;
 
         //Base values
-        public static float defaultRunMoveSpeed = 0f;
-        public static float defaultFastWalkMoveSpeed = 0f;
-        public static float nimbleRunMoveSpeed = 0f;
-        public static float nimbleFastWalkMoveSpeed = 0f;
-        public static float runMoveSpeed = 0f;
-        public static float fastWalkMoveSpeed = 0f;
-        public static float walkMoveSpeed = 0f;
+        public static float defaultRunMoveSpeed;
+        public static float defaultFastWalkMoveSpeed;
+        public static float nimbleRunMoveSpeed;
+        public static float nimbleFastWalkMoveSpeed;
+        public static float runMoveSpeed;
+        public static float fastWalkMoveSpeed;
+        public static float walkMoveSpeed;
 
         public string Name;
         public bool IsLocalPlayer;
@@ -36,8 +36,6 @@ namespace MurderousPursuitHack
         public Vector3 Velocity = Vector3.zero;
         public Vector3 Size = Vector3.zero;
         public CharacterAbilities CharacterAbilities;
-        public XPlacePieBomb PieBombAbility;
-        public XFlash Flash;
         public XPlayerPerk PlayerPerk;
         public Collider Collider;
         public XCharacterMovement CharacterMovement;

@@ -15,21 +15,12 @@ namespace MurderousPursuitHack
 {
     class WallhackManager : MonoBehaviour
     {
-        GameInfoManager gameInfoManager;
-
-        public void Start()
-        {
-            gameInfoManager = FindObjectOfType<GameInfoManager>();
-        }
-
         public void Update()
         {
         }
 
         public void OnGUI()
         {
-            if (gameInfoManager == null)
-                throw new Exception("GameInfoManager not present");
             GUI.color = Color.yellow;
             if (HackSettingsManager.DebugInfo)
                 DrawDebugInfo();
@@ -40,14 +31,14 @@ namespace MurderousPursuitHack
                     if (HackSettingsManager.WallhackEnabled)
                         DrawWallhack();
                     if (HackSettingsManager.LocalPlayerInfo)
-                        DisplayLocalPlayerInfo(gameInfoManager.Players.Find(x => x.IsLocalPlayer = true));
+                        DisplayLocalPlayerInfo(GameInfoManager.Instance.Players.Find(x => x.IsLocalPlayer = true));
                 }
             }
         }
 
         private void DrawWallhack()
         {
-            foreach (var p in gameInfoManager.Players)
+            foreach (var p in GameInfoManager.Instance.Players)
             {
                 //Unity returns Vector3.zero when out off screen
                 if (p.OnScreenPosition != Vector3.zero && p.OnScreenPosition.z >= 0)
@@ -76,7 +67,7 @@ namespace MurderousPursuitHack
         private void DrawDebugInfo()
         {
             GUI.Label(new Rect(0, 30, 400, 30), "DEBUG - Current scene: " + SceneManager.GetActiveScene().name);
-            GUI.Label(new Rect(0, 60, 400, 30), "DEBUG - Player count: " + gameInfoManager.Players.Count);
+            GUI.Label(new Rect(0, 60, 400, 30), "DEBUG - Player count: " + GameInfoManager.Instance.Players.Count);
         }
     }
 }

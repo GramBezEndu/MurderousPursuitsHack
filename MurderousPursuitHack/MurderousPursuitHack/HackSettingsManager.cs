@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProjectX.Abilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,7 +21,7 @@ namespace MurderousPursuitHack
         public static int CurrentMultiplier = 3; //1f
 
         Vector2 startingPos = new Vector2(10f, 100f);
-        Vector2 size = new Vector2(300, 450);
+        Vector2 size = new Vector2(300, 480);
         const float yMargin = 25f;
 
         public void OnGUI()
@@ -71,14 +72,38 @@ namespace MurderousPursuitHack
         {
             if (Input.GetKeyDown(KeyCode.F1))
                 WindowHidden = !WindowHidden;
-            else if (Input.GetKeyDown(KeyCode.F2))
+            if (Input.GetKeyDown(KeyCode.F2))
                 WallhackEnabled = !WallhackEnabled;
-            else if (Input.GetKeyDown(KeyCode.F3))
+            if (Input.GetKeyDown(KeyCode.F3))
                 LocalPlayerInfo = !LocalPlayerInfo;
-            else if (Input.GetKeyDown(KeyCode.F4))
+            if (Input.GetKeyDown(KeyCode.F4))
                 DebugInfo = !DebugInfo;
-            else if (Input.GetKeyDown(KeyCode.F5))
+            if (Input.GetKeyDown(KeyCode.F5))
                 ZeroExposure = !ZeroExposure;
+            ManageTeleports();
+            ManageAbilities();
+        }
+
+        private static void ManageTeleports()
+        {
+            if (Input.GetKeyDown(KeyCode.Keypad1))
+            {
+                Teleports.TeleportLocalPlayerToQuarry();
+            }
+            if (Input.GetKeyDown(KeyCode.Keypad2))
+            {
+                Teleports.TeleportLocalPlayerToHunter();
+            }
+        }
+
+        private static void ManageAbilities()
+        {
+            if (Input.GetKeyDown(KeyCode.F6))
+                AbilityManager.StartAbility<XPlacePieBomb>();
+            if (Input.GetKeyDown(KeyCode.F7))
+                AbilityManager.StartAbility<XFlash>();
+            if (Input.GetKeyDown(KeyCode.F8))
+                AbilityManager.StartAbility<XDisrupt>();
         }
 
         public void OnEnable()
