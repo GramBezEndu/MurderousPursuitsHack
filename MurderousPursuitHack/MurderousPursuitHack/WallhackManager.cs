@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using UnityEngine;
+using UnityEngine.Profiling;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -15,6 +16,22 @@ namespace MurderousPursuitHack
 {
     class WallhackManager : MonoBehaviour
     {
+        private static WallhackManager instance;
+        public static WallhackManager Instance { get { return instance; } }
+
+        public void Awake()
+        {
+            if (instance != null && instance != this)
+            {
+                Destroy(this.gameObject);
+            }
+            else
+            {
+                instance = this;
+                DontDestroyOnLoad(gameObject);
+            }
+        }
+
         public void Update()
         {
         }
@@ -66,8 +83,12 @@ namespace MurderousPursuitHack
 
         private void DrawDebugInfo()
         {
+            GUI.color = Color.red;
             GUI.Label(new Rect(0, 30, 400, 30), "DEBUG - Current scene: " + SceneManager.GetActiveScene().name);
             GUI.Label(new Rect(0, 60, 400, 30), "DEBUG - Player count: " + GameInfoManager.Instance.Players.Count);
+            GUI.Label(new Rect(0, 90, 400, 30), "DEBUG - Mono memory: " + Math.Round(System.GC.GetTotalMemory(false) / Math.Pow(10, 6), 1) + " MB");
+            GUI.Label(new Rect(0, 120, 400, 30), "DEBUG - Unity memory: " + Math.Round(Profiler.usedHeapSizeLong / Math.Pow(10, 6), 1) + " MB");
+            GUI.color = Color.yellow;
         }
     }
 }

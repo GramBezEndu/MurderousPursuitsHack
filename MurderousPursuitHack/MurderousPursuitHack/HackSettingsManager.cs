@@ -20,6 +20,23 @@ namespace MurderousPursuitHack
         public static float[] SpeedhackMultipliers;
         public static int CurrentMultiplier = 3; //1f
 
+        private static HackSettingsManager instance;
+        public static HackSettingsManager Instance { get { return instance; } }
+
+        public void Awake()
+        {
+            if (instance != null && instance != this)
+            {
+                Destroy(this.gameObject);
+            }
+            else
+            {
+                instance = this;
+                DontDestroyOnLoad(gameObject);
+            }
+        }
+
+
         Vector2 startingPos = new Vector2(10f, 100f);
         Vector2 size = new Vector2(300, 480);
         const float yMargin = 25f;
@@ -36,18 +53,20 @@ namespace MurderousPursuitHack
         /// <param name="windowID"></param>
         private void DoMyWindow(int windowID)
         {
-            GUI.Label(new Rect(startingPos.x, yMargin, size.x - 2 * startingPos.x, yMargin), "Hide/Show window [F1]");
+            GUI.Label(new Rect(startingPos.x, yMargin, size.x - 2 * startingPos.x, yMargin), String.Format("Hide/Show window {0}", Keybindings.CheatWindow));
 
             GUI.Label(new Rect(startingPos.x, 2 * yMargin, size.x - 2 * startingPos.x, yMargin), "VISUALS");
-            WallhackEnabled = GUI.Toggle(new Rect(startingPos.x, 3 * yMargin, size.x - 2 * startingPos.x, yMargin), WallhackEnabled, " Wallhack [F2]");
+            WallhackEnabled = GUI.Toggle(new Rect(startingPos.x, 3 * yMargin, size.x - 2 * startingPos.x, yMargin), WallhackEnabled, String.Format(" Wallhack {0}", Keybindings.Wallhack));
 
             GUI.Label(new Rect(startingPos.x, 4 * yMargin, size.x - 2 * startingPos.x, yMargin), "DEBUG");
-            LocalPlayerInfo = GUI.Toggle(new Rect(startingPos.x, 5 * yMargin, size.x - 2 * startingPos.x, yMargin), LocalPlayerInfo, " Local player info [F3]");
-            DebugInfo = GUI.Toggle(new Rect(startingPos.x, 6 * yMargin, size.x - 2 * startingPos.x, yMargin), DebugInfo, " Debug info [F4]");
+            LocalPlayerInfo = GUI.Toggle(new Rect(startingPos.x, 5 * yMargin, size.x - 2 * startingPos.x, yMargin), LocalPlayerInfo, String.Format(" Local player info {0}", Keybindings.LocalPlayerInfo));
+            DebugInfo = GUI.Toggle(new Rect(startingPos.x, 6 * yMargin, size.x - 2 * startingPos.x, yMargin), DebugInfo, String.Format(" Debug info {0}", Keybindings.DebugInfo));
 
             GUI.Label(new Rect(startingPos.x, 7 * yMargin, size.x - 2 * startingPos.x, yMargin), "TELEPORTS");
-            GUI.Button(new Rect(startingPos.x, 8 * yMargin, size.x - 2 * startingPos.x, yMargin), "Teleport to quarry [Num1]");
-            GUI.Button(new Rect(startingPos.x, 9 * yMargin, size.x - 2 * startingPos.x, yMargin), "Teleport to any hunter [Num2]");
+            if (GUI.Button(new Rect(startingPos.x, 8 * yMargin, size.x - 2 * startingPos.x, yMargin), "Teleport to quarry [Num1]"))
+                Teleports.TeleportLocalPlayerToQuarry();
+            if (GUI.Button(new Rect(startingPos.x, 9 * yMargin, size.x - 2 * startingPos.x, yMargin), "Teleport to any hunter [Num2]"))
+                Teleports.TeleportLocalPlayerToHunter();
 
             GUI.Label(new Rect(startingPos.x, 10 * yMargin, size.x - 2 * startingPos.x, yMargin), "SPEED HACK");
             Speedhack = GUI.Toggle(new Rect(startingPos.x, 11 * yMargin, size.x * 0.4f, yMargin), Speedhack, String.Format("Speedhack: {0}", Math.Round(SpeedhackMultipliers[CurrentMultiplier], 3)));
@@ -58,9 +77,12 @@ namespace MurderousPursuitHack
             ZeroExposure = GUI.Toggle(new Rect(startingPos.x, 13 * yMargin, size.x - 2 * startingPos.x, yMargin), ZeroExposure, " Zero exposure [F5]");
 
             GUI.Label(new Rect(startingPos.x, 14 * yMargin, size.x - 2 * startingPos.x, yMargin), "ABILITIES");
-            GUI.Button(new Rect(startingPos.x, 15 * yMargin, size.x - 2 * startingPos.x, yMargin), "Place Pie Bomb [F6]");
-            GUI.Button(new Rect(startingPos.x, 16 * yMargin, size.x - 2 * startingPos.x, yMargin), "Flash [F7]");
-            GUI.Button(new Rect(startingPos.x, 17 * yMargin, size.x - 2 * startingPos.x, yMargin), "Disrupt [F8]");
+            if (GUI.Button(new Rect(startingPos.x, 15 * yMargin, size.x - 2 * startingPos.x, yMargin), "Place Pie Bomb [F6]"))
+                AbilityManager.StartAbility<XPlacePieBomb>();
+            if (GUI.Button(new Rect(startingPos.x, 16 * yMargin, size.x - 2 * startingPos.x, yMargin), "Flash [F7]"))
+                AbilityManager.StartAbility<XFlash>();
+            if (GUI.Button(new Rect(startingPos.x, 17 * yMargin, size.x - 2 * startingPos.x, yMargin), "Disrupt [F8]"))
+                AbilityManager.StartAbility<XDisrupt>();
         }
 
         public void Start()
@@ -70,13 +92,13 @@ namespace MurderousPursuitHack
 
         public void Update()
         {
-            if (Input.GetKeyDown(KeyCode.F1))
+            if (Input.GetKeyDown(Keybindings.CheatWindow))
                 WindowHidden = !WindowHidden;
-            if (Input.GetKeyDown(KeyCode.F2))
+            if (Input.GetKeyDown(Keybindings.Wallhack))
                 WallhackEnabled = !WallhackEnabled;
-            if (Input.GetKeyDown(KeyCode.F3))
+            if (Input.GetKeyDown(Keybindings.LocalPlayerInfo))
                 LocalPlayerInfo = !LocalPlayerInfo;
-            if (Input.GetKeyDown(KeyCode.F4))
+            if (Input.GetKeyDown(Keybindings.DebugInfo))
                 DebugInfo = !DebugInfo;
             if (Input.GetKeyDown(KeyCode.F5))
                 ZeroExposure = !ZeroExposure;

@@ -23,6 +23,7 @@ namespace MurderousPursuitHack
             else
             {
                 instance = this;
+                DontDestroyOnLoad(gameObject);
             }
         }
 

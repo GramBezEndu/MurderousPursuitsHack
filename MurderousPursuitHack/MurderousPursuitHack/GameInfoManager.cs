@@ -26,6 +26,7 @@ namespace MurderousPursuitHack
             else
             {
                 instance = this;
+                DontDestroyOnLoad(gameObject);
             }
         }
 
@@ -37,24 +38,38 @@ namespace MurderousPursuitHack
 
         public void Update()
         {
-            LocalPlayerId = PlayerManager.Instance.GetLocalPlayer().PlayerID;
+            if (PlayerManager.Instance != null)
+                LocalPlayerId = PlayerManager.Instance.GetLocalPlayer().PlayerID;
             UpdateHunterList();
             UpdateQuarryList();
             Players.Clear();
-            foreach (var p in PlayerManager.Instance.thePlayers.Values)
+            if (PlayerManager.Instance != null)
             {
-                UpdatePlayerInfo(p);
+                foreach (var p in PlayerManager.Instance.thePlayers.Values)
+                {
+                    UpdatePlayerInfo(p);
+                }
             }
         }
 
         private void UpdateQuarryList()
         {
-            CurrentQuarry = GameManager.Instance.QuarryManager.GetQuarryForPlayer(LocalPlayerId);
+            if (GameManager.Instance != null)
+            {
+                if (GameManager.Instance.QuarryManager != null)
+                {
+                    CurrentQuarry = GameManager.Instance.QuarryManager.GetQuarryForPlayer(LocalPlayerId);
+                }
+            }
         }
 
         private void UpdateHunterList()
         {
-            CurrentHunters = GameManager.Instance.QuarryManager.GetHuntersForPlayer(LocalPlayerId);
+            if (GameManager.Instance != null)
+            {
+                if (GameManager.Instance.QuarryManager != null)
+                    CurrentHunters = GameManager.Instance.QuarryManager.GetHuntersForPlayer(LocalPlayerId);
+            }
         }
 
         private void UpdatePlayerInfo(XPlayer p)
