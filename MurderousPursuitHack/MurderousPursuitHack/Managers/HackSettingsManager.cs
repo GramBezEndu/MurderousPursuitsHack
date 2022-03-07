@@ -1,4 +1,5 @@
-﻿using MurderousPursuitHack.Input;
+﻿using MurderousPursuitHack.Drawing;
+using MurderousPursuitHack.Input;
 using MurderousPursuitHack.Skins;
 using ProjectX.Abilities;
 using System;
@@ -27,7 +28,7 @@ namespace MurderousPursuitHack
 
         private Vector2 windowSize = new Vector2(300, 480);
 
-        private readonly float yMargin = 25f;
+        private readonly float elementHeight = 25f;
 
         public void OnGUI()
         {
@@ -39,69 +40,71 @@ namespace MurderousPursuitHack
 
         private void CreateCheatManagerWindow(int windowID)
         {
-            GUI.Label(
-                new Rect(windowPosition.x, yMargin, windowSize.x - 2 * windowPosition.x, yMargin),
-                String.Format(" [F1] Toggle window", InputManager.Instance.Keybindings.CheatWindow));
+            WindowBuilder builder = new WindowBuilder(windowPosition, windowSize, elementHeight);
+            builder.StartWindow();
 
-            GUI.Label(new Rect(windowPosition.x, 2 * yMargin, windowSize.x - 2 * windowPosition.x, yMargin), "VISUALS");
+            builder.Label(String.Format(" [F1] Toggle window", InputManager.Instance.Keybindings.CheatWindow));
+
+            builder.Label("VISUALS");
+
             WallhackEnabled = GUI.Toggle(
-                new Rect(windowPosition.x, 3 * yMargin, windowSize.x - 2 * windowPosition.x, yMargin),
+                builder.NextRect(),
                 WallhackEnabled,
                 String.Format(" [{0}] Wallhack", InputManager.Instance.Keybindings.Wallhack));
 
-            GUI.Label(new Rect(windowPosition.x, 4 * yMargin, windowSize.x - 2 * windowPosition.x, yMargin), "DEBUG");
+            builder.Label("DEBUG");
             DebugInfo = GUI.Toggle(
-                new Rect(windowPosition.x, 6 * yMargin, windowSize.x - 2 * windowPosition.x, yMargin),
+                builder.NextRect(),
                 DebugInfo,
                 String.Format(" {0} Debug window", InputManager.Instance.Keybindings.DebugInfo));
 
-            GUI.Label(new Rect(windowPosition.x, 7 * yMargin, windowSize.x - 2 * windowPosition.x, yMargin), "TELEPORTS");
+            builder.Label("TELEPORTS");
             if (GUI.Button(
-                new Rect(windowPosition.x, 8 * yMargin, windowSize.x - 2 * windowPosition.x, yMargin),
+                builder.NextRect(),
                 String.Format(" [{0}] Teleport To Quarry", InputManager.Instance.Keybindings.TeleportToQuarry)))
             {
                 TeleportManager.TeleportToQuarry();
             }
 
             if (GUI.Button(
-                new Rect(windowPosition.x, 9 * yMargin, windowSize.x - 2 * windowPosition.x, yMargin),
+                builder.NextRect(),
                 String.Format(" [{0}] Teleport To Any Hunter", InputManager.Instance.Keybindings.TeleportToAnyHunter)))
             {
                 TeleportManager.TeleportToAnyHunter();
             }
 
-            GUI.Label(new Rect(windowPosition.x, 10 * yMargin, windowSize.x - 2 * windowPosition.x, yMargin), "SPEED HACK");
-            Speedhack = GUI.Toggle(new Rect(windowPosition.x, 11 * yMargin, windowSize.x * 0.4f, yMargin), Speedhack, String.Format("Speedhack: {0}", Math.Round(SpeedhackMultipliers[CurrentSpeedMultiplierIndex], 3)));
-            CurrentSpeedMultiplierIndex = (int)GUI.HorizontalSlider(new Rect(windowPosition.x + windowSize.x * 0.45f, 11 * yMargin + 5, windowSize.x * 0.4f, yMargin),
+            builder.Label("SPEED HACK");
+            Speedhack = GUI.Toggle(builder.NextRect(), Speedhack, String.Format("Speedhack: {0}", Math.Round(SpeedhackMultipliers[CurrentSpeedMultiplierIndex], 3)));
+            CurrentSpeedMultiplierIndex = (int)GUI.HorizontalSlider(builder.NextRect(),
                 CurrentSpeedMultiplierIndex, 0, SpeedhackMultipliers.Length - 1);
 
-            GUI.Label(new Rect(windowPosition.x, 12 * yMargin, windowSize.x - 2 * windowPosition.x, yMargin), "OTHERS");
+            builder.Label("OTHERS");
             GUI.enabled = false;
-            ZeroExposure = GUI.Toggle(new Rect(windowPosition.x, 13 * yMargin, windowSize.x - 2 * windowPosition.x, yMargin), ZeroExposure, " [F5] Zero exposure");
+            ZeroExposure = GUI.Toggle(builder.NextRect(), ZeroExposure, " [F5] Zero exposure");
 
             GUI.enabled = true;
-            GUI.Label(new Rect(windowPosition.x, 14 * yMargin, windowSize.x - 2 * windowPosition.x, yMargin), "ABILITIES");
+            builder.Label("ABILITIES");
             GUI.enabled = false;
 
-            if (GUI.Button(new Rect(windowPosition.x, 15 * yMargin, windowSize.x - 2 * windowPosition.x, yMargin), " [F6] Place Pie Bomb"))
+            if (GUI.Button(builder.NextRect(), " [F6] Place Pie Bomb"))
             {
                 AbilityManager.StartAbility<XPlacePieBomb>();
             }
-            if (GUI.Button(new Rect(windowPosition.x, 16 * yMargin, windowSize.x - 2 * windowPosition.x, yMargin), " [F7] Flash"))
+            if (GUI.Button(builder.NextRect(), " [F7] Flash"))
             {
                 AbilityManager.StartAbility<XFlash>();
             }
 
-            if (GUI.Button(new Rect(windowPosition.x, 17 * yMargin, windowSize.x - 2 * windowPosition.x, yMargin), " [F8] Disrupt"))
+            if (GUI.Button(builder.NextRect(), " [F8] Disrupt"))
             {
                 AbilityManager.StartAbility<XDisrupt>();
             }
 
             GUI.enabled = true;
-            if (GUI.Button(new Rect(
-                windowPosition.x, 17 * yMargin, windowSize.x - 2 * windowPosition.x, yMargin),
-                String.Format(" [{0}] Change skin", InputManager.Instance.Keybindings.ChangeSkin)))
+            if (GUI.Button(builder.NextRect(), String.Format(" [{0}] Change skin", InputManager.Instance.Keybindings.ChangeSkin)))
                 SkinsHelper.ChangeSkin();
+
+            builder.EndWindow();
         }
 
         public void Start()
