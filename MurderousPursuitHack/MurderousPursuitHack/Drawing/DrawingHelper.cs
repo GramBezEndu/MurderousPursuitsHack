@@ -1,7 +1,6 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class Drawing
+public class DrawingHelper
 {
     //****************************************************************************************************
     //  static function DrawLine(rect : Rect) : void
