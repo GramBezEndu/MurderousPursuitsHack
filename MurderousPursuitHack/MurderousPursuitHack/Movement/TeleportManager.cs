@@ -1,11 +1,12 @@
 ﻿namespace MurderousPursuitHack
 {
     using ProjectX.Player;
+    using System.Collections.Generic;
     using UnityEngine;
 
     public static class TeleportManager
     {
-        public static void TeleportLocalPlayerToQuarry()
+        public static void TeleportToQuarry()
         {
             if (GameInfoManager.Instance != null)
             {
@@ -15,13 +16,22 @@
             }
         }
 
-        public static void TeleportLocalPlayerToHunter()
+        public static void TeleportToAnyHunter()
         {
             if (GameInfoManager.Instance != null)
             {
-                var target = GameInfoManager.Instance.Players.Find(x => x.IsHunterForLocal);
-                if (target != null)
-                    TeleportLocalPlayer(target.Position);
+                List<PlayerInfo> hunters = GameInfoManager.Instance.Players.FindAll(x => x.IsHunterForLocal);
+                if (hunters != null)
+                {
+                    foreach (var hunter in hunters)
+                    {
+                        if (hunter.IsAlive)
+                        {
+                            TeleportLocalPlayer(hunter.Position);
+                            return;
+                        }
+                    }
+                }
             }
         }
 
@@ -29,7 +39,7 @@
         {
             if (GameInfoManager.Instance != null)
             {
-                var local = GameInfoManager.Instance.Players.Find(x => x.IsLocalPlayer);
+                PlayerInfo local = GameInfoManager.Instance.Players.Find(x => x.IsLocalPlayer);
                 if (local != null)
                 {
                     Transform characterTransform = (Transform)(typeof(XCharacterMovement).GetField("characterTransform", Utils.FieldGetFlags).GetValue(local.CharacterMovement));

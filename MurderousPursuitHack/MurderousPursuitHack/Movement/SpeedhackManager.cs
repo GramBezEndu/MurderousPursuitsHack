@@ -28,21 +28,21 @@ namespace MurderousPursuitHack
         {
             var local = GameInfoManager.Instance.Players.Find(x => x.IsLocalPlayer);
             (typeof(XCharacterMovement)).GetField("defaultRunMoveSpeed", Utils.FieldGetFlags).SetValue(local.CharacterMovement,
-                HackSettingsManager.SpeedhackMultipliers[HackSettingsManager.CurrentMultiplier] * PlayerInfo.defaultRunMoveSpeed);
+                HackSettingsManager.SpeedhackMultipliers[HackSettingsManager.CurrentSpeedMultiplierIndex] * PlayerInfo.defaultRunMoveSpeed);
             (typeof(XCharacterMovement)).GetField("defaultFastWalkMoveSpeed", Utils.FieldGetFlags).SetValue(local.CharacterMovement,
-                HackSettingsManager.SpeedhackMultipliers[HackSettingsManager.CurrentMultiplier] * PlayerInfo.defaultFastWalkMoveSpeed);
+                HackSettingsManager.SpeedhackMultipliers[HackSettingsManager.CurrentSpeedMultiplierIndex] * PlayerInfo.defaultFastWalkMoveSpeed);
 
             (typeof(XCharacterMovement)).GetField("nimbleRunMoveSpeed", Utils.FieldGetFlags).SetValue(local.CharacterMovement,
-                HackSettingsManager.SpeedhackMultipliers[HackSettingsManager.CurrentMultiplier] * PlayerInfo.nimbleRunMoveSpeed);
+                HackSettingsManager.SpeedhackMultipliers[HackSettingsManager.CurrentSpeedMultiplierIndex] * PlayerInfo.nimbleRunMoveSpeed);
             (typeof(XCharacterMovement)).GetField("nimbleFastWalkMoveSpeed", Utils.FieldGetFlags).SetValue(local.CharacterMovement,
-                HackSettingsManager.SpeedhackMultipliers[HackSettingsManager.CurrentMultiplier] * PlayerInfo.nimbleFastWalkMoveSpeed);
+                HackSettingsManager.SpeedhackMultipliers[HackSettingsManager.CurrentSpeedMultiplierIndex] * PlayerInfo.nimbleFastWalkMoveSpeed);
 
             (typeof(XCharacterMovement)).GetField("runMoveSpeed", Utils.FieldGetFlags).SetValue(local.CharacterMovement,
-                HackSettingsManager.SpeedhackMultipliers[HackSettingsManager.CurrentMultiplier] * PlayerInfo.runMoveSpeed);
+                HackSettingsManager.SpeedhackMultipliers[HackSettingsManager.CurrentSpeedMultiplierIndex] * PlayerInfo.runMoveSpeed);
             (typeof(XCharacterMovement)).GetField("fastWalkMoveSpeed", Utils.FieldGetFlags).SetValue(local.CharacterMovement,
-                HackSettingsManager.SpeedhackMultipliers[HackSettingsManager.CurrentMultiplier] * PlayerInfo.fastWalkMoveSpeed);
+                HackSettingsManager.SpeedhackMultipliers[HackSettingsManager.CurrentSpeedMultiplierIndex] * PlayerInfo.fastWalkMoveSpeed);
             (typeof(XCharacterMovement)).GetField("walkMoveSpeed", Utils.FieldGetFlags).SetValue(local.CharacterMovement,
-                HackSettingsManager.SpeedhackMultipliers[HackSettingsManager.CurrentMultiplier] * PlayerInfo.walkMoveSpeed);
+                HackSettingsManager.SpeedhackMultipliers[HackSettingsManager.CurrentSpeedMultiplierIndex] * PlayerInfo.walkMoveSpeed);
         }
 
         private static void SetBaseValues()

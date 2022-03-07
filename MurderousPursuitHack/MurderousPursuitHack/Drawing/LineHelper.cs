@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class DrawingHelper
+public class LineHelper
 {
     //****************************************************************************************************
     //  static function DrawLine(rect : Rect) : void

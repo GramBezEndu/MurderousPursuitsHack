@@ -1,15 +1,9 @@
-﻿using BG.Utils;
-using MurderousPursuitHack.Input;
+﻿using MurderousPursuitHack.Input;
 using MurderousPursuitHack.Skins;
 using ProjectX.Abilities;
-using ProjectX.Characters;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace MurderousPursuitHack
 {
@@ -27,7 +21,7 @@ namespace MurderousPursuitHack
 
         public static float[] SpeedhackMultipliers;
 
-        public static int CurrentMultiplier = 3; //1f
+        public static int CurrentSpeedMultiplierIndex = 3; // Equals to 1f speed
 
         private Vector2 windowPosition = new Vector2(10f, 230f);
 
@@ -62,31 +56,47 @@ namespace MurderousPursuitHack
                 String.Format(" {0} Debug window", InputManager.Instance.Keybindings.DebugInfo));
 
             GUI.Label(new Rect(windowPosition.x, 7 * yMargin, windowSize.x - 2 * windowPosition.x, yMargin), "TELEPORTS");
-            GUI.enabled = false;
-            if (GUI.Button(new Rect(windowPosition.x, 8 * yMargin, windowSize.x - 2 * windowPosition.x, yMargin), " [Num1] Teleport to quarry"))
-                TeleportManager.TeleportLocalPlayerToQuarry();
-            if (GUI.Button(new Rect(windowPosition.x, 9 * yMargin, windowSize.x - 2 * windowPosition.x, yMargin), " [Num2] Teleport to any hunter"))
-                TeleportManager.TeleportLocalPlayerToHunter();
-            GUI.enabled = true;
+            if (GUI.Button(
+                new Rect(windowPosition.x, 8 * yMargin, windowSize.x - 2 * windowPosition.x, yMargin),
+                String.Format(" [{0}] Teleport To Quarry", InputManager.Instance.Keybindings.TeleportToQuarry)))
+            {
+                TeleportManager.TeleportToQuarry();
+            }
+
+            if (GUI.Button(
+                new Rect(windowPosition.x, 9 * yMargin, windowSize.x - 2 * windowPosition.x, yMargin),
+                String.Format(" [{0}] Teleport To Any Hunter", InputManager.Instance.Keybindings.TeleportToAnyHunter)))
+            {
+                TeleportManager.TeleportToAnyHunter();
+            }
 
             GUI.Label(new Rect(windowPosition.x, 10 * yMargin, windowSize.x - 2 * windowPosition.x, yMargin), "SPEED HACK");
-            Speedhack = GUI.Toggle(new Rect(windowPosition.x, 11 * yMargin, windowSize.x * 0.4f, yMargin), Speedhack, String.Format("Speedhack: {0}", Math.Round(SpeedhackMultipliers[CurrentMultiplier], 3)));
-            CurrentMultiplier = (int)GUI.HorizontalSlider(new Rect(windowPosition.x + windowSize.x * 0.45f, 11 * yMargin + 5, windowSize.x * 0.4f, yMargin),
-                CurrentMultiplier, 0, SpeedhackMultipliers.Length - 1);
+            Speedhack = GUI.Toggle(new Rect(windowPosition.x, 11 * yMargin, windowSize.x * 0.4f, yMargin), Speedhack, String.Format("Speedhack: {0}", Math.Round(SpeedhackMultipliers[CurrentSpeedMultiplierIndex], 3)));
+            CurrentSpeedMultiplierIndex = (int)GUI.HorizontalSlider(new Rect(windowPosition.x + windowSize.x * 0.45f, 11 * yMargin + 5, windowSize.x * 0.4f, yMargin),
+                CurrentSpeedMultiplierIndex, 0, SpeedhackMultipliers.Length - 1);
 
             GUI.Label(new Rect(windowPosition.x, 12 * yMargin, windowSize.x - 2 * windowPosition.x, yMargin), "OTHERS");
             GUI.enabled = false;
             ZeroExposure = GUI.Toggle(new Rect(windowPosition.x, 13 * yMargin, windowSize.x - 2 * windowPosition.x, yMargin), ZeroExposure, " [F5] Zero exposure");
-            GUI.enabled = true;
 
+            GUI.enabled = true;
             GUI.Label(new Rect(windowPosition.x, 14 * yMargin, windowSize.x - 2 * windowPosition.x, yMargin), "ABILITIES");
             GUI.enabled = false;
+
             if (GUI.Button(new Rect(windowPosition.x, 15 * yMargin, windowSize.x - 2 * windowPosition.x, yMargin), " [F6] Place Pie Bomb"))
+            {
                 AbilityManager.StartAbility<XPlacePieBomb>();
+            }
             if (GUI.Button(new Rect(windowPosition.x, 16 * yMargin, windowSize.x - 2 * windowPosition.x, yMargin), " [F7] Flash"))
+            {
                 AbilityManager.StartAbility<XFlash>();
+            }
+
             if (GUI.Button(new Rect(windowPosition.x, 17 * yMargin, windowSize.x - 2 * windowPosition.x, yMargin), " [F8] Disrupt"))
+            {
                 AbilityManager.StartAbility<XDisrupt>();
+            }
+
             GUI.enabled = true;
             if (GUI.Button(new Rect(
                 windowPosition.x, 17 * yMargin, windowSize.x - 2 * windowPosition.x, yMargin),

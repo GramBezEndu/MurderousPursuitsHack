@@ -35,6 +35,16 @@
             {
                 SkinsHelper.ChangeSkin();
             }
+
+            if (Input.GetKeyDown(Keybindings.TeleportToQuarry))
+            {
+                TeleportManager.TeleportToQuarry();
+            }
+
+            if (Input.GetKeyDown(Keybindings.TeleportToAnyHunter))
+            {
+                TeleportManager.TeleportToAnyHunter();
+            }
         }
     }
 }

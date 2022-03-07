@@ -1,9 +1,6 @@
 ﻿namespace MurderousPursuitHack.WH
 {
-    using BG.Utils;
-    using ProjectX.Characters;
     using ProjectX.Player;
-    using System;
     using UnityEngine;
 
     public class Glow : MonoBehaviour
