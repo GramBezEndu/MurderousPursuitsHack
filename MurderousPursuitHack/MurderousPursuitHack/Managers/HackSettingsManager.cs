@@ -26,7 +26,7 @@ namespace MurderousPursuitHack
 
         private Vector2 windowPosition = new Vector2(10f, 230f);
 
-        private Vector2 windowSize = new Vector2(300, 480);
+        private Vector2 windowSize = new Vector2(300, 520);
 
         private readonly float elementHeight = 25f;
 
@@ -45,66 +45,86 @@ namespace MurderousPursuitHack
 
             builder.Label(String.Format(" [F1] Toggle window", InputManager.Instance.Keybindings.CheatWindow));
 
+            VisualsSection(builder);
+            DebugSection(builder);
+            TeleportsSection(builder);
+            SpeedhackSection(builder);
+            OthersSection(builder);
+            AbilitiesSection(builder);
+            SkinsSection(builder);
+
+            builder.EndWindow();
+        }
+
+        private static void VisualsSection(WindowBuilder builder)
+        {
             builder.Label("VISUALS");
 
-            WallhackEnabled = GUI.Toggle(
-                builder.NextRect(),
-                WallhackEnabled,
-                String.Format(" [{0}] Wallhack", InputManager.Instance.Keybindings.Wallhack));
+            WallhackEnabled = builder.Toggle(WallhackEnabled, String.Format(" [{0}] Wallhack", InputManager.Instance.Keybindings.Wallhack));
+        }
 
+        private static void DebugSection(WindowBuilder builder)
+        {
             builder.Label("DEBUG");
-            DebugInfo = GUI.Toggle(
-                builder.NextRect(),
-                DebugInfo,
-                String.Format(" {0} Debug window", InputManager.Instance.Keybindings.DebugInfo));
+            DebugInfo = builder.Toggle(DebugInfo, String.Format(" {0} Debug window", InputManager.Instance.Keybindings.DebugInfo));
+        }
 
+        private static void TeleportsSection(WindowBuilder builder)
+        {
             builder.Label("TELEPORTS");
-            if (GUI.Button(
-                builder.NextRect(),
-                String.Format(" [{0}] Teleport To Quarry", InputManager.Instance.Keybindings.TeleportToQuarry)))
+            if (builder.Button(String.Format(" [{0}] Teleport To Quarry", InputManager.Instance.Keybindings.TeleportToQuarry)))
             {
                 TeleportManager.TeleportToQuarry();
             }
 
-            if (GUI.Button(
-                builder.NextRect(),
-                String.Format(" [{0}] Teleport To Any Hunter", InputManager.Instance.Keybindings.TeleportToAnyHunter)))
+            if (builder.Button(String.Format(" [{0}] Teleport To Any Hunter", InputManager.Instance.Keybindings.TeleportToAnyHunter)))
             {
                 TeleportManager.TeleportToAnyHunter();
             }
+        }
 
+        private static void SkinsSection(WindowBuilder builder)
+        {
+            if (builder.Button(String.Format(" [{0}] Change skin", InputManager.Instance.Keybindings.ChangeSkin)))
+                SkinsHelper.ChangeSkin();
+        }
+
+        private static void SpeedhackSection(WindowBuilder builder)
+        {
             builder.Label("SPEED HACK");
-            Speedhack = GUI.Toggle(builder.NextRect(), Speedhack, String.Format("Speedhack: {0}", Math.Round(SpeedhackMultipliers[CurrentSpeedMultiplierIndex], 3)));
+            Speedhack = builder.Toggle(Speedhack, String.Format("Speedhack: {0}", Math.Round(SpeedhackMultipliers[CurrentSpeedMultiplierIndex], 3)));
             CurrentSpeedMultiplierIndex = (int)GUI.HorizontalSlider(builder.NextRect(),
                 CurrentSpeedMultiplierIndex, 0, SpeedhackMultipliers.Length - 1);
+        }
 
+        private static void OthersSection(WindowBuilder builder)
+        {
             builder.Label("OTHERS");
-            GUI.enabled = false;
-            ZeroExposure = GUI.Toggle(builder.NextRect(), ZeroExposure, " [F5] Zero exposure");
+            builder.StartDisabledSection();
+            ZeroExposure = builder.Toggle(ZeroExposure, " [F5] Zero exposure");
+            builder.EndDisabledSection();
+        }
 
-            GUI.enabled = true;
+        private static void AbilitiesSection(WindowBuilder builder)
+        {
+            builder.StartDisabledSection();
             builder.Label("ABILITIES");
-            GUI.enabled = false;
-
-            if (GUI.Button(builder.NextRect(), " [F6] Place Pie Bomb"))
+            if (builder.Button(" [F6] Place Pie Bomb"))
             {
                 AbilityManager.StartAbility<XPlacePieBomb>();
             }
-            if (GUI.Button(builder.NextRect(), " [F7] Flash"))
+
+            if (builder.Button(" [F7] Flash"))
             {
                 AbilityManager.StartAbility<XFlash>();
             }
 
-            if (GUI.Button(builder.NextRect(), " [F8] Disrupt"))
+            if (builder.Button(" [F8] Disrupt"))
             {
                 AbilityManager.StartAbility<XDisrupt>();
             }
 
-            GUI.enabled = true;
-            if (GUI.Button(builder.NextRect(), String.Format(" [{0}] Change skin", InputManager.Instance.Keybindings.ChangeSkin)))
-                SkinsHelper.ChangeSkin();
-
-            builder.EndWindow();
+            builder.EndDisabledSection();
         }
 
         public void Start()

@@ -31,6 +31,16 @@
             ResetPosition();
         }
 
+        public bool Button(string message)
+        {
+            return GUI.Button(NextRect(), message);
+        }
+
+        public bool Toggle(bool value, string message)
+        {
+            return GUI.Toggle(NextRect(), value, message);
+        }
+
         public void Label(string message)
         {
             GUI.Label(NextRect(), message);
@@ -45,6 +55,16 @@
         public void EndWindow()
         {
             ResetPosition();
+        }
+
+        public void StartDisabledSection()
+        {
+            GUI.enabled = false;
+        }
+
+        public void EndDisabledSection()
+        {
+            GUI.enabled = true;
         }
 
         private void ResetPosition()
