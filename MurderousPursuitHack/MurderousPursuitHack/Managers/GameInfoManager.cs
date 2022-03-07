@@ -97,29 +97,29 @@
             }
         }
 
-        private void UpdatePlayerInfo(XPlayer p)
+        private void UpdatePlayerInfo(XPlayer player)
         {
             XCharacterMovement xCharacterMovement = (XCharacterMovement)
-                (typeof(XPlayer).GetField("characterMovement", Utils.FieldGetFlags).GetValue(p));
+                (typeof(XPlayer).GetField("characterMovement", Utils.FieldGetFlags).GetValue(player));
             Transform characterTransform = (Transform)(typeof(XCharacterMovement).GetField("characterTransform", Utils.FieldGetFlags).GetValue(xCharacterMovement));
             var collider = xCharacterMovement.GetComponent<Collider>();
             var playerInfo = new PlayerInfo()
             {
-                PlayerId = p.PlayerID,
-                Player = p,
-                DisplayName = p.name,
+                PlayerId = player.PlayerID,
+                Player = player,
+                DisplayName = player.name,
                 IsLocalPlayer = xCharacterMovement.isLocalPlayer,
-                IsAlive = p.IsAlive,
-                IsBot = Singleton<PlayerManager>.Instance.BotIDs.Contains(p.PlayerID) ? true : false,
-                IsHunterForLocal = HunterIDs.Contains(p.PlayerID) ? true : false,
-                IsQuarryForLocal = p.PlayerID == CurrentQuarry ? true : false,
+                IsAlive = player.IsAlive,
+                IsBot = Singleton<PlayerManager>.Instance.BotIDs.Contains(player.PlayerID) ? true : false,
+                IsHunterForLocal = HunterIDs.Contains(player.PlayerID) ? true : false,
+                IsQuarryForLocal = player.PlayerID == CurrentQuarry ? true : false,
                 //Note: use characterTransform.position (not transform.position)
                 Position = characterTransform.position,
                 Velocity = xCharacterMovement.Velocity,
                 Size = collider.bounds.size,
                 CharacterMovement = xCharacterMovement,
                 CharacterAbilities = xCharacterMovement.Abilities,
-                PlayerPerk = p.PlayerPerk,
+                PlayerPerk = player.PlayerPerk,
                 Collider = collider,
             };
             playerInfo.OnScreenPosition = Camera.main.WorldToScreenPoint(playerInfo.Position);

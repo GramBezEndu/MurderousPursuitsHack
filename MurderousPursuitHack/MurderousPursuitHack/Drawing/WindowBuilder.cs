@@ -41,9 +41,17 @@
             return GUI.Toggle(NextRect(), value, message);
         }
 
-        public void Label(string message)
+        public void Label(string message, bool applySpacing = false)
         {
-            GUI.Label(NextRect(), message);
+            Rect rect = NextRect();
+            if (applySpacing)
+            {
+                GUI.Label(new Rect(rect.x + 10f, rect.y, rect.width, rect.height), message);
+            }
+            else
+            {
+                GUI.Label(rect, message);
+            }
         }
 
         public Rect NextRect()

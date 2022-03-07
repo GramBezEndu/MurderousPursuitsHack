@@ -3,7 +3,7 @@
     using ProjectX.Player;
     using UnityEngine;
 
-    public class Glow : MonoBehaviour
+    public class Chams : MonoBehaviour
     {
         Material neutralGlow;
 
@@ -22,7 +22,7 @@
         {
             foreach (PlayerInfo playerInfo in GameInfoManager.Instance.Players)
             {
-                ApplyGlow(playerInfo);
+                UpdateGlow(playerInfo);
             }
         }
 
@@ -65,7 +65,7 @@
             return newMaterial;
         }
 
-        private void ApplyGlow(PlayerInfo playerInfo)
+        private void UpdateGlow(PlayerInfo playerInfo)
         {
             XPlayer player = playerInfo.Player;
             if (player.isLocalPlayer)
@@ -77,41 +77,62 @@
 
             for (int i = 0; i < allRenderers.Length; i++)
             {
-                Renderer renderer = allRenderers[i];
-                if (playerInfo.IsHunterForLocal)
+                if (HackSettingsManager.ChamsEnabled)
                 {
-                    renderer.material = hunterGlow;
-
-                    var shared = renderer.sharedMaterials;
-                    for (int j = 0; j < shared.Length; j++)
-                    {
-                        shared[j] = hunterGlow;
-                    }
-                    renderer.sharedMaterials = shared;
-                }
-                else if (playerInfo.IsQuarryForLocal)
-                {
-                    renderer.material = quarryGlow;
-
-                    var shared = renderer.sharedMaterials;
-                    for (int j = 0; j < shared.Length; j++)
-                    {
-                        shared[j] = quarryGlow;
-                    }
-                    renderer.sharedMaterials = shared;
+                    ApplyChams(playerInfo, allRenderers, i);
                 }
                 else
                 {
-                    renderer.material = neutralGlow;
-
-                    var shared = renderer.sharedMaterials;
-                    for (int j = 0; j < shared.Length; j++)
-                    {
-                        shared[j] = neutralGlow;
-                    }
-                    renderer.sharedMaterials = shared;
+                    ClearChams(allRenderers, i);
                 }
             }
+        }
+
+        private void ApplyChams(PlayerInfo playerInfo, Renderer[] allRenderers, int i)
+        {
+            Renderer renderer = allRenderers[i];
+            if (playerInfo.IsHunterForLocal)
+            {
+                ApplyMaterial(renderer, hunterGlow);
+            }
+            else if (playerInfo.IsQuarryForLocal)
+            {
+                ApplyMaterial(renderer, quarryGlow);
+            }
+            else
+            {
+                ApplyMaterial(renderer, neutralGlow);
+            }
+        }
+
+        private void ClearChams(Renderer[] allRenderers, int i)
+        {
+            // TODO: Finish
+            return;
+
+            Renderer renderer = allRenderers[i];
+
+            renderer.material = neutralGlow;
+
+            var shared = renderer.sharedMaterials;
+            for (int j = 0; j < shared.Length; j++)
+            {
+                shared[j] = neutralGlow;
+            }
+            renderer.sharedMaterials = shared;
+        }
+
+        // TODO: Refactor, maybe extension method
+        private void ApplyMaterial(Renderer renderer, Material material)
+        {
+            renderer.material = material;
+
+            Material[] shared = renderer.sharedMaterials;
+            for (int j = 0; j < shared.Length; j++)
+            {
+                shared[j] = material;
+            }
+            renderer.sharedMaterials = shared;
         }
     }
 }

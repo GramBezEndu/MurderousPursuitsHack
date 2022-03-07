@@ -7,15 +7,6 @@
 
     public class PlayerInfo
     {
-        //Base values
-        public static float defaultRunMoveSpeed;
-        public static float defaultFastWalkMoveSpeed;
-        public static float nimbleRunMoveSpeed;
-        public static float nimbleFastWalkMoveSpeed;
-        public static float runMoveSpeed;
-        public static float fastWalkMoveSpeed;
-        public static float walkMoveSpeed;
-
         public uint PlayerId { get; set; }
 
         public XPlayer Player { get; set; }

@@ -12,7 +12,9 @@ namespace MurderousPursuitHack
     {
         public static bool WindowHidden = false;
 
-        public static bool WallhackEnabled = true;
+        public static bool ChamsEnabled = true;
+
+        public static bool EspEnabled = true;
 
         public static bool DebugInfo = false;
 
@@ -43,7 +45,7 @@ namespace MurderousPursuitHack
             WindowBuilder builder = new WindowBuilder(windowPosition, windowSize, elementHeight);
             builder.StartWindow();
 
-            builder.Label(String.Format(" [F1] Toggle window", InputManager.Instance.Keybindings.CheatWindow));
+            builder.Label(String.Format("[F1] Toggle window", InputManager.Instance.Keybindings.CheatWindow));
 
             VisualsSection(builder);
             DebugSection(builder);
@@ -60,24 +62,25 @@ namespace MurderousPursuitHack
         {
             builder.Label("VISUALS");
 
-            WallhackEnabled = builder.Toggle(WallhackEnabled, String.Format(" [{0}] Wallhack", InputManager.Instance.Keybindings.Wallhack));
+            ChamsEnabled = builder.Toggle(ChamsEnabled, String.Format("[{0}] Chams", InputManager.Instance.Keybindings.Chams));
+            EspEnabled = builder.Toggle(EspEnabled, String.Format("[{0}] Wallhack", InputManager.Instance.Keybindings.Esp));
         }
 
         private static void DebugSection(WindowBuilder builder)
         {
             builder.Label("DEBUG");
-            DebugInfo = builder.Toggle(DebugInfo, String.Format(" {0} Debug window", InputManager.Instance.Keybindings.DebugInfo));
+            DebugInfo = builder.Toggle(DebugInfo, String.Format("{0} Debug window", InputManager.Instance.Keybindings.DebugInfo));
         }
 
         private static void TeleportsSection(WindowBuilder builder)
         {
             builder.Label("TELEPORTS");
-            if (builder.Button(String.Format(" [{0}] Teleport To Quarry", InputManager.Instance.Keybindings.TeleportToQuarry)))
+            if (builder.Button(String.Format("[{0}] Teleport To Quarry", InputManager.Instance.Keybindings.TeleportToQuarry)))
             {
                 TeleportManager.TeleportToQuarry();
             }
 
-            if (builder.Button(String.Format(" [{0}] Teleport To Any Hunter", InputManager.Instance.Keybindings.TeleportToAnyHunter)))
+            if (builder.Button(String.Format("[{0}] Teleport To Any Hunter", InputManager.Instance.Keybindings.TeleportToAnyHunter)))
             {
                 TeleportManager.TeleportToAnyHunter();
             }
@@ -85,7 +88,7 @@ namespace MurderousPursuitHack
 
         private static void SkinsSection(WindowBuilder builder)
         {
-            if (builder.Button(String.Format(" [{0}] Change skin", InputManager.Instance.Keybindings.ChangeSkin)))
+            if (builder.Button(String.Format("[{0}] Change skin", InputManager.Instance.Keybindings.ChangeSkin)))
                 SkinsHelper.ChangeSkin();
         }
 
@@ -101,7 +104,7 @@ namespace MurderousPursuitHack
         {
             builder.Label("OTHERS");
             builder.StartDisabledSection();
-            ZeroExposure = builder.Toggle(ZeroExposure, " [F5] Zero exposure");
+            ZeroExposure = builder.Toggle(ZeroExposure, "[F5] Zero exposure");
             builder.EndDisabledSection();
         }
 
@@ -109,17 +112,17 @@ namespace MurderousPursuitHack
         {
             builder.StartDisabledSection();
             builder.Label("ABILITIES");
-            if (builder.Button(" [F6] Place Pie Bomb"))
+            if (builder.Button("[F6] Place Pie Bomb"))
             {
                 AbilityManager.StartAbility<XPlacePieBomb>();
             }
 
-            if (builder.Button(" [F7] Flash"))
+            if (builder.Button("[F7] Flash"))
             {
                 AbilityManager.StartAbility<XFlash>();
             }
 
-            if (builder.Button(" [F8] Disrupt"))
+            if (builder.Button("[F8] Disrupt"))
             {
                 AbilityManager.StartAbility<XDisrupt>();
             }

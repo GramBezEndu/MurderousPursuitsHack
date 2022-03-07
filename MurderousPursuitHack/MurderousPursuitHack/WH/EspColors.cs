@@ -2,7 +2,7 @@
 {
     using UnityEngine;
 
-    public class WallhackColors
+    public class EspColors
     {
         public Color Neutral { get; set; } = Color.white;
 

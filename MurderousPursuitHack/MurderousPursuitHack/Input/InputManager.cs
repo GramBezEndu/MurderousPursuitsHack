@@ -21,9 +21,14 @@
                 HackSettingsManager.WindowHidden = !HackSettingsManager.WindowHidden;
             }
 
-            if (Input.GetKeyDown(Keybindings.Wallhack))
+            if (Input.GetKeyDown(Keybindings.Chams))
             {
-                HackSettingsManager.WallhackEnabled = !HackSettingsManager.WallhackEnabled;
+                HackSettingsManager.ChamsEnabled = !HackSettingsManager.ChamsEnabled;
+            }
+
+            if (Input.GetKeyDown(Keybindings.Esp))
+            {
+                HackSettingsManager.EspEnabled = !HackSettingsManager.EspEnabled;
             }
 
             if (Input.GetKeyDown(Keybindings.DebugInfo))

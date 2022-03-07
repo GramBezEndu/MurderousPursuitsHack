@@ -16,8 +16,8 @@
             Loader.Load.AddComponent<GameInfoManager>();
             Loader.Load.AddComponent<SpeedhackManager>();
             Loader.Load.AddComponent<ExposureManager>();
-            Loader.Load.AddComponent<WallhackManager>();
-            Loader.Load.AddComponent<Glow>();
+            Loader.Load.AddComponent<EspManager>();
+            Loader.Load.AddComponent<Chams>();
             UnityEngine.Object.DontDestroyOnLoad(Loader.Load);
         }
 

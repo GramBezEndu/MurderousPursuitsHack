@@ -4,9 +4,9 @@
     using ProjectX;
     using UnityEngine;
 
-    class WallhackManager : MonoBehaviour
+    class EspManager : MonoBehaviour
     {
-        public WallhackColors WallhackColors { get; set; } = new WallhackColors()
+        public EspColors WallhackColors { get; set; } = new EspColors()
         {
             Quarry = Color.cyan,
             Hunter = Color.red,
@@ -15,7 +15,7 @@
 
         public void OnGUI()
         {
-            if (HackSettingsManager.WallhackEnabled)
+            if (HackSettingsManager.EspEnabled)
             {
                 DrawWallhack();
             }

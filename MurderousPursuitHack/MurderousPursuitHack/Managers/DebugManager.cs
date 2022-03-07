@@ -1,6 +1,7 @@
 ﻿namespace MurderousPursuitHack.Managers
 {
     using BG.Utils;
+    using MurderousPursuitHack.Drawing;
     using ProjectX.Levels;
     using ProjectX.Networking;
     using System;
@@ -23,13 +24,14 @@
 
         private void CreateDebugWindow(int windowID)
         {
+            WindowBuilder builder = new WindowBuilder(windowPosition, windowSize, 30f);
             GUI.color = Color.white;
-            GUI.Label(new Rect(windowPosition.x, 30, 800, 30), "Mono memory: " + Math.Round(System.GC.GetTotalMemory(false) / Math.Pow(10, 6), 1) + " MB");
-            GUI.Label(new Rect(windowPosition.x, 60, 800, 30), "Is Host: " + Singleton<LevelManager>.Instance.IsHost);
-            GUI.Label(new Rect(windowPosition.x, 90, 800, 30), "Game Type: " + UNetManager.Instance.GameType);
-            GUI.Label(new Rect(windowPosition.x, 120, 800, 30), "Quarry Bar found: " + ((GameInfoManager.Instance.QuarryBar != null) ? "True" : "False"));
-            GUI.Label(new Rect(windowPosition.x, 150, 800, 30), "Hunter HUD found: " + ((GameInfoManager.Instance.HunterHUD != null) ? "True" : "False"));
-            GUI.Label(new Rect(windowPosition.x, 180, 800, 30), "Hunters count: " + GameInfoManager.Instance.HunterIDs.Count.ToString());
+            builder.Label("Mono memory: " + Math.Round(System.GC.GetTotalMemory(false) / Math.Pow(10, 6), 1) + " MB", true);
+            builder.Label("Is Host: " + Singleton<LevelManager>.Instance.IsHost, true);
+            builder.Label("Game Type: " + UNetManager.Instance.GameType, true);
+            builder.Label("Quarry Bar found: " + ((GameInfoManager.Instance.QuarryBar != null) ? "True" : "False"), true);
+            builder.Label("Hunter HUD found: " + ((GameInfoManager.Instance.HunterHUD != null) ? "True" : "False"), true);
+            builder.Label("Hunters count: " + GameInfoManager.Instance.HunterIDs.Count.ToString(), true);
             GUI.color = Color.yellow;
         }
     }
