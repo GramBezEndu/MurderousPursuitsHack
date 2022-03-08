@@ -61,7 +61,7 @@
                 hideFlags = HideFlags.DontSaveInEditor | HideFlags.HideInHierarchy
             };
             newMaterial.CopyPropertiesFromMaterial(neutral);
-            newMaterial.SetColor("_Color", new Color(0f, 0.45f, 0.65f, 1f));
+            newMaterial.SetColor("_Color", new Color(0f, 0.5f, 0.7f, 1f));
             return newMaterial;
         }
 

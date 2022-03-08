@@ -63,7 +63,7 @@ namespace MurderousPursuitHack
             builder.Label("VISUALS");
 
             ChamsEnabled = builder.Toggle(ChamsEnabled, String.Format("[{0}] Chams", InputManager.Instance.Keybindings.Chams));
-            EspEnabled = builder.Toggle(EspEnabled, String.Format("[{0}] Wallhack", InputManager.Instance.Keybindings.Esp));
+            EspEnabled = builder.Toggle(EspEnabled, String.Format("[{0}] ESP", InputManager.Instance.Keybindings.Esp));
         }
 
         private static void DebugSection(WindowBuilder builder)
@@ -89,7 +89,9 @@ namespace MurderousPursuitHack
         private static void SkinsSection(WindowBuilder builder)
         {
             if (builder.Button(String.Format("[{0}] Change skin", InputManager.Instance.Keybindings.ChangeSkin)))
+            {
                 SkinsHelper.ChangeSkin();
+            }
         }
 
         private static void SpeedhackSection(WindowBuilder builder)

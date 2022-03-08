@@ -26,7 +26,7 @@ namespace MurderousPursuitHack
         {
             if (ProjectX.CoreGameLoop.ExposureManager.Instance != null)
             {
-                exposure = (Dictionary<uint, PlayerExposure>)(typeof(ProjectX.CoreGameLoop.ExposureManager)).GetField("exposure", Utils.FieldGetFlags).GetValue(ProjectX.CoreGameLoop.ExposureManager.Instance);
+                exposure = (Dictionary<uint, PlayerExposure>)(ProjectX.CoreGameLoop.ExposureManager.Instance.GetFieldValue("exposure"));
             }
         }
     }

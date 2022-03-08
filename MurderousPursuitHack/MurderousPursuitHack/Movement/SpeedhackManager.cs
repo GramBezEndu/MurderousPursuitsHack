@@ -30,7 +30,7 @@ namespace MurderousPursuitHack
         {
             if (DefaultRunMoveSpeed == 0f)
             {
-                SetBaseValues();
+                GetBaseValues();
             }
 
             //If base values still not set -> return 
@@ -52,25 +52,18 @@ namespace MurderousPursuitHack
         public void EnableSpeedhack()
         {
             var local = GameInfoManager.Instance.Players.Find(x => x.IsLocalPlayer);
-            (typeof(XCharacterMovement)).GetField("defaultRunMoveSpeed", Utils.FieldGetFlags).SetValue(local.CharacterMovement,
-                HackSettingsManager.SpeedhackMultipliers[HackSettingsManager.CurrentSpeedMultiplierIndex] * DefaultRunMoveSpeed);
-            (typeof(XCharacterMovement)).GetField("defaultFastWalkMoveSpeed", Utils.FieldGetFlags).SetValue(local.CharacterMovement,
-                HackSettingsManager.SpeedhackMultipliers[HackSettingsManager.CurrentSpeedMultiplierIndex] * DefaultFastWalkMoveSpeed);
+            float multiplier = HackSettingsManager.SpeedhackMultipliers[HackSettingsManager.CurrentSpeedMultiplierIndex];
 
-            (typeof(XCharacterMovement)).GetField("nimbleRunMoveSpeed", Utils.FieldGetFlags).SetValue(local.CharacterMovement,
-                HackSettingsManager.SpeedhackMultipliers[HackSettingsManager.CurrentSpeedMultiplierIndex] * NimbleRunMoveSpeed);
-            (typeof(XCharacterMovement)).GetField("nimbleFastWalkMoveSpeed", Utils.FieldGetFlags).SetValue(local.CharacterMovement,
-                HackSettingsManager.SpeedhackMultipliers[HackSettingsManager.CurrentSpeedMultiplierIndex] * NimbleFastWalkMoveSpeed);
-
-            (typeof(XCharacterMovement)).GetField("runMoveSpeed", Utils.FieldGetFlags).SetValue(local.CharacterMovement,
-                HackSettingsManager.SpeedhackMultipliers[HackSettingsManager.CurrentSpeedMultiplierIndex] * RunMoveSpeed);
-            (typeof(XCharacterMovement)).GetField("fastWalkMoveSpeed", Utils.FieldGetFlags).SetValue(local.CharacterMovement,
-                HackSettingsManager.SpeedhackMultipliers[HackSettingsManager.CurrentSpeedMultiplierIndex] * FastWalkMoveSpeed);
-            (typeof(XCharacterMovement)).GetField("walkMoveSpeed", Utils.FieldGetFlags).SetValue(local.CharacterMovement,
-                HackSettingsManager.SpeedhackMultipliers[HackSettingsManager.CurrentSpeedMultiplierIndex] * WalkMoveSpeed);
+            local.CharacterMovement.SetFieldValue("defaultRunMoveSpeed", multiplier * DefaultRunMoveSpeed);
+            local.CharacterMovement.SetFieldValue("defaultFastWalkMoveSpeed", multiplier * DefaultFastWalkMoveSpeed);
+            local.CharacterMovement.SetFieldValue("nimbleRunMoveSpeed", multiplier * NimbleRunMoveSpeed);
+            local.CharacterMovement.SetFieldValue("nimbleFastWalkMoveSpeed", multiplier * NimbleFastWalkMoveSpeed);
+            local.CharacterMovement.SetFieldValue("runMoveSpeed", multiplier * RunMoveSpeed);
+            local.CharacterMovement.SetFieldValue("fastWalkMoveSpeed", multiplier * FastWalkMoveSpeed);
+            local.CharacterMovement.SetFieldValue("walkMoveSpeed", multiplier * WalkMoveSpeed);
         }
 
-        private void SetBaseValues()
+        private void GetBaseValues()
         {
             if (GameInfoManager.Instance != null)
             {
@@ -78,15 +71,16 @@ namespace MurderousPursuitHack
                 {
                     if (GameInfoManager.Instance.Players.Count > 0)
                     {
-                        DefaultRunMoveSpeed = (float)(typeof(XCharacterMovement).GetField("defaultRunMoveSpeed", Utils.FieldGetFlags).GetValue(GameInfoManager.Instance.Players[0].CharacterMovement));
-                        DefaultFastWalkMoveSpeed = (float)(typeof(XCharacterMovement).GetField("defaultFastWalkMoveSpeed", Utils.FieldGetFlags).GetValue(GameInfoManager.Instance.Players[0].CharacterMovement));
+                        XCharacterMovement characterMovement = GameInfoManager.Instance.Players[0].CharacterMovement;
+                        DefaultRunMoveSpeed = (float)(characterMovement.GetFieldValue("defaultRunMoveSpeed"));
+                        DefaultFastWalkMoveSpeed = (float)(characterMovement.GetFieldValue("defaultFastWalkMoveSpeed"));
 
-                        NimbleRunMoveSpeed = (float)(typeof(XCharacterMovement).GetField("nimbleRunMoveSpeed", Utils.FieldGetFlags).GetValue(GameInfoManager.Instance.Players[0].CharacterMovement));
-                        NimbleFastWalkMoveSpeed = (float)(typeof(XCharacterMovement).GetField("nimbleFastWalkMoveSpeed", Utils.FieldGetFlags).GetValue(GameInfoManager.Instance.Players[0].CharacterMovement));
+                        NimbleRunMoveSpeed = (float)(characterMovement.GetFieldValue("nimbleRunMoveSpeed"));
+                        NimbleFastWalkMoveSpeed = (float)(characterMovement.GetFieldValue("nimbleFastWalkMoveSpeed"));
 
-                        RunMoveSpeed = (float)(typeof(XCharacterMovement).GetField("runMoveSpeed", Utils.FieldGetFlags).GetValue(GameInfoManager.Instance.Players[0].CharacterMovement));
-                        FastWalkMoveSpeed = (float)(typeof(XCharacterMovement).GetField("fastWalkMoveSpeed", Utils.FieldGetFlags).GetValue(GameInfoManager.Instance.Players[0].CharacterMovement));
-                        WalkMoveSpeed = (float)(typeof(XCharacterMovement).GetField("walkMoveSpeed", Utils.FieldGetFlags).GetValue(GameInfoManager.Instance.Players[0].CharacterMovement));
+                        RunMoveSpeed = (float)(characterMovement.GetFieldValue("runMoveSpeed"));
+                        FastWalkMoveSpeed = (float)(characterMovement.GetFieldValue("fastWalkMoveSpeed"));
+                        WalkMoveSpeed = (float)(characterMovement.GetFieldValue("walkMoveSpeed"));
                     }
                 }
             }
@@ -95,15 +89,13 @@ namespace MurderousPursuitHack
         public void DisableSpeedhack()
         {
             var local = GameInfoManager.Instance.Players.Find(x => x.IsLocalPlayer);
-            (typeof(XCharacterMovement)).GetField("defaultRunMoveSpeed", Utils.FieldGetFlags).SetValue(local.CharacterMovement, DefaultRunMoveSpeed);
-            (typeof(XCharacterMovement)).GetField("defaultFastWalkMoveSpeed", Utils.FieldGetFlags).SetValue(local.CharacterMovement, DefaultFastWalkMoveSpeed);
-
-            (typeof(XCharacterMovement)).GetField("nimbleRunMoveSpeed", Utils.FieldGetFlags).SetValue(local.CharacterMovement, NimbleRunMoveSpeed);
-            (typeof(XCharacterMovement)).GetField("nimbleFastWalkMoveSpeed", Utils.FieldGetFlags).SetValue(local.CharacterMovement, NimbleFastWalkMoveSpeed);
-
-            (typeof(XCharacterMovement)).GetField("runMoveSpeed", Utils.FieldGetFlags).SetValue(local.CharacterMovement, RunMoveSpeed);
-            (typeof(XCharacterMovement)).GetField("fastWalkMoveSpeed", Utils.FieldGetFlags).SetValue(local.CharacterMovement, FastWalkMoveSpeed);
-            (typeof(XCharacterMovement)).GetField("walkMoveSpeed", Utils.FieldGetFlags).SetValue(local.CharacterMovement, WalkMoveSpeed);
+            local.CharacterMovement.SetFieldValue("defaultRunMoveSpeed", DefaultRunMoveSpeed);
+            local.CharacterMovement.SetFieldValue("defaultFastWalkMoveSpeed", DefaultFastWalkMoveSpeed);
+            local.CharacterMovement.SetFieldValue("nimbleRunMoveSpeed", NimbleRunMoveSpeed);
+            local.CharacterMovement.SetFieldValue("nimbleFastWalkMoveSpeed", NimbleFastWalkMoveSpeed);
+            local.CharacterMovement.SetFieldValue("runMoveSpeed", RunMoveSpeed);
+            local.CharacterMovement.SetFieldValue("fastWalkMoveSpeed", FastWalkMoveSpeed);
+            local.CharacterMovement.SetFieldValue("walkMoveSpeed", WalkMoveSpeed);
         }
     }
 }

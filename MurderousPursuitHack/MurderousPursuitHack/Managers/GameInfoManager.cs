@@ -52,6 +52,8 @@
                     if (Singleton<PlayerManager>.Instance.PlayerCount > 0)
                     {
                         HunterHUD = UnityEngine.Object.FindObjectOfType<HunterHUD>();
+                        QuarryBar = UnityEngine.Object.FindObjectOfType<QuarryLocatorBarHUD>();
+
                         UpdateHunterList();
 
                         foreach (var p in Singleton<PlayerManager>.Instance.thePlayers.Values)
@@ -59,7 +61,6 @@
                             UpdatePlayerInfo(p);
                         }
 
-                        QuarryBar = UnityEngine.Object.FindObjectOfType<QuarryLocatorBarHUD>();
                         UpdateCurrentQuarry();
                     }
                 }
@@ -68,9 +69,9 @@
 
         private void UpdateCurrentQuarry()
         {
-            if (LocalPlayer != null && QuarryBar != null)
+            if (QuarryBar != null)
             {
-                CurrentQuarry = (uint)(QuarryBar.GetType().GetField("quarryID", Utils.FieldGetFlags).GetValue(QuarryBar));
+                CurrentQuarry = (uint)(QuarryBar.GetFieldValue("quarryID"));
             }
             else
             {
@@ -83,7 +84,7 @@
             HunterIDs.Clear();
             if (LocalPlayer != null && HunterHUD != null)
             {
-                object hunterDetails = (HunterHUD.GetType().GetField("hunterDetails", Utils.FieldGetFlags).GetValue(HunterHUD));
+                object hunterDetails = HunterHUD.GetFieldValue("hunterDetails");
                 int objIndex = 0;
                 if (hunterDetails != null)
                 {
@@ -99,9 +100,9 @@
 
         private void UpdatePlayerInfo(XPlayer player)
         {
-            XCharacterMovement xCharacterMovement = (XCharacterMovement)
-                (typeof(XPlayer).GetField("characterMovement", Utils.FieldGetFlags).GetValue(player));
-            Transform characterTransform = (Transform)(typeof(XCharacterMovement).GetField("characterTransform", Utils.FieldGetFlags).GetValue(xCharacterMovement));
+            // Note: Need to be "XPlayer" type
+            XCharacterMovement xCharacterMovement = (XCharacterMovement)(typeof(XPlayer).GetField("characterMovement", ReflectionHelper.FieldGetFlags).GetValue(player));
+            Transform characterTransform = (Transform)(xCharacterMovement.GetFieldValue("characterTransform"));
             var collider = xCharacterMovement.GetComponent<Collider>();
             var playerInfo = new PlayerInfo()
             {

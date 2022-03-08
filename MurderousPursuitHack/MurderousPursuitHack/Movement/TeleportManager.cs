@@ -42,7 +42,7 @@
                 PlayerInfo local = GameInfoManager.Instance.Players.Find(x => x.IsLocalPlayer);
                 if (local != null)
                 {
-                    Transform characterTransform = (Transform)(typeof(XCharacterMovement).GetField("characterTransform", Utils.FieldGetFlags).GetValue(local.CharacterMovement));
+                    Transform characterTransform = (Transform)(local.CharacterMovement.GetFieldValue("characterTransform"));
                     characterTransform.position = pos;
                 }
             }
