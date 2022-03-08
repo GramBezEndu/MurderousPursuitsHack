@@ -12,7 +12,7 @@
     {
         private Vector2 windowPosition = new Vector2(10f, 5f);
 
-        private Vector2 windowSize = new Vector2(300f, 220f);
+        private Vector2 windowSize = new Vector2(300f, 240f);
 
         public void OnGUI()
         {
@@ -25,14 +25,14 @@
         private void CreateDebugWindow(int windowID)
         {
             WindowBuilder builder = new WindowBuilder(windowPosition, windowSize, 30f);
-            GUI.color = Color.white;
-            builder.Label("Mono memory: " + Math.Round(System.GC.GetTotalMemory(false) / Math.Pow(10, 6), 1) + " MB", true);
-            builder.Label("Is Host: " + Singleton<LevelManager>.Instance.IsHost, true);
-            builder.Label("Game Type: " + UNetManager.Instance.GameType, true);
-            builder.Label("Quarry Bar found: " + ((GameInfoManager.Instance.QuarryBar != null) ? "True" : "False"), true);
-            builder.Label("Hunter HUD found: " + ((GameInfoManager.Instance.HunterHUD != null) ? "True" : "False"), true);
-            builder.Label("Hunters count: " + GameInfoManager.Instance.HunterIDs.Count.ToString(), true);
-            GUI.color = Color.yellow;
+            builder.StartElements();
+            builder.Label("Mono memory: " + Math.Round(System.GC.GetTotalMemory(false) / Math.Pow(10, 6), 1) + " MB");
+            builder.Label("Is Host: " + Singleton<LevelManager>.Instance.IsHost);
+            builder.Label("Game Type: " + UNetManager.Instance.GameType);
+            builder.Label("Quarry Bar found: " + ((GameInfoManager.Instance.QuarryBar != null) ? "True" : "False"));
+            builder.Label("Hunter HUD found: " + ((GameInfoManager.Instance.HunterHUD != null) ? "True" : "False"));
+            builder.Label("Hunters count: " + GameInfoManager.Instance.HunterIDs.Count.ToString());
+            builder.EndElements();
         }
     }
 }

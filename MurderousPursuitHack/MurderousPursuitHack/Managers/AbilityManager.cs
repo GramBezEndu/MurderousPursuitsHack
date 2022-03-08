@@ -1,14 +1,7 @@
-﻿using Opsive.ThirdPersonController.Abilities;
-using ProjectX.Abilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
-
-namespace MurderousPursuitHack
+﻿namespace MurderousPursuitHack
 {
+    using System;
+
     public static class AbilityManager
     {
         public static void StartAbility<LoadoutAbility>()
@@ -22,7 +15,9 @@ namespace MurderousPursuitHack
                     ability.enabled = true;
                     local.CharacterAbilities.ClientTryStartAbility(ability, true);
                     if (ability is ProjectX.Abilities.LoadoutAbility loadoutAbility)
+                    {
                         loadoutAbility.ResetCooldown();
+                    }
                 }
             }
         }

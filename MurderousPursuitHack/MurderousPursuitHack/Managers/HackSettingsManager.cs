@@ -26,9 +26,9 @@ namespace MurderousPursuitHack
 
         public static int CurrentSpeedMultiplierIndex = 3; // Equals to 1f speed
 
-        private Vector2 windowPosition = new Vector2(10f, 230f);
+        private Vector2 windowPosition = new Vector2(10f, 260f);
 
-        private Vector2 windowSize = new Vector2(300, 520);
+        private Vector2 windowSize = new Vector2(300, 610);
 
         private readonly float elementHeight = 25f;
 
@@ -36,45 +36,46 @@ namespace MurderousPursuitHack
         {
             if (!WindowHidden)
             {
-                GUI.Window(0, new Rect(windowPosition, windowSize), CreateCheatManagerWindow, "CHEAT MANAGER");
+                GUI.Window(0, new Rect(windowPosition, windowSize), CreateElements, String.Format("[{0}] CHEATS", InputManager.Instance.Keybindings.CheatWindow));
             }
         }
 
-        private void CreateCheatManagerWindow(int windowID)
+        private void CreateElements(int windowID)
         {
             WindowBuilder builder = new WindowBuilder(windowPosition, windowSize, elementHeight);
-            builder.StartWindow();
-
-            builder.Label(String.Format("[F1] Toggle window", InputManager.Instance.Keybindings.CheatWindow));
+            builder.StartElements();
 
             VisualsSection(builder);
-            DebugSection(builder);
             TeleportsSection(builder);
             SpeedhackSection(builder);
             OthersSection(builder);
             AbilitiesSection(builder);
-            SkinsSection(builder);
+            DebugSection(builder);
 
-            builder.EndWindow();
+            builder.EndElements();
         }
 
         private static void VisualsSection(WindowBuilder builder)
         {
-            builder.Label("VISUALS");
+            builder.Expander("VISUALS");
 
             ChamsEnabled = builder.Toggle(ChamsEnabled, String.Format("[{0}] Chams", InputManager.Instance.Keybindings.Chams));
             EspEnabled = builder.Toggle(EspEnabled, String.Format("[{0}] ESP", InputManager.Instance.Keybindings.Esp));
+            if (builder.Button(String.Format("[{0}] Change skin", InputManager.Instance.Keybindings.ChangeSkin)))
+            {
+                SkinsHelper.ChangeSkin();
+            }
         }
 
         private static void DebugSection(WindowBuilder builder)
         {
-            builder.Label("DEBUG");
-            DebugInfo = builder.Toggle(DebugInfo, String.Format("{0} Debug window", InputManager.Instance.Keybindings.DebugInfo));
+            builder.Expander("DEBUG");
+            DebugInfo = builder.Toggle(DebugInfo, String.Format("[{0}] Debug window", InputManager.Instance.Keybindings.DebugInfo));
         }
 
         private static void TeleportsSection(WindowBuilder builder)
         {
-            builder.Label("TELEPORTS");
+            builder.Expander("TELEPORTS");
             if (builder.Button(String.Format("[{0}] Teleport To Quarry", InputManager.Instance.Keybindings.TeleportToQuarry)))
             {
                 TeleportManager.TeleportToQuarry();
@@ -86,17 +87,9 @@ namespace MurderousPursuitHack
             }
         }
 
-        private static void SkinsSection(WindowBuilder builder)
-        {
-            if (builder.Button(String.Format("[{0}] Change skin", InputManager.Instance.Keybindings.ChangeSkin)))
-            {
-                SkinsHelper.ChangeSkin();
-            }
-        }
-
         private static void SpeedhackSection(WindowBuilder builder)
         {
-            builder.Label("SPEED HACK");
+            builder.Expander("SPEED HACK");
             Speedhack = builder.Toggle(Speedhack, String.Format("Speedhack: {0}", Math.Round(SpeedhackMultipliers[CurrentSpeedMultiplierIndex], 3)));
             CurrentSpeedMultiplierIndex = (int)GUI.HorizontalSlider(builder.NextRect(),
                 CurrentSpeedMultiplierIndex, 0, SpeedhackMultipliers.Length - 1);
@@ -104,7 +97,7 @@ namespace MurderousPursuitHack
 
         private static void OthersSection(WindowBuilder builder)
         {
-            builder.Label("OTHERS");
+            builder.Expander("OTHERS");
             builder.StartDisabledSection();
             ZeroExposure = builder.Toggle(ZeroExposure, "[F5] Zero exposure");
             builder.EndDisabledSection();
@@ -112,8 +105,8 @@ namespace MurderousPursuitHack
 
         private static void AbilitiesSection(WindowBuilder builder)
         {
+            builder.Expander("ABILITIES");
             builder.StartDisabledSection();
-            builder.Label("ABILITIES");
             if (builder.Button("[F6] Place Pie Bomb"))
             {
                 AbilityManager.StartAbility<XPlacePieBomb>();
