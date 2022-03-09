@@ -36,28 +36,27 @@ namespace MurderousPursuitHack
 
         public void Start()
         {
-            builder = new WindowBuilder(windowPosition, windowSize, elementHeight);
             SpeedhackMultipliers = GeneratePossibleMultipliers();
+            builder = new WindowBuilder(windowPosition, windowSize, elementHeight);
         }
 
         public void OnGUI()
         {
+            void CreateElements(int windowID)
+            {
+                builder.Start();
+                VisualsSection(builder);
+                TeleportsSection(builder);
+                SpeedhackSection(builder);
+                OthersSection(builder);
+                AbilitiesSection(builder);
+                DebugSection(builder);
+            }
+
             if (!WindowHidden)
             {
-                GUI.Window(0, new Rect(windowPosition, windowSize), CreateElements, String.Format("[{0}] CHEATS", InputManager.Instance.Keybindings.CheatWindow));
+                builder.CreateWindow(CreateElements, 1, "CHEATS");
             }
-        }
-
-        private void CreateElements(int windowID)
-        {
-            builder.StartElements();
-
-            VisualsSection(builder);
-            TeleportsSection(builder);
-            SpeedhackSection(builder);
-            OthersSection(builder);
-            AbilitiesSection(builder);
-            DebugSection(builder);
         }
 
         private static void VisualsSection(WindowBuilder builder)

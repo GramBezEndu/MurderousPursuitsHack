@@ -1,5 +1,6 @@
 ﻿namespace MurderousPursuitHack.Drawing
 {
+    using System;
     using UnityEngine;
 
     public class WindowStyle
@@ -9,6 +10,14 @@
         public GUIStyle Expander { get; private set; }
 
         public GUIStyle Label { get; private set; }
+
+        public GUIStyle Toggle { get; private set; }
+
+        public GUIStyle Window { get; private set; }
+
+        public GUIStyle HorizontalSlider { get; private set; }
+
+        public GUIStyle Thumb { get; set; }
 
         public void Init()
         {
@@ -20,11 +29,16 @@
             CreateButtonStyle();
             CreateExpanderStyle();
             CreateLabelStyle();
+            CreateToggleStyle();
+            CreateWindowStyle();
+            CreateSliderStyle();
+            CreateThumbStyle();
         }
 
         private void CreateButtonStyle()
         {
             Button = new GUIStyle(GUI.skin.button);
+            Button.fontStyle = FontStyle.Bold;
             Button.normal.background = CreateTexture(2, 2, new Color(0f, 0.55f, 0.8f, 1f));
             Button.hover.background = CreateTexture(2, 2, new Color(0f, 0.75f, 1f, 1f));
         }
@@ -32,6 +46,7 @@
         private void CreateExpanderStyle()
         {
             Expander = new GUIStyle(GUI.skin.button);
+            Expander.fontStyle = FontStyle.Bold;
             Expander.normal.background = CreateTexture(2, 2, new Color(0f, 0.55f, 0.55f, 1f));
             Expander.onNormal.background = CreateTexture(2, 2, new Color(0f, 0.55f, 0.55f, 1f));
 
@@ -45,6 +60,37 @@
         private void CreateLabelStyle()
         {
             Label = new GUIStyle(GUI.skin.label);
+        }
+
+        private void CreateToggleStyle()
+        {
+            Toggle = new GUIStyle(GUI.skin.toggle);
+            Toggle.fontStyle = FontStyle.Bold;
+            // When false
+            //Toggle.normal.textColor = new Color(0.73f, 0.2f, 0.2f, 1f);
+            // When true
+            //Toggle.onNormal.textColor = new Color(0f, 0.65f, 1f, 1f);
+        }
+
+        private void CreateWindowStyle()
+        {
+            Window = new GUIStyle(GUI.skin.window);
+            Window.normal.background = CreateTexture(2, 2, Color.black);
+            Window.onNormal.background = CreateTexture(2, 2, Color.black);
+            Window.active.background = CreateTexture(2, 2, Color.black);
+            Window.onActive.background = CreateTexture(2, 2, Color.black);
+        }
+
+        private void CreateSliderStyle()
+        {
+            HorizontalSlider = new GUIStyle(GUI.skin.horizontalSlider);
+            HorizontalSlider.normal.background = CreateTexture(2, 2, new Color(0f, 0.55f, 0.8f, 1f));
+        }
+
+        private void CreateThumbStyle()
+        {
+            Thumb = new GUIStyle(GUI.skin.horizontalSliderThumb);
+            Thumb.normal.background = CreateTexture(2, 2, new Color(0f, 0.75f, 0.75f, 1f));
         }
 
         private Texture2D CreateTexture(int width, int height, Color col)

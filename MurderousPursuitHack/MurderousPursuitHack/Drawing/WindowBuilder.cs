@@ -1,10 +1,6 @@
 ﻿namespace MurderousPursuitHack.Drawing
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using UnityEngine;
 
     public class WindowBuilder
@@ -29,7 +25,7 @@
 
         private bool initialized;
 
-        public WindowBuilder(Vector2 position, Vector2 windowSize, float elementHeight) 
+        public WindowBuilder(Vector2 position, Vector2 windowSize, float elementHeight)
         {
             Position = position;
             Size = windowSize;
@@ -37,7 +33,7 @@
             style = new WindowStyle();
         }
 
-        public void StartElements()
+        public void Start()
         {
             if (!initialized)
             {
@@ -48,6 +44,11 @@
             ResetPosition();
             currentSectionIndex = -1;
             elementsCount = 0;
+        }
+
+        public void CreateWindow(GUI.WindowFunction windowFunction, int windowID, string name)
+        {
+            GUI.Window(windowID, new Rect(Position, Size), windowFunction, name, style.Window);
         }
 
         public void StartSection(string name)
@@ -89,7 +90,7 @@
         {
             if (currentSectionIndex == -1 || sections[currentSectionIndex].Expanded)
             {
-                return GUI.Toggle(NextRect(), value, message);
+                return GUI.Toggle(NextRect(), value, message, style.Toggle);
             }
             else
             {
@@ -102,7 +103,7 @@
         {
             if (currentSectionIndex == -1 || sections[currentSectionIndex].Expanded)
             {
-                return (int)GUI.HorizontalSlider(NextRect(), current, leftValue, rightValue);
+                return (int)GUI.HorizontalSlider(NextRect(), current, leftValue, rightValue, style.HorizontalSlider, style.Thumb);
             }
             else
             {

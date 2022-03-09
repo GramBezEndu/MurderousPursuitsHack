@@ -14,23 +14,29 @@
 
         private Vector2 windowSize = new Vector2(300f, 240f);
 
-        public void OnGUI()
+        WindowBuilder builder;
+
+        public void Start()
         {
-            if (HackSettingsManager.DebugInfo)
-            {
-                GUI.Window(1, new Rect(windowPosition, windowSize), CreateDebugWindow, "DEBUG");
-            }
+            builder = new WindowBuilder(windowPosition, windowSize, 30f);
         }
 
-        private void CreateDebugWindow(int windowID)
+        public void OnGUI()
         {
-            WindowBuilder builder = new WindowBuilder(windowPosition, windowSize, 30f);
-            builder.StartElements();
-            builder.Label("Mono memory: " + Math.Round(System.GC.GetTotalMemory(false) / Math.Pow(10, 6), 1) + " MB");
-            builder.Label("Is Host: " + Singleton<LevelManager>.Instance.IsHost);
-            builder.Label("Game Type: " + UNetManager.Instance.GameType);
-            builder.Label("Quarry Bar found: " + ((GameInfoManager.Instance.QuarryBar != null) ? "True" : "False"));
-            builder.Label("Hunter HUD found: " + ((GameInfoManager.Instance.HunterHUD != null) ? "True" : "False"));
+            void CreateDebugWindow(int windowID)
+            {
+                builder.Start();
+                builder.Label("Mono memory: " + Math.Round(System.GC.GetTotalMemory(false) / Math.Pow(10, 6), 1) + " MB");
+                builder.Label("Is Host: " + Singleton<LevelManager>.Instance.IsHost);
+                builder.Label("Game Type: " + UNetManager.Instance.GameType);
+                builder.Label("Quarry Bar found: " + ((GameInfoManager.Instance.QuarryBar != null) ? "True" : "False"));
+                builder.Label("Hunter HUD found: " + ((GameInfoManager.Instance.HunterHUD != null) ? "True" : "False"));
+            }
+
+            if (HackSettingsManager.DebugInfo)
+            {
+                builder.CreateWindow(CreateDebugWindow, 0, "DEBUG");
+            }
         }
     }
 }
