@@ -5,7 +5,7 @@
     using ProjectX.Player;
     using UnityEngine;
 
-    public class PlayerInfo
+    public class PlayerData
     {
         public uint PlayerId { get; set; }
 

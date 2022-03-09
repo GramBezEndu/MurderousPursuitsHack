@@ -34,6 +34,12 @@ namespace MurderousPursuitHack
 
         private readonly float elementHeight = 25f;
 
+        public void Start()
+        {
+            builder = new WindowBuilder(windowPosition, windowSize, elementHeight);
+            SpeedhackMultipliers = GeneratePossibleMultipliers();
+        }
+
         public void OnGUI()
         {
             if (!WindowHidden)
@@ -127,12 +133,6 @@ namespace MurderousPursuitHack
 
             builder.EndDisabled();
             builder.EndSection();
-        }
-
-        public void Start()
-        {
-            builder = new WindowBuilder(windowPosition, windowSize, elementHeight);
-            SpeedhackMultipliers = GeneratePossibleMultipliers();
         }
 
         private float[] GeneratePossibleMultipliers()

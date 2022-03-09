@@ -15,6 +15,12 @@
 
         public void OnGUI()
         {
+            if (Event.current.type != EventType.Repaint)
+            {
+                // Optimization: repaint ESP only once per frame
+                return;
+            }
+
             if (HackSettingsManager.EspEnabled)
             {
                 DrawWallhack();
@@ -25,7 +31,7 @@
         {
             foreach (var p in GameInfoManager.Instance.Players)
             {
-                //Unity returns Vector3.zero when out off screen
+                // Unity returns Vector3.zero when out off screen
                 if (p.OnScreenPosition == Vector3.zero)
                 {
                     continue;
@@ -48,11 +54,11 @@
 
                 DrawPlayer(p);
             }
-            //Bring back old color
+            // Bring back old color
             GUI.color = Color.yellow;
         }
 
-        private void DrawPlayer(PlayerInfo playerInfo)
+        private void DrawPlayer(PlayerData playerInfo)
         {
             SetGuiColorBasedOnPlayerType(playerInfo);
 
@@ -78,7 +84,7 @@
                 name + FormatDistance(DistanceToLocalPlayer(playerInfo)));
         }
 
-        private void SetGuiColorBasedOnPlayerType(PlayerInfo p)
+        private void SetGuiColorBasedOnPlayerType(PlayerData p)
         {
             if (p.IsHunterForLocal)
             {
@@ -94,7 +100,7 @@
             }
         }
 
-        private int DistanceToLocalPlayer(PlayerInfo p)
+        private int DistanceToLocalPlayer(PlayerData p)
         {
             return (int)Vector3.Distance(GameInfoManager.Instance.LocalPlayer.transform.position, p.Position);
         }

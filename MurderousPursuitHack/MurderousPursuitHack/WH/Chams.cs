@@ -20,7 +20,7 @@
 
         public void Update()
         {
-            foreach (PlayerInfo playerInfo in GameInfoManager.Instance.Players)
+            foreach (PlayerData playerInfo in GameInfoManager.Instance.Players)
             {
                 UpdateGlow(playerInfo);
             }
@@ -65,7 +65,7 @@
             return newMaterial;
         }
 
-        private void UpdateGlow(PlayerInfo playerInfo)
+        private void UpdateGlow(PlayerData playerInfo)
         {
             XPlayer player = playerInfo.Player;
             if (player.isLocalPlayer)
@@ -88,7 +88,7 @@
             }
         }
 
-        private void ApplyChams(PlayerInfo playerInfo, Renderer[] allRenderers, int i)
+        private void ApplyChams(PlayerData playerInfo, Renderer[] allRenderers, int i)
         {
             Renderer renderer = allRenderers[i];
             if (playerInfo.IsHunterForLocal)

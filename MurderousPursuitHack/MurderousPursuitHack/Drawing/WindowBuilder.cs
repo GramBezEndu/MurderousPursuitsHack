@@ -25,19 +25,29 @@
 
         private int currentSectionIndex = -1;
 
+        private uint elementsCount = 0;
+
+        private bool initialized;
+
         public WindowBuilder(Vector2 position, Vector2 windowSize, float elementHeight) 
         {
             Position = position;
             Size = windowSize;
             ElementHeight = elementHeight;
             style = new WindowStyle();
-            style.Init();
         }
 
         public void StartElements()
         {
+            if (!initialized)
+            {
+                style.Init();
+                initialized = true;
+            }
+
             ResetPosition();
             currentSectionIndex = -1;
+            elementsCount = 0;
         }
 
         public void StartSection(string name)
@@ -129,6 +139,7 @@
             float windowCentreX = Size.x / 2f;
             float halfElementWidth = Size.x * widthElementScale / 2f;
             float posX = windowCentreX - halfElementWidth;
+            elementsCount++;
             return new Rect(posX, currentElementPosition.y, Size.x * widthElementScale, ElementHeight);
         }
 

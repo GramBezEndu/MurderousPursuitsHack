@@ -20,7 +20,7 @@
         {
             if (GameInfoManager.Instance != null)
             {
-                List<PlayerInfo> hunters = GameInfoManager.Instance.Players.FindAll(x => x.IsHunterForLocal);
+                List<PlayerData> hunters = GameInfoManager.Instance.Players.FindAll(x => x.IsHunterForLocal);
                 if (hunters != null)
                 {
                     foreach (var hunter in hunters)
@@ -39,7 +39,7 @@
         {
             if (GameInfoManager.Instance != null)
             {
-                PlayerInfo local = GameInfoManager.Instance.Players.Find(x => x.IsLocalPlayer);
+                PlayerData local = GameInfoManager.Instance.Players.Find(x => x.IsLocalPlayer);
                 if (local != null)
                 {
                     Transform characterTransform = (Transform)(local.CharacterMovement.GetFieldValue("characterTransform"));
