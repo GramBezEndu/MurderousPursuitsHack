@@ -19,46 +19,111 @@
 
         private float elementsMarginY = 5f;
 
-        private GUIStyle buttonStyle = null;
+        private WindowStyle style;
 
-        private GUIStyle expanderStyle = null;
+        private List<Section> sections = new List<Section>();
 
-        private GUIStyle labelStyle = null;
+        private int currentSectionIndex = -1;
 
         public WindowBuilder(Vector2 position, Vector2 windowSize, float elementHeight) 
         {
             Position = position;
             Size = windowSize;
             ElementHeight = elementHeight;
+            style = new WindowStyle();
+            style.Init();
         }
 
         public void StartElements()
         {
-            InitStyles();
             ResetPosition();
+            currentSectionIndex = -1;
+        }
+
+        public void StartSection(string name)
+        {
+            int index = sections.FindIndex(x => x.Name == name);
+            if (index == -1)
+            {
+                var section = new Section();
+                section.Name = name;
+                section.Expanded = Expander(name, section.Expanded);
+                sections.Add(section);
+                currentSectionIndex = sections.Count - 1;
+            }
+            else
+            {
+                sections[index].Expanded = Expander(name, sections[index].Expanded);
+                currentSectionIndex = index;
+            }
+        }
+
+        public void EndSection()
+        {
+            currentSectionIndex = -1;
         }
 
         public bool Button(string message)
         {
-            return GUI.Button(NextRect(), message, buttonStyle);
+            if (currentSectionIndex == -1 || sections[currentSectionIndex].Expanded)
+            {
+                return GUI.Button(NextRect(0.8f), message, style.Button);
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public bool Toggle(bool value, string message)
         {
-            return GUI.Toggle(NextRect(), value, message);
+            if (currentSectionIndex == -1 || sections[currentSectionIndex].Expanded)
+            {
+                return GUI.Toggle(NextRect(), value, message);
+            }
+            else
+            {
+                // Returns previous value
+                return value;
+            }
         }
 
-        public void Expander(string message)
+        public int Slider(int current, int leftValue, int rightValue)
         {
-            GUI.Toggle(NextRect(0.98f), true, message, expanderStyle);
+            if (currentSectionIndex == -1 || sections[currentSectionIndex].Expanded)
+            {
+                return (int)GUI.HorizontalSlider(NextRect(), current, leftValue, rightValue);
+            }
+            else
+            {
+                return current;
+            }
+        }
+
+        public bool Expander(string message, bool value)
+        {
+            return GUI.Toggle(NextRect(0.98f), value, message, style.Expander);
         }
 
         public void Label(string message)
         {
-            GUI.Label(NextRect(), message, labelStyle);
+            if (currentSectionIndex == -1 || sections[currentSectionIndex].Expanded)
+            {
+                GUI.Label(NextRect(), message, style.Label);
+            }
         }
 
-        public Rect NextRect(float widthElementScale = 0.95f)
+        public void StartDisabled()
+        {
+            GUI.enabled = false;
+        }
+
+        public void EndDisabled()
+        {
+            GUI.enabled = true;
+        }
+
+        private Rect NextRect(float widthElementScale = 0.95f)
         {
             currentElementPosition.y += ElementHeight + elementsMarginY;
             float windowCentreX = Size.x / 2f;
@@ -67,60 +132,9 @@
             return new Rect(posX, currentElementPosition.y, Size.x * widthElementScale, ElementHeight);
         }
 
-        public void EndElements()
-        {
-            ResetPosition();
-        }
-
-        public void StartDisabledSection()
-        {
-            GUI.enabled = false;
-        }
-
-        public void EndDisabledSection()
-        {
-            GUI.enabled = true;
-        }
-
         private void ResetPosition()
         {
             currentElementPosition = new Vector2(0f, 0f);
-        }
-
-        private void InitStyles()
-        {
-            if (buttonStyle == null)
-            {
-                buttonStyle = new GUIStyle(GUI.skin.button);
-                //buttonStyle.normal.background = MakeTex(2, 2, new Color(0f, 0.75f, 0.75f, 1f));
-                //buttonStyle.hover.background = MakeTex(2, 2, new Color(0f, 0.6f, 0.6f, 1f));
-            }
-
-            if (expanderStyle == null)
-            {
-                expanderStyle = new GUIStyle(GUI.skin.button);
-                expanderStyle.normal.background = MakeTex(2, 2, new Color(0f, 0.55f, 0.55f, 1f));
-                expanderStyle.hover.background = MakeTex(2, 2, new Color(0f, 0.4f, 0.4f, 1f));
-            }
-
-            if (labelStyle == null)
-            {
-                labelStyle = new GUIStyle(GUI.skin.label);
-                //labelStyle.normal.background = MakeTex(2, 2, new Color(0.7f, 0.7f, 0.7f, 1f));
-            }
-        }
-
-        private Texture2D MakeTex(int width, int height, Color col)
-        {
-            Color[] pix = new Color[width * height];
-            for (int i = 0; i < pix.Length; ++i)
-            {
-                pix[i] = col;
-            }
-            Texture2D result = new Texture2D(width, height);
-            result.SetPixels(pix);
-            result.Apply();
-            return result;
         }
     }
 }

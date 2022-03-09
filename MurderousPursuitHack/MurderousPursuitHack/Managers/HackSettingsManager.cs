@@ -26,6 +26,8 @@ namespace MurderousPursuitHack
 
         public static int CurrentSpeedMultiplierIndex = 3; // Equals to 1f speed
 
+        private WindowBuilder builder;
+
         private Vector2 windowPosition = new Vector2(10f, 260f);
 
         private Vector2 windowSize = new Vector2(300, 610);
@@ -42,7 +44,6 @@ namespace MurderousPursuitHack
 
         private void CreateElements(int windowID)
         {
-            WindowBuilder builder = new WindowBuilder(windowPosition, windowSize, elementHeight);
             builder.StartElements();
 
             VisualsSection(builder);
@@ -51,13 +52,11 @@ namespace MurderousPursuitHack
             OthersSection(builder);
             AbilitiesSection(builder);
             DebugSection(builder);
-
-            builder.EndElements();
         }
 
         private static void VisualsSection(WindowBuilder builder)
         {
-            builder.Expander("VISUALS");
+            builder.StartSection("VISUALS");
 
             ChamsEnabled = builder.Toggle(ChamsEnabled, String.Format("[{0}] Chams", InputManager.Instance.Keybindings.Chams));
             EspEnabled = builder.Toggle(EspEnabled, String.Format("[{0}] ESP", InputManager.Instance.Keybindings.Esp));
@@ -65,17 +64,19 @@ namespace MurderousPursuitHack
             {
                 SkinsHelper.ChangeSkin();
             }
+            builder.EndSection();
         }
 
         private static void DebugSection(WindowBuilder builder)
         {
-            builder.Expander("DEBUG");
+            builder.StartSection("DEBUG");
             DebugInfo = builder.Toggle(DebugInfo, String.Format("[{0}] Debug window", InputManager.Instance.Keybindings.DebugInfo));
+            builder.EndSection();
         }
 
         private static void TeleportsSection(WindowBuilder builder)
         {
-            builder.Expander("TELEPORTS");
+            builder.StartSection("TELEPORTS");
             if (builder.Button(String.Format("[{0}] Teleport To Quarry", InputManager.Instance.Keybindings.TeleportToQuarry)))
             {
                 TeleportManager.TeleportToQuarry();
@@ -85,28 +86,30 @@ namespace MurderousPursuitHack
             {
                 TeleportManager.TeleportToAnyHunter();
             }
+            builder.EndSection();
         }
 
         private static void SpeedhackSection(WindowBuilder builder)
         {
-            builder.Expander("SPEED HACK");
+            builder.StartSection("SPEED HACK");
             Speedhack = builder.Toggle(Speedhack, String.Format("Speedhack: {0}", Math.Round(SpeedhackMultipliers[CurrentSpeedMultiplierIndex], 3)));
-            CurrentSpeedMultiplierIndex = (int)GUI.HorizontalSlider(builder.NextRect(),
-                CurrentSpeedMultiplierIndex, 0, SpeedhackMultipliers.Length - 1);
+            CurrentSpeedMultiplierIndex = builder.Slider(CurrentSpeedMultiplierIndex, 0, SpeedhackMultipliers.Length - 1);
+            builder.EndSection();
         }
 
         private static void OthersSection(WindowBuilder builder)
         {
-            builder.Expander("OTHERS");
-            builder.StartDisabledSection();
+            builder.StartSection("OTHERS");
+            builder.StartDisabled();
             ZeroExposure = builder.Toggle(ZeroExposure, "[F5] Zero exposure");
-            builder.EndDisabledSection();
+            builder.EndDisabled();
+            builder.EndSection();
         }
 
         private static void AbilitiesSection(WindowBuilder builder)
         {
-            builder.Expander("ABILITIES");
-            builder.StartDisabledSection();
+            builder.StartSection("ABILITIES");
+            builder.StartDisabled();
             if (builder.Button("[F6] Place Pie Bomb"))
             {
                 AbilityManager.StartAbility<XPlacePieBomb>();
@@ -122,11 +125,13 @@ namespace MurderousPursuitHack
                 AbilityManager.StartAbility<XDisrupt>();
             }
 
-            builder.EndDisabledSection();
+            builder.EndDisabled();
+            builder.EndSection();
         }
 
         public void Start()
         {
+            builder = new WindowBuilder(windowPosition, windowSize, elementHeight);
             SpeedhackMultipliers = GeneratePossibleMultipliers();
         }
 
