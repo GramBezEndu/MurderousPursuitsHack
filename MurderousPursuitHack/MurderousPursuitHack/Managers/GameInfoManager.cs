@@ -7,6 +7,7 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Text;
     using UnityEngine;
 
     public class GameInfoManager : MonoBehaviour
@@ -36,7 +37,7 @@
 
         public List<uint> HunterIDs = new List<uint>();
 
-        private float lastCache;
+        public List<uint> BotIDs = new List<uint>();
 
         public void Update()
         {
@@ -49,9 +50,11 @@
                 }
 
                 LocalPlayerId = LocalPlayer.PlayerID;
-                if (NeedToUpdateCachedObjects())
+                FindHUD();
+
+                if (Singleton<PlayerManager>.Instance.BotIDs != null)
                 {
-                    FindAndCacheObjects();
+                    BotIDs = Singleton<PlayerManager>.Instance.BotIDs;
                 }
 
                 UpdateHunterList();
@@ -60,11 +63,14 @@
             }
         }
 
-        private void FindAndCacheObjects()
+        private void FindHUD()
         {
-            lastCache = Time.time + 1f;
-            HunterHUD = UnityEngine.Object.FindObjectOfType<HunterHUD>();
-            QuarryBar = UnityEngine.Object.FindObjectOfType<QuarryLocatorBarHUD>();
+            GameObject canvasGameplayHUD = GameObject.Find("CanvasGameplayHUD");
+            if (canvasGameplayHUD != null)
+            {
+                HunterHUD = canvasGameplayHUD.GetComponentInChildren<HunterHUD>();
+                QuarryBar = canvasGameplayHUD.GetComponentInChildren<QuarryLocatorBarHUD>();
+            }
         }
 
         private List<PlayerData> CreatePlayerDataList()
@@ -118,8 +124,17 @@
         {
             // Note: Need to be "XPlayer" type
             XCharacterMovement xCharacterMovement = (XCharacterMovement)(typeof(XPlayer).GetField("characterMovement", ReflectionHelper.FieldGetFlags).GetValue(player));
+            if (xCharacterMovement == null)
+            {
+                return new PlayerData()
+                {
+                    PlayerId = 0,
+                };
+            }
+
             Transform characterTransform = (Transform)(xCharacterMovement.GetFieldValue("characterTransform"));
             Collider collider = xCharacterMovement.GetComponent<Collider>();
+
             PlayerData playerData = new PlayerData()
             {
                 PlayerId = player.PlayerID,
@@ -127,7 +142,7 @@
                 DisplayName = player.name,
                 IsLocalPlayer = xCharacterMovement.isLocalPlayer,
                 IsAlive = player.IsAlive,
-                IsBot = Singleton<PlayerManager>.Instance.BotIDs.Contains(player.PlayerID) ? true : false,
+                IsBot = BotIDs.Contains(player.PlayerID) ? true : false,
                 IsHunterForLocal = HunterIDs.Contains(player.PlayerID) ? true : false,
                 IsQuarryForLocal = player.PlayerID == CurrentQuarry ? true : false,
                 // Note: use characterTransform.position (not transform.position)
@@ -142,11 +157,6 @@
             // Note: Caching camera might improve performance but it will add additional checks
             playerData.OnScreenPosition = Camera.main.WorldToScreenPoint(playerData.Position);
             return playerData;
-        }
-
-        private bool NeedToUpdateCachedObjects()
-        {
-            return Time.time >= lastCache;
         }
     }
 }

@@ -31,7 +31,6 @@
             builder.Label("Game Type: " + UNetManager.Instance.GameType);
             builder.Label("Quarry Bar found: " + ((GameInfoManager.Instance.QuarryBar != null) ? "True" : "False"));
             builder.Label("Hunter HUD found: " + ((GameInfoManager.Instance.HunterHUD != null) ? "True" : "False"));
-            builder.Label("Hunters count: " + GameInfoManager.Instance.HunterIDs.Count.ToString());
         }
     }
 }
