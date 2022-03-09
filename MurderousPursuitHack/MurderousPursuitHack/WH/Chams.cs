@@ -1,6 +1,7 @@
 ﻿namespace MurderousPursuitHack.WH
 {
     using ProjectX.Player;
+    using System;
     using UnityEngine;
 
     public class Chams : MonoBehaviour
@@ -11,11 +12,16 @@
 
         Material quarryGlow;
 
+        Material localPlayerGlow;
+
+        private readonly bool drawLocalPlayerChams = true;
+
         public void Start()
         {
             neutralGlow = CreateNeutralMaterial();
             hunterGlow = CreateHunterMaterial(neutralGlow);
             quarryGlow = CreateQuarryMaterial(neutralGlow);
+            localPlayerGlow = CreateLocalPlayerMaterial(neutralGlow);
         }
 
         public void Update()
@@ -24,6 +30,14 @@
             {
                 UpdateGlow(playerInfo);
             }
+        }
+
+        public void OnDestroy()
+        {
+            GameObject.Destroy(neutralGlow);
+            GameObject.Destroy(hunterGlow);
+            GameObject.Destroy(quarryGlow);
+            GameObject.Destroy(localPlayerGlow);
         }
 
         private Material CreateNeutralMaterial()
@@ -54,6 +68,17 @@
             return newMaterial;
         }
 
+        private Material CreateLocalPlayerMaterial(Material neutral)
+        {
+            var newMaterial = new Material(Shader.Find("Hidden/Internal-Colored"))
+            {
+                hideFlags = HideFlags.DontSaveInEditor | HideFlags.HideInHierarchy
+            };
+            newMaterial.CopyPropertiesFromMaterial(neutral);
+            newMaterial.SetColor("_Color", Color.white);
+            return newMaterial;
+        }
+
         private Material CreateQuarryMaterial(Material neutral)
         {
             var newMaterial = new Material(Shader.Find("Hidden/Internal-Colored"))
@@ -68,7 +93,7 @@
         private void UpdateGlow(PlayerData playerInfo)
         {
             XPlayer player = playerInfo.Player;
-            if (player.isLocalPlayer)
+            if (player.isLocalPlayer && drawLocalPlayerChams == false)
             {
                 return;
             }
@@ -77,7 +102,7 @@
 
             for (int i = 0; i < allRenderers.Length; i++)
             {
-                if (HackSettingsManager.ChamsEnabled)
+                if (Settings.ChamsEnabled)
                 {
                     ApplyChams(playerInfo, allRenderers, i);
                 }
@@ -98,6 +123,10 @@
             else if (playerInfo.IsQuarryForLocal)
             {
                 ApplyMaterial(renderer, quarryGlow);
+            }
+            else if (playerInfo.IsLocalPlayer)
+            {
+                ApplyMaterial(renderer, localPlayerGlow);
             }
             else
             {

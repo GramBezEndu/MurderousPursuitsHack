@@ -27,16 +27,21 @@
             {
                 builder.Start();
                 builder.Label("Mono memory: " + Math.Round(System.GC.GetTotalMemory(false) / Math.Pow(10, 6), 1) + " MB");
-                builder.Label("Is Host: " + Singleton<LevelManager>.Instance.IsHost);
+                builder.Label("Is Host: " + GameInfoManager.Instance.IsHost.ToString());
                 builder.Label("Game Type: " + UNetManager.Instance.GameType);
                 builder.Label("Quarry Bar found: " + ((GameInfoManager.Instance.QuarryBar != null) ? "True" : "False"));
                 builder.Label("Hunter HUD found: " + ((GameInfoManager.Instance.HunterHUD != null) ? "True" : "False"));
             }
 
-            if (HackSettingsManager.DebugInfo)
+            if (Settings.DebugWindow)
             {
                 builder.CreateWindow(CreateDebugWindow, 0, "DEBUG");
             }
+        }
+
+        public void OnDestroy()
+        {
+            builder.OnDestroy();
         }
     }
 }

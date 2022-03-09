@@ -1,4 +1,4 @@
-﻿namespace MurderousPursuitHack
+﻿namespace MurderousPursuitHack.Managers
 {
     using System;
 
@@ -8,16 +8,16 @@
         {
             if (GameInfoManager.Instance != null)
             {
-                var local = GameInfoManager.Instance.Players.Find(x => x.IsLocalPlayer);
-                if (local != null)
+                PlayerData playerData = GameInfoManager.Instance.Players.Find(x => x.IsLocalPlayer);
+                if (playerData != null)
                 {
-                    var ability = Array.Find(local.CharacterMovement.Abilities.Abilities, x => typeof(LoadoutAbility).Equals(x.GetType()));
+                    ProjectX.Abilities.LoadoutAbility ability = 
+                        (ProjectX.Abilities.LoadoutAbility)Array.Find(playerData.CharacterMovement.Abilities.Abilities, x => typeof(LoadoutAbility).Equals(x.GetType()));
                     ability.enabled = true;
-                    local.CharacterAbilities.ClientTryStartAbility(ability, true);
-                    if (ability is ProjectX.Abilities.LoadoutAbility loadoutAbility)
-                    {
-                        loadoutAbility.ResetCooldown();
-                    }
+                    ability.ResetCooldown();
+                    playerData.CharacterAbilities.ClientTryStartAbility(ability, true);
+                    // TODO: Reset cooldown when ability ends
+                    ability.ResetCooldown();
                 }
             }
         }

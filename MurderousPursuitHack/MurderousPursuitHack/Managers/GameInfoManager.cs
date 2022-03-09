@@ -2,12 +2,12 @@
 {
     using BG.UI;
     using BG.Utils;
+    using ProjectX.Levels;
     using ProjectX.Player;
     using ProjectX.UI.HUD;
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Text;
     using UnityEngine;
 
     public class GameInfoManager : MonoBehaviour
@@ -22,6 +22,8 @@
         {
             Instance = this;
         }
+
+        public bool IsHost { get; private set; }
 
         public List<PlayerData> Players = new List<PlayerData>(8);
 
@@ -41,6 +43,15 @@
 
         public void Update()
         {
+            if (Singleton<LevelManager>.Instance != null)
+            {
+                IsHost = Singleton<LevelManager>.Instance.IsHost;
+            }
+            else
+            {
+                IsHost = false;
+            }
+            
             if (Singleton<PlayerManager>.Instance != null)
             {
                 LocalPlayer = Singleton<PlayerManager>.Instance.GetLocalPlayer();

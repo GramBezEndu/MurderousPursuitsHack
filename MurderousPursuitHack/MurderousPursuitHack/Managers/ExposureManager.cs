@@ -16,7 +16,7 @@ namespace MurderousPursuitHack
         public void Update()
         {
             UpdateExposureDictionary();
-            if (HackSettingsManager.ZeroExposure)
+            if (Settings.ZeroExposure)
             {
                 exposure[GameInfoManager.Instance.LocalPlayerId].exposure = 0f;
             }

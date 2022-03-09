@@ -1,6 +1,7 @@
 ﻿namespace MurderousPursuitHack.Drawing
 {
     using System;
+    using System.Collections.Generic;
     using UnityEngine;
 
     public class WindowStyle
@@ -19,9 +20,19 @@
 
         public GUIStyle Thumb { get; set; }
 
+        private List<Texture2D> textures = new List<Texture2D>();
+
         public void Init()
         {
             InitStyles();
+        }
+
+        public void OnDestroy()
+        {
+            foreach (Texture2D texture in textures)
+            {
+                GameObject.Destroy(texture);
+            }
         }
 
         private void InitStyles()
@@ -66,10 +77,6 @@
         {
             Toggle = new GUIStyle(GUI.skin.toggle);
             Toggle.fontStyle = FontStyle.Bold;
-            // When false
-            //Toggle.normal.textColor = new Color(0.73f, 0.2f, 0.2f, 1f);
-            // When true
-            //Toggle.onNormal.textColor = new Color(0f, 0.65f, 1f, 1f);
         }
 
         private void CreateWindowStyle()
@@ -103,6 +110,7 @@
             Texture2D result = new Texture2D(width, height);
             result.SetPixels(pix);
             result.Apply();
+            textures.Add(result);
             return result;
         }
     }

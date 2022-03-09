@@ -1,6 +1,7 @@
 ﻿namespace MurderousPursuitHack.Input
 {
     using MurderousPursuitHack.Skins;
+    using ProjectX.Abilities;
     using UnityEngine;
 
     public class InputManager : MonoBehaviour
@@ -16,24 +17,34 @@
 
         public void Update()
         {
+            UpdateKeys();
+
+            if (GameInfoManager.Instance.IsHost)
+            {
+                UpdateHostFeaturesKeys();
+            }
+        }
+
+        private void UpdateKeys()
+        {
             if (Input.GetKeyDown(Keybindings.CheatWindow))
             {
-                HackSettingsManager.WindowHidden = !HackSettingsManager.WindowHidden;
+                Settings.CheatsWindow = !Settings.CheatsWindow;
             }
 
             if (Input.GetKeyDown(Keybindings.Chams))
             {
-                HackSettingsManager.ChamsEnabled = !HackSettingsManager.ChamsEnabled;
+                Settings.ChamsEnabled = !Settings.ChamsEnabled;
             }
 
             if (Input.GetKeyDown(Keybindings.Esp))
             {
-                HackSettingsManager.EspEnabled = !HackSettingsManager.EspEnabled;
+                Settings.EspEnabled = !Settings.EspEnabled;
             }
 
             if (Input.GetKeyDown(Keybindings.DebugInfo))
             {
-                HackSettingsManager.DebugInfo = !HackSettingsManager.DebugInfo;
+                Settings.DebugWindow = !Settings.DebugWindow;
             }
 
             if (Input.GetKeyDown(Keybindings.ChangeSkin))
@@ -49,6 +60,29 @@
             if (Input.GetKeyDown(Keybindings.TeleportToAnyHunter))
             {
                 TeleportManager.TeleportToAnyHunter();
+            }
+        }
+
+        private void UpdateHostFeaturesKeys()
+        {
+            if (Input.GetKeyDown(Keybindings.ZeroExposure))
+            {
+                Settings.ZeroExposure = !Settings.ZeroExposure;
+            }
+
+            if (Input.GetKeyDown(Keybindings.PieBomb))
+            {
+                Managers.AbilityManager.StartAbility<XPlacePieBomb>();
+            }
+
+            if (Input.GetKeyDown(Keybindings.Flash))
+            {
+                Managers.AbilityManager.StartAbility<XFlash>();
+            }
+
+            if (Input.GetKeyDown(Keybindings.Disrupt))
+            {
+                Managers.AbilityManager.StartAbility<XDisrupt>();
             }
         }
     }

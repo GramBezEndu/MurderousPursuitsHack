@@ -21,7 +21,7 @@
                 return;
             }
 
-            if (HackSettingsManager.EspEnabled)
+            if (Settings.EspEnabled)
             {
                 DrawWallhack();
             }

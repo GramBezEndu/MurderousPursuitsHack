@@ -10,18 +10,6 @@ namespace MurderousPursuitHack
 {
     class HackSettingsManager : MonoBehaviour
     {
-        public static bool WindowHidden = false;
-
-        public static bool ChamsEnabled = true;
-
-        public static bool EspEnabled = true;
-
-        public static bool DebugInfo = false;
-
-        public static bool Speedhack = false;
-
-        public static bool ZeroExposure = false;
-
         public static float[] SpeedhackMultipliers;
 
         public static int CurrentSpeedMultiplierIndex = 3; // Equals to 1f speed
@@ -40,6 +28,11 @@ namespace MurderousPursuitHack
             builder = new WindowBuilder(windowPosition, windowSize, elementHeight);
         }
 
+        public void OnDestroy()
+        {
+            builder.OnDestroy();
+        }
+
         public void OnGUI()
         {
             void CreateElements(int windowID)
@@ -48,90 +41,91 @@ namespace MurderousPursuitHack
                 VisualsSection(builder);
                 TeleportsSection(builder);
                 SpeedhackSection(builder);
-                OthersSection(builder);
-                AbilitiesSection(builder);
+                HostOnlySection(builder);
                 DebugSection(builder);
             }
 
-            if (!WindowHidden)
+            if (!Settings.CheatsWindow)
             {
                 builder.CreateWindow(CreateElements, 1, "CHEATS");
             }
         }
 
-        private static void VisualsSection(WindowBuilder builder)
+        private void VisualsSection(WindowBuilder builder)
         {
             builder.StartSection("VISUALS");
 
-            ChamsEnabled = builder.Toggle(ChamsEnabled, String.Format("[{0}] Chams", InputManager.Instance.Keybindings.Chams));
-            EspEnabled = builder.Toggle(EspEnabled, String.Format("[{0}] ESP", InputManager.Instance.Keybindings.Esp));
-            if (builder.Button(String.Format("[{0}] Change skin", InputManager.Instance.Keybindings.ChangeSkin)))
+            Settings.ChamsEnabled = builder.Toggle(Settings.ChamsEnabled, DrawingHelper.DisplayKeybind("Chams", InputManager.Instance.Keybindings.Chams));
+            Settings.EspEnabled = builder.Toggle(Settings.EspEnabled, DrawingHelper.DisplayKeybind("ESP", InputManager.Instance.Keybindings.Esp));
+            if (builder.Button(DrawingHelper.DisplayKeybind("Change skin", InputManager.Instance.Keybindings.ChangeSkin)))
             {
                 SkinsHelper.ChangeSkin();
             }
+
             builder.EndSection();
         }
 
-        private static void DebugSection(WindowBuilder builder)
+        private void DebugSection(WindowBuilder builder)
         {
             builder.StartSection("DEBUG");
-            DebugInfo = builder.Toggle(DebugInfo, String.Format("[{0}] Debug window", InputManager.Instance.Keybindings.DebugInfo));
+            Settings.DebugWindow = builder.Toggle(Settings.DebugWindow, DrawingHelper.DisplayKeybind("Debug window", InputManager.Instance.Keybindings.DebugInfo));
             builder.EndSection();
         }
 
-        private static void TeleportsSection(WindowBuilder builder)
+        private void TeleportsSection(WindowBuilder builder)
         {
             builder.StartSection("TELEPORTS");
-            if (builder.Button(String.Format("[{0}] Teleport To Quarry", InputManager.Instance.Keybindings.TeleportToQuarry)))
+            if (builder.Button(DrawingHelper.DisplayKeybind("Teleport to Quarry", InputManager.Instance.Keybindings.TeleportToQuarry)))
             {
                 TeleportManager.TeleportToQuarry();
             }
 
-            if (builder.Button(String.Format("[{0}] Teleport To Any Hunter", InputManager.Instance.Keybindings.TeleportToAnyHunter)))
+            if (builder.Button(DrawingHelper.DisplayKeybind("Teleport to Any Hunter", InputManager.Instance.Keybindings.TeleportToAnyHunter)))
             {
                 TeleportManager.TeleportToAnyHunter();
             }
+
             builder.EndSection();
         }
 
-        private static void SpeedhackSection(WindowBuilder builder)
+        private void SpeedhackSection(WindowBuilder builder)
         {
             builder.StartSection("SPEED HACK");
-            Speedhack = builder.Toggle(Speedhack, String.Format("Speedhack: {0}", Math.Round(SpeedhackMultipliers[CurrentSpeedMultiplierIndex], 3)));
+            Settings.Speedhack = builder.Toggle(Settings.Speedhack, String.Format("Speedhack: {0}", Math.Round(SpeedhackMultipliers[CurrentSpeedMultiplierIndex], 3)));
             CurrentSpeedMultiplierIndex = builder.Slider(CurrentSpeedMultiplierIndex, 0, SpeedhackMultipliers.Length - 1);
             builder.EndSection();
         }
 
-        private static void OthersSection(WindowBuilder builder)
+        private void HostOnlySection(WindowBuilder builder)
         {
-            builder.StartSection("OTHERS");
-            builder.StartDisabled();
-            ZeroExposure = builder.Toggle(ZeroExposure, "[F5] Zero exposure");
-            builder.EndDisabled();
+            bool isHosting = GameInfoManager.Instance.IsHost;
+            builder.StartSection("HOST ONLY");
+            Settings.ZeroExposure = builder.Toggle(Settings.ZeroExposure, DrawingHelper.DisplayKeybind("Zero Exposure", InputManager.Instance.Keybindings.ZeroExposure));
+            if (!isHosting)
+            {
+                builder.StartDisabled();
+            }
+
+            if (builder.Button(DrawingHelper.DisplayKeybind("Pie Bomb", InputManager.Instance.Keybindings.PieBomb)))
+            {
+                Managers.AbilityManager.StartAbility<XPlacePieBomb>();
+            }
+
+            if (builder.Button(DrawingHelper.DisplayKeybind("Flash", InputManager.Instance.Keybindings.Flash)))
+            {
+                Managers.AbilityManager.StartAbility<XFlash>();
+            }
+
+            if (builder.Button(DrawingHelper.DisplayKeybind("Disrupt", InputManager.Instance.Keybindings.Disrupt)))
+            {
+                Managers.AbilityManager.StartAbility<XDisrupt>();
+            }
+
             builder.EndSection();
-        }
-
-        private static void AbilitiesSection(WindowBuilder builder)
-        {
-            builder.StartSection("ABILITIES");
-            builder.StartDisabled();
-            if (builder.Button("[F6] Place Pie Bomb"))
+            if (!isHosting)
             {
-                AbilityManager.StartAbility<XPlacePieBomb>();
+                builder.EndDisabled();
             }
-
-            if (builder.Button("[F7] Flash"))
-            {
-                AbilityManager.StartAbility<XFlash>();
-            }
-
-            if (builder.Button("[F8] Disrupt"))
-            {
-                AbilityManager.StartAbility<XDisrupt>();
-            }
-
-            builder.EndDisabled();
-            builder.EndSection();
         }
 
         private float[] GeneratePossibleMultipliers()

@@ -39,7 +39,7 @@ namespace MurderousPursuitHack
                 return;
             }
 
-            if (HackSettingsManager.Speedhack)
+            if (Settings.Speedhack)
             {
                 EnableSpeedhack();
             }
