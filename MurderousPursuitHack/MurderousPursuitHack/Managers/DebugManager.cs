@@ -12,7 +12,7 @@
     {
         private Vector2 windowPosition = new Vector2(10f, 5f);
 
-        private Vector2 windowSize = new Vector2(300f, 240f);
+        private Vector2 windowSize = new Vector2(300f, 220f);
 
         WindowBuilder builder;
 

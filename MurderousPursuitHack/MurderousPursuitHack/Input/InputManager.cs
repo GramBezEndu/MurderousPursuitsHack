@@ -49,7 +49,7 @@
 
             if (Input.GetKeyDown(Keybindings.ChangeSkin))
             {
-                SkinsHelper.ChangeSkin();
+                SkinsHelper.ClientSwitchSkin();
             }
 
             if (Input.GetKeyDown(Keybindings.TeleportToQuarry))

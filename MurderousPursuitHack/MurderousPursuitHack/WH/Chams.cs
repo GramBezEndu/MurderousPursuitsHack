@@ -1,5 +1,6 @@
 ﻿namespace MurderousPursuitHack.WH
 {
+    using MurderousPursuitHack.Skins;
     using ProjectX.Player;
     using System;
     using UnityEngine;
@@ -22,6 +23,7 @@
             hunterGlow = CreateHunterMaterial(neutralGlow);
             quarryGlow = CreateQuarryMaterial(neutralGlow);
             localPlayerGlow = CreateLocalPlayerMaterial(neutralGlow);
+            Settings.OnChamsDisabled += (o, e) => ClearChams();
         }
 
         public void Update()
@@ -106,10 +108,6 @@
                 {
                     ApplyChams(playerInfo, allRenderers, i);
                 }
-                else
-                {
-                    ClearChams(allRenderers, i);
-                }
             }
         }
 
@@ -134,23 +132,6 @@
             }
         }
 
-        private void ClearChams(Renderer[] allRenderers, int i)
-        {
-            // TODO: Finish
-            return;
-
-            Renderer renderer = allRenderers[i];
-
-            renderer.material = neutralGlow;
-
-            var shared = renderer.sharedMaterials;
-            for (int j = 0; j < shared.Length; j++)
-            {
-                shared[j] = neutralGlow;
-            }
-            renderer.sharedMaterials = shared;
-        }
-
         // TODO: Refactor, maybe extension method
         private void ApplyMaterial(Renderer renderer, Material material)
         {
@@ -162,6 +143,15 @@
                 shared[j] = material;
             }
             renderer.sharedMaterials = shared;
+        }
+
+        private void ClearChams()
+        {
+            foreach (PlayerData playerData in GameInfoManager.Instance.Players)
+            {
+                XPlayer player = playerData.Player;
+                SkinsHelper.RestoreSkin(player);
+            }
         }
     }
 }

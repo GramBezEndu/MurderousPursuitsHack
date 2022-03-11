@@ -59,7 +59,7 @@ namespace MurderousPursuitHack
             Settings.EspEnabled = builder.Toggle(Settings.EspEnabled, DrawingHelper.DisplayKeybind("ESP", InputManager.Instance.Keybindings.Esp));
             if (builder.Button(DrawingHelper.DisplayKeybind("Change skin", InputManager.Instance.Keybindings.ChangeSkin)))
             {
-                SkinsHelper.ChangeSkin();
+                SkinsHelper.ClientSwitchSkin();
             }
 
             builder.EndSection();
