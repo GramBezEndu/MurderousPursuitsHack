@@ -6,15 +6,15 @@
     {
         public KeyCode CheatWindow { get; set; } = KeyCode.F1;
 
-        public KeyCode Chams { get; set; } = KeyCode.F2;
+        public KeyCode Chams { get; set; } = KeyCode.None;
 
-        public KeyCode Esp { get; set; } = KeyCode.F3;
+        public KeyCode Esp { get; set; } = KeyCode.None;
 
-        public KeyCode ChangeSkin { get; set; } = KeyCode.F4;
+        public KeyCode ChangeSkin { get; set; } = KeyCode.F2;
 
         public KeyCode DebugInfo { get; set; } = KeyCode.F5;
 
-        public KeyCode ZeroExposure { get; set; } = KeyCode.F6;
+        public KeyCode ZeroExposure { get; set; } = KeyCode.None;
 
         public KeyCode PieBomb { get; set; } = KeyCode.Z;
 

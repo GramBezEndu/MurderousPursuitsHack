@@ -4,7 +4,6 @@
     using Opsive.ThirdPersonController;
     using ProjectX.Characters;
     using ProjectX.Player;
-    using System;
     using System.Collections.Generic;
     using System.Reflection;
 

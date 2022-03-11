@@ -4,7 +4,7 @@ namespace MurderousPursuitHack
 {
     public static class Settings
     {
-        private static bool chamsEnabled;
+        private static bool chamsEnabled = true;
 
         public static event EventHandler OnChamsDisabled;
 
@@ -26,12 +26,12 @@ namespace MurderousPursuitHack
             }
         }
 
-        public static bool EspEnabled { get; set; }
+        public static bool EspEnabled { get; set; } = true;
 
         public static bool DebugWindow { get; set; }
 
         public static bool Speedhack { get; set; }
 
-        public static bool ZeroExposure { get; set; }
+        public static bool ZeroExposure { get; set; } = true;
     }
 }

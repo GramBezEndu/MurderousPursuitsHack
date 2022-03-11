@@ -7,7 +7,14 @@
     {
         public static string DisplayKeybind(string action, KeyCode keycode)
         {
-            return String.Format("[{0}] {1}", keycode, action);
+            if (keycode == KeyCode.None)
+            {
+                return action;
+            }
+            else
+            {
+                return String.Format("[{0}] {1}", keycode, action);
+            }
         }
     }
 }

@@ -8,7 +8,7 @@
 
     public class Section
     {
-        public bool Expanded = false;
+        public bool Expanded { get; set; } = true;
 
         public string Name { get; set; } = string.Empty;
     }

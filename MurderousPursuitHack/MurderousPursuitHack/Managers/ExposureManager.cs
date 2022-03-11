@@ -1,23 +1,18 @@
-﻿using ProjectX.CoreGameLoop;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
-using static ProjectX.CoreGameLoop.ExposureManager;
-
-namespace MurderousPursuitHack
+﻿namespace MurderousPursuitHack
 {
+    using System.Collections.Generic;
+    using UnityEngine;
+    using static ProjectX.CoreGameLoop.ExposureManager;
+
     public class ExposureManager : MonoBehaviour
     {
         private Dictionary<uint, PlayerExposure> exposure;
 
         public void Update()
         {
-            UpdateExposureDictionary();
-            if (Settings.ZeroExposure)
+            if (Settings.ZeroExposure && GameInfoManager.Instance.IsHost)
             {
+                UpdateExposureDictionary();
                 exposure[GameInfoManager.Instance.LocalPlayerId].exposure = 0f;
             }
         }
