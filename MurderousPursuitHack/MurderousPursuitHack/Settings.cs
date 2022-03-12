@@ -8,6 +8,8 @@ namespace MurderousPursuitHack
 
         public static event EventHandler OnChamsDisabled;
 
+        public static bool AutoAttackAfterTeleport { get; set; } = true;
+
         public static bool CheatsWindow { get; set; }
 
         public static bool ChamsEnabled 

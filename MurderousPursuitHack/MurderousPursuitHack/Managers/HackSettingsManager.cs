@@ -18,7 +18,7 @@ namespace MurderousPursuitHack
 
         private Vector2 windowPosition = new Vector2(10f, 260f);
 
-        private Vector2 windowSize = new Vector2(300, 610);
+        private Vector2 windowSize = new Vector2(300, 635);
 
         private readonly float elementHeight = 25f;
 
@@ -75,6 +75,10 @@ namespace MurderousPursuitHack
         private void TeleportsSection(WindowBuilder builder)
         {
             builder.StartSection("TELEPORTS");
+            Settings.AutoAttackAfterTeleport = builder.Toggle(
+                Settings.AutoAttackAfterTeleport,
+                DrawingHelper.DisplayKeybind("Auto attack after teleport", InputManager.Instance.Keybindings.AutoAttackAfterTeleport));
+
             if (builder.Button(DrawingHelper.DisplayKeybind("Teleport to Quarry", InputManager.Instance.Keybindings.TeleportToQuarry)))
             {
                 TeleportManager.TeleportToQuarry();

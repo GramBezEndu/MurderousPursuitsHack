@@ -22,6 +22,8 @@
 
         public KeyCode Disrupt { get; set; } = KeyCode.C;
 
+        public KeyCode AutoAttackAfterTeleport { get; set; } = KeyCode.None;
+
         public KeyCode TeleportToQuarry { get; set; } = KeyCode.Alpha1;
 
         public KeyCode TeleportToAnyHunter { get; set; } = KeyCode.Alpha2;

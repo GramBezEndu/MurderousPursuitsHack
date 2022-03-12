@@ -1,5 +1,6 @@
 ﻿namespace MurderousPursuitHack
 {
+    using MurderousPursuitHack.Managers;
     using System.Collections.Generic;
     using UnityEngine;
 
@@ -13,6 +14,10 @@
                 if (target != null)
                 {
                     TeleportLocalPlayer(target.Position);
+                    if (Settings.AutoAttackAfterTeleport)
+                    {
+                        AbilityManager.StartAttack(target.Player);
+                    }
                 }
             }
         }
@@ -29,6 +34,10 @@
                         if (hunter.IsAlive)
                         {
                             TeleportLocalPlayer(hunter.Position);
+                            if (Settings.AutoAttackAfterTeleport)
+                            {
+                                AbilityManager.StartAttack(hunter.Player);
+                            }
                             return;
                         }
                     }
@@ -49,13 +58,16 @@
             }
         }
 
-        private static void TeleportQuarry(Vector3 position)
+        private static bool TeleportQuarry(Vector3 position)
         {
             PlayerData quarry = GameInfoManager.Instance.Players.Find(x => x.IsQuarryForLocal);
             if (quarry != null)
             {
                 TeleportPlayer(quarry, position);
+                return true;
             }
+
+            return false;
         }
 
         public static void TeleportHuntersToLocal()
