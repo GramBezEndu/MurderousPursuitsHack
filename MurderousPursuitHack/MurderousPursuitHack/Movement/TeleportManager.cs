@@ -1,6 +1,5 @@
 ﻿namespace MurderousPursuitHack
 {
-    using ProjectX.Player;
     using System.Collections.Generic;
     using UnityEngine;
 
@@ -10,9 +9,11 @@
         {
             if (GameInfoManager.Instance != null)
             {
-                var target = GameInfoManager.Instance.Players.Find(x => x.IsQuarryForLocal);
+                PlayerData target = GameInfoManager.Instance.Players.Find(x => x.IsQuarryForLocal);
                 if (target != null)
+                {
                     TeleportLocalPlayer(target.Position);
+                }
             }
         }
 
@@ -35,15 +36,71 @@
             }
         }
 
-        private static void TeleportLocalPlayer(Vector3 pos)
+        public static void TeleportQuarryToLocal()
         {
             if (GameInfoManager.Instance != null)
             {
-                PlayerData local = GameInfoManager.Instance.Players.Find(x => x.IsLocalPlayer);
-                if (local != null)
+                if (GameInfoManager.Instance.LocalPlayer == null)
                 {
-                    Transform characterTransform = (Transform)(local.CharacterMovement.GetFieldValue("characterTransform"));
-                    characterTransform.position = pos;
+                    return;
+                }
+                Vector3 position = GameInfoManager.Instance.Players.Find(x => x.IsLocalPlayer).Position;
+                TeleportQuarry(position);
+            }
+        }
+
+        private static void TeleportQuarry(Vector3 position)
+        {
+            PlayerData quarry = GameInfoManager.Instance.Players.Find(x => x.IsQuarryForLocal);
+            if (quarry != null)
+            {
+                TeleportPlayer(quarry, position);
+            }
+        }
+
+        public static void TeleportHuntersToLocal()
+        {
+            if (GameInfoManager.Instance == null)
+            {
+                return;
+            }
+
+            if (GameInfoManager.Instance.LocalPlayer == null)
+            {
+                return;
+            }
+
+            Vector3 position = GameInfoManager.Instance.Players.Find(x => x.IsLocalPlayer).Position;
+            TeleportQuarry(position);
+            List<PlayerData> hunters = GameInfoManager.Instance.Players.FindAll(x => x.IsHunterForLocal);
+            if (hunters != null)
+            {
+                foreach (PlayerData hunter in hunters)
+                {
+                    if (hunter.IsAlive)
+                    {
+                        TeleportPlayer(hunter, position);
+                    }
+                }
+            }
+        }
+
+        private static void TeleportLocalPlayer(Vector3 position)
+        {
+            TeleportPlayer(GameInfoManager.Instance.Players.Find(x => x.IsLocalPlayer), position);
+        }
+
+        private static void TeleportPlayer(PlayerData playerData, Vector3 position)
+        {
+            if (GameInfoManager.Instance != null)
+            {
+                if (playerData != null)
+                {
+                    Transform characterTransform = (Transform)(playerData.CharacterMovement.GetFieldValue("characterTransform"));
+                    if (characterTransform != null)
+                    {
+                        characterTransform.position = position;
+                    }
                 }
             }
         }

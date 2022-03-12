@@ -85,6 +85,16 @@ namespace MurderousPursuitHack
                 TeleportManager.TeleportToAnyHunter();
             }
 
+            if (builder.Button(DrawingHelper.DisplayKeybind("Teleport Quarry To Local", InputManager.Instance.Keybindings.TeleportQuarryToLocal)))
+            {
+                TeleportManager.TeleportQuarryToLocal();
+            }
+
+            if (builder.Button(DrawingHelper.DisplayKeybind("Teleport Hunters To Local", InputManager.Instance.Keybindings.TeleportHunters)))
+            {
+                TeleportManager.TeleportHuntersToLocal();
+            }
+
             builder.EndSection();
         }
 

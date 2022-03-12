@@ -61,6 +61,16 @@
             {
                 TeleportManager.TeleportToAnyHunter();
             }
+
+            if (Input.GetKeyDown(Keybindings.TeleportQuarryToLocal))
+            {
+                TeleportManager.TeleportQuarryToLocal();
+            }
+
+            if (Input.GetKeyDown(Keybindings.TeleportHunters))
+            {
+                TeleportManager.TeleportHuntersToLocal();
+            }
         }
 
         private void UpdateHostFeaturesKeys()
