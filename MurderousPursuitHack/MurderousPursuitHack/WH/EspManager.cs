@@ -23,11 +23,11 @@
 
             if (Settings.EspEnabled)
             {
-                DrawWallhack();
+                DrawPlayerESP();
             }
         }
 
-        private void DrawWallhack()
+        private void DrawPlayerESP()
         {
             foreach (PlayerData p in HackManager.Instance.Players)
             {

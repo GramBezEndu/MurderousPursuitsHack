@@ -86,9 +86,9 @@
                 Teleports.TeleportToQuarry();
             }
 
-            if (builder.Button(DrawingHelper.DisplayKeybind("Teleport to Any Hunter", InputManager.Instance.Keybindings.TeleportToAnyHunter)))
+            if (builder.Button(DrawingHelper.DisplayKeybind("Teleport to Closest Hunter", InputManager.Instance.Keybindings.TeleportToClosestHunter)))
             {
-                Teleports.TeleportToHunter();
+                Teleports.TeleportToClosestHunter();
             }
 
             if (builder.Button(DrawingHelper.DisplayKeybind("Teleport Quarry To Local", InputManager.Instance.Keybindings.TeleportQuarryToLocal)))
@@ -96,7 +96,7 @@
                 Teleports.TeleportQuarry();
             }
 
-            if (builder.Button(DrawingHelper.DisplayKeybind("Teleport Hunters To Local", InputManager.Instance.Keybindings.TeleportHunters)))
+            if (builder.Button(DrawingHelper.DisplayKeybind("Teleport Hunter To Local", InputManager.Instance.Keybindings.TeleportHunter)))
             {
                 Teleports.TeleportHunter();
             }

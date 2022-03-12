@@ -59,9 +59,9 @@
                 Teleports.TeleportToQuarry();
             }
 
-            if (Input.GetKeyDown(Keybindings.TeleportToAnyHunter))
+            if (Input.GetKeyDown(Keybindings.TeleportToClosestHunter))
             {
-                Teleports.TeleportToHunter();
+                Teleports.TeleportToClosestHunter();
             }
 
             if (Input.GetKeyDown(Keybindings.TeleportQuarryToLocal))
@@ -69,7 +69,7 @@
                 Teleports.TeleportQuarry();
             }
 
-            if (Input.GetKeyDown(Keybindings.TeleportHunters))
+            if (Input.GetKeyDown(Keybindings.TeleportHunter))
             {
                 Teleports.TeleportHunter();
             }

@@ -1,6 +1,9 @@
 ﻿namespace MurderousPursuitHack.Movement
 {
     using MurderousPursuitHack.Managers;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using UnityEngine;
 
     public static class Teleports
@@ -21,20 +24,20 @@
             return TeleportLocalToPlayer(target, Settings.AutoAttackAfterTeleport);
         }
 
-        public static bool TeleportToHunter()
+        public static bool TeleportToClosestHunter()
         {
             if (HackManager.Instance == null)
             {
                 return false;
             }
 
-            PlayerData hunter = HackManager.Instance.Players.Find(x => x.IsHunterForLocal);
-            if (hunter == null)
+            PlayerData closestHunter = GetClosestHunter();
+            if (closestHunter == null)
             {
                 return false;
             }
 
-            return TeleportLocalToPlayer(hunter, Settings.AutoAttackAfterTeleport);
+            return TeleportLocalToPlayer(closestHunter, Settings.AutoAttackAfterTeleport);
         }
 
         public static bool TeleportQuarry()
@@ -50,13 +53,18 @@
 
         public static bool TeleportHunter()
         {
-            PlayerData hunter = HackManager.Instance.Players.Find(x => x.IsHunterForLocal);
-            if (hunter == null)
+            if (HackManager.Instance == null)
             {
                 return false;
             }
 
-            return TeleportPlayerToLocal(hunter, Settings.AutoAttackAfterTeleport);
+            PlayerData closestHunter = GetClosestHunter();
+            if (closestHunter == null)
+            {
+                return false;
+            }
+
+            return TeleportPlayerToLocal(closestHunter, Settings.AutoAttackAfterTeleport);
         }
 
         private static bool TeleportPlayerToLocal(PlayerData from, bool attackAutomatically)
@@ -122,6 +130,36 @@
 
             characterTransform.position = position;
             return true;
+        }
+
+        private static PlayerData GetClosestHunter()
+        {
+            if (HackManager.Instance == null)
+            {
+                return null;
+            }
+
+            PlayerData[] hunters = HackManager.Instance.Players.FindAll(x => x.IsHunterForLocal).ToArray();
+            if (hunters == null || hunters.Length == 0)
+            {
+                return null;
+            }
+
+            if (HackManager.Instance.LocalPlayer == null)
+            {
+                return null;
+            }
+
+            Vector3 localPosition = HackManager.Instance.LocalPlayer.transform.position;
+            float[] distanceData = new float[hunters.Length];
+            for (int i = 0; i < hunters.Length; i++)
+            {
+                distanceData[i] = Vector3.Distance(localPosition, hunters[i].Position);
+            }
+
+            float minDistance = distanceData.Min();
+            int index = Array.IndexOf(distanceData, minDistance);
+            return hunters[index];
         }
     }
 }

@@ -26,10 +26,10 @@
 
         public KeyCode TeleportToQuarry { get; set; } = KeyCode.Alpha1;
 
-        public KeyCode TeleportToAnyHunter { get; set; } = KeyCode.Alpha2;
+        public KeyCode TeleportToClosestHunter { get; set; } = KeyCode.Alpha2;
 
         public KeyCode TeleportQuarryToLocal { get; set; } = KeyCode.Alpha3;
 
-        public KeyCode TeleportHunters { get; set; } = KeyCode.Alpha4;
+        public KeyCode TeleportHunter { get; set; } = KeyCode.Alpha4;
     }
 }

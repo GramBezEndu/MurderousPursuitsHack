@@ -70,7 +70,9 @@
 
                 UpdateHunterList();
                 UpdateCurrentQuarry();
-                Players = CreatePlayerDataList();
+                // Note: Caching camera might improve performance but it will add additional checks
+                Camera camera = Camera.main;
+                Players = CreatePlayerDataList(camera);
             }
         }
 
@@ -84,20 +86,24 @@
             }
         }
 
-        private List<PlayerData> CreatePlayerDataList()
+        private List<PlayerData> CreatePlayerDataList(Camera camera)
         {
-            List<PlayerData> players = new List<PlayerData>();
+            List<PlayerData> playerDataList = new List<PlayerData>();
             if (Singleton<PlayerManager>.Instance.thePlayers == null)
             {
-                return players;
+                return playerDataList;
             }
 
             foreach (XPlayer player in Singleton<PlayerManager>.Instance.thePlayers.Values)
             {
-                players.Add(CreatePlayerData(player));
+                PlayerData playerData = CreatePlayerData(player, camera);
+                if (playerData != null)
+                {
+                    playerDataList.Add(CreatePlayerData(player, camera));
+                }
             }
 
-            return players;
+            return playerDataList;
         }
 
         private void UpdateCurrentQuarry()
@@ -131,16 +137,13 @@
             }
         }
 
-        private PlayerData CreatePlayerData(XPlayer player)
+        private PlayerData CreatePlayerData(XPlayer player, Camera camera)
         {
             // Note: Need to be "XPlayer" type
             XCharacterMovement xCharacterMovement = (XCharacterMovement)(typeof(XPlayer).GetField("characterMovement", ReflectionHelper.FieldGetFlags).GetValue(player));
             if (xCharacterMovement == null)
             {
-                return new PlayerData()
-                {
-                    PlayerId = 0,
-                };
+                return null;
             }
 
             Transform characterTransform = (Transform)(xCharacterMovement.GetFieldValue("characterTransform"));
@@ -153,9 +156,9 @@
                 DisplayName = player.name,
                 IsLocalPlayer = xCharacterMovement.isLocalPlayer,
                 IsAlive = player.IsAlive,
-                IsBot = BotIDs.Contains(player.PlayerID) ? true : false,
-                IsHunterForLocal = HunterIDs.Contains(player.PlayerID) ? true : false,
-                IsQuarryForLocal = player.PlayerID == CurrentQuarry ? true : false,
+                IsBot = BotIDs.Contains(player.PlayerID),
+                IsHunterForLocal = HunterIDs.Contains(player.PlayerID),
+                IsQuarryForLocal = player.PlayerID == CurrentQuarry,
                 // Note: use characterTransform.position (not transform.position)
                 Position = characterTransform.position,
                 Velocity = xCharacterMovement.Velocity,
@@ -165,8 +168,7 @@
                 PlayerPerk = player.PlayerPerk,
                 Collider = collider,
             };
-            // Note: Caching camera might improve performance but it will add additional checks
-            playerData.OnScreenPosition = Camera.main.WorldToScreenPoint(playerData.Position);
+            playerData.OnScreenPosition = camera.WorldToScreenPoint(playerData.Position);
             return playerData;
         }
     }
