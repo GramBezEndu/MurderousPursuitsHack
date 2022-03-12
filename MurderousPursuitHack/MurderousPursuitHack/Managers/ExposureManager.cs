@@ -12,7 +12,7 @@
         {
             if (!HackManager.Instance.InGame)
             {
-                return false;
+                return;
             }
 
             if (Settings.ZeroExposure && HackManager.Instance.IsHost)
