@@ -4,7 +4,7 @@
     using ProjectX;
     using UnityEngine;
 
-    class EspManager : MonoBehaviour
+    public class EspManager : MonoBehaviour
     {
         public EspColors Colors { get; set; } = new EspColors()
         {

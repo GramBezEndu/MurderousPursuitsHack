@@ -3,13 +3,12 @@
     using MurderousPursuitHack.Managers;
     using MurderousPursuitHack.Visuals;
     using ProjectX.Player;
-    using System;
     using UnityEngine;
 
     public class Chams : MonoBehaviour
     {
         private readonly bool drawLocalPlayerChams = true;
-       
+
         private Material neutralGlow;
 
         private Material hunterGlow;
@@ -62,7 +61,7 @@
 
         private Material CreateHunterMaterial(Material neutral)
         {
-            var newMaterial = new Material(Shader.Find("Hidden/Internal-Colored"))
+            Material newMaterial = new Material(Shader.Find("Hidden/Internal-Colored"))
             {
                 hideFlags = HideFlags.DontSaveInEditor | HideFlags.HideInHierarchy
             };
@@ -73,7 +72,7 @@
 
         private Material CreateLocalPlayerMaterial(Material neutral)
         {
-            var newMaterial = new Material(Shader.Find("Hidden/Internal-Colored"))
+            Material newMaterial = new Material(Shader.Find("Hidden/Internal-Colored"))
             {
                 hideFlags = HideFlags.DontSaveInEditor | HideFlags.HideInHierarchy
             };
@@ -84,7 +83,7 @@
 
         private Material CreateQuarryMaterial(Material neutral)
         {
-            var newMaterial = new Material(Shader.Find("Hidden/Internal-Colored"))
+            Material newMaterial = new Material(Shader.Find("Hidden/Internal-Colored"))
             {
                 hideFlags = HideFlags.DontSaveInEditor | HideFlags.HideInHierarchy
             };

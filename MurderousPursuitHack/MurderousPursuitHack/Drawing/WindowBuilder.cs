@@ -7,9 +7,9 @@
     {
         private Vector2 currentElementPosition;
 
-        private float elementsMarginY = 5f;
+        private readonly float elementsMarginY = 5f;
 
-        private List<Section> sections = new List<Section>();
+        private readonly List<Section> sections = new List<Section>();
 
         private int currentSectionIndex = -1;
 
@@ -58,7 +58,7 @@
             int index = sections.FindIndex(x => x.Name == name);
             if (index == -1)
             {
-                var section = new Section();
+                Section section = new Section();
                 section.Name = name;
                 section.Expanded = Expander(name, section.Expanded);
                 sections.Add(section);

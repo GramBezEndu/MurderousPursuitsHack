@@ -51,7 +51,7 @@
             {
                 IsHost = false;
             }
-            
+
             if (Singleton<PlayerManager>.Instance != null)
             {
                 LocalPlayer = Singleton<PlayerManager>.Instance.GetLocalPlayer();

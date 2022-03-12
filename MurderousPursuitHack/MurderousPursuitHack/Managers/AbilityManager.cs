@@ -19,7 +19,7 @@
                 return false;
             }
 
-            ProjectX.Abilities.LoadoutAbility ability = 
+            ProjectX.Abilities.LoadoutAbility ability =
                 (ProjectX.Abilities.LoadoutAbility)Array.Find(playerData.CharacterMovement.Abilities.Abilities, x => typeof(LoadoutAbility).Equals(x.GetType()));
             ability.enabled = true;
             ability.ResetCooldown();
@@ -63,7 +63,7 @@
             attack.SetFieldValue("isFinishingAttack", false);
             // 0 is equal to AttackState.None
             attack.SetFieldValue("attackState", 0);
-            MethodInfo methodInfo = 
+            MethodInfo methodInfo =
                 typeof(ProjectX.Abilities.XPlayerAttack).GetMethod("AbilityStopped", BindingFlags.Instance | BindingFlags.NonPublic);
             methodInfo.Invoke(attack, new object[] { });
             return true;

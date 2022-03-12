@@ -1,6 +1,5 @@
 ﻿namespace MurderousPursuitHack.Drawing
 {
-    using System;
     using System.Collections.Generic;
     using UnityEngine;
 
@@ -20,7 +19,7 @@
 
         public GUIStyle Thumb { get; private set; }
 
-        private List<Texture2D> textures = new List<Texture2D>();
+        private readonly List<Texture2D> textures = new List<Texture2D>();
 
         public void Init()
         {

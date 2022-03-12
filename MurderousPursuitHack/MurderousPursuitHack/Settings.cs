@@ -12,8 +12,8 @@
 
         public static bool CheatsWindow { get; set; }
 
-        public static bool ChamsEnabled 
-        { 
+        public static bool ChamsEnabled
+        {
             get => chamsEnabled;
             set
             {

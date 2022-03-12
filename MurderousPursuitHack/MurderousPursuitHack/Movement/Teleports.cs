@@ -115,7 +115,7 @@
             }
 
             Transform characterTransform = (Transform)(playerData.CharacterMovement.GetFieldValue("characterTransform"));
-            if(characterTransform == null)
+            if (characterTransform == null)
             {
                 return false;
             }

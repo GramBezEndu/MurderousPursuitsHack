@@ -10,7 +10,7 @@
     using System.Collections.Generic;
     using UnityEngine;
 
-    class SettingsWindow : MonoBehaviour
+    public class SettingsWindow : MonoBehaviour
     {
         public static float[] SpeedhackMultipliers;
 
@@ -150,7 +150,7 @@
             float max = 5f;
             float step = 0.2f;
             List<float> results = new List<float>();
-            while(min < max)
+            while (min < max)
             {
                 results.Add(min);
                 min += step;
