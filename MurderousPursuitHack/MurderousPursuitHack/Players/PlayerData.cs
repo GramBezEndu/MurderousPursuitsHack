@@ -25,7 +25,7 @@
 
         public Vector3 Position { get; set; } = Vector3.zero;
 
-        //We need vector3 to check Z (behind camera)
+        // Vector3 is needed to check if player is behind camera
         public Vector3 OnScreenPosition { get; set; } = Vector3.zero;
 
         public Vector3 Velocity { get; set; } = Vector3.zero;

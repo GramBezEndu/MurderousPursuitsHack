@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace MurderousPursuitHack
+﻿namespace MurderousPursuitHack
 {
+    using System;
+
     public static class Settings
     {
         private static bool chamsEnabled = true;

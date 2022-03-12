@@ -1,6 +1,8 @@
 ﻿namespace MurderousPursuitHack.Input
 {
-    using MurderousPursuitHack.Skins;
+    using MurderousPursuitHack.Managers;
+    using MurderousPursuitHack.Movement;
+    using MurderousPursuitHack.Visuals;
     using ProjectX.Abilities;
     using UnityEngine;
 
@@ -19,7 +21,7 @@
         {
             UpdateKeys();
 
-            if (GameInfoManager.Instance.IsHost)
+            if (HackManager.Instance.IsHost)
             {
                 UpdateHostFeaturesKeys();
             }
@@ -49,27 +51,27 @@
 
             if (Input.GetKeyDown(Keybindings.ChangeSkin))
             {
-                SkinsHelper.ClientSwitchSkin();
+                Skins.ChangeLocalPlayerSkin();
             }
 
             if (Input.GetKeyDown(Keybindings.TeleportToQuarry))
             {
-                TeleportManager.TeleportToQuarry();
+                Teleports.TeleportToQuarry();
             }
 
             if (Input.GetKeyDown(Keybindings.TeleportToAnyHunter))
             {
-                TeleportManager.TeleportToAnyHunter();
+                Teleports.TeleportToHunter();
             }
 
             if (Input.GetKeyDown(Keybindings.TeleportQuarryToLocal))
             {
-                TeleportManager.TeleportQuarryToLocal();
+                Teleports.TeleportQuarry();
             }
 
             if (Input.GetKeyDown(Keybindings.TeleportHunters))
             {
-                TeleportManager.TeleportHuntersToLocal();
+                Teleports.TeleportHunter();
             }
         }
 

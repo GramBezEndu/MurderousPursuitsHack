@@ -1,12 +1,12 @@
-﻿namespace MurderousPursuitHack
+﻿namespace MurderousPursuitHack.WH
 {
-    using MurderousPursuitHack.WH;
+    using MurderousPursuitHack.Managers;
     using ProjectX;
     using UnityEngine;
 
     class EspManager : MonoBehaviour
     {
-        public EspColors WallhackColors { get; set; } = new EspColors()
+        public EspColors Colors { get; set; } = new EspColors()
         {
             Quarry = Color.cyan,
             Hunter = Color.red,
@@ -29,7 +29,7 @@
 
         private void DrawWallhack()
         {
-            foreach (var p in GameInfoManager.Instance.Players)
+            foreach (PlayerData p in HackManager.Instance.Players)
             {
                 // Unity returns Vector3.zero when out off screen
                 if (p.OnScreenPosition == Vector3.zero)
@@ -54,8 +54,6 @@
 
                 DrawPlayer(p);
             }
-            // Bring back old color
-            GUI.color = Color.yellow;
         }
 
         private void DrawPlayer(PlayerData playerInfo)
@@ -71,7 +69,7 @@
             {
                 if (LobbyNetworkManager.Instance != null)
                 {
-                    var nickname = LobbyNetworkManager.Instance.GetPlayerName(playerInfo.PlayerId);
+                    string nickname = LobbyNetworkManager.Instance.GetPlayerName(playerInfo.PlayerId);
                     if (nickname != string.Empty)
                     {
                         name = nickname;
@@ -88,21 +86,21 @@
         {
             if (p.IsHunterForLocal)
             {
-                GUI.color = WallhackColors.Hunter;
+                GUI.color = Colors.Hunter;
             }
             else if (p.IsQuarryForLocal)
             {
-                GUI.color = WallhackColors.Quarry;
+                GUI.color = Colors.Quarry;
             }
             else
             {
-                GUI.color = WallhackColors.Neutral;
+                GUI.color = Colors.Neutral;
             }
         }
 
         private int DistanceToLocalPlayer(PlayerData p)
         {
-            return (int)Vector3.Distance(GameInfoManager.Instance.LocalPlayer.transform.position, p.Position);
+            return (int)Vector3.Distance(HackManager.Instance.LocalPlayer.transform.position, p.Position);
         }
 
         private string FormatDistance(int distance)

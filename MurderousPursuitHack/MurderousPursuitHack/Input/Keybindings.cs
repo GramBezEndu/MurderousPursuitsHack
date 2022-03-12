@@ -1,4 +1,4 @@
-﻿namespace MurderousPursuitHack
+﻿namespace MurderousPursuitHack.Input
 {
     using UnityEngine;
 

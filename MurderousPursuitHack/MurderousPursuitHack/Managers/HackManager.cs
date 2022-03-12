@@ -1,4 +1,4 @@
-﻿namespace MurderousPursuitHack
+﻿namespace MurderousPursuitHack.Managers
 {
     using BG.UI;
     using BG.Utils;
@@ -10,13 +10,13 @@
     using System.Collections.Generic;
     using UnityEngine;
 
-    public class GameInfoManager : MonoBehaviour
+    public class HackManager : MonoBehaviour
     {
         // Known singletons:
         // Singleton<PlayerManager>
         // Singleton<GameDataManager>
 
-        public static GameInfoManager Instance { get; private set; }
+        public static HackManager Instance { get; private set; }
 
         public void Start()
         {
