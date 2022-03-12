@@ -26,6 +26,11 @@
 
         public void Update()
         {
+            if (!HackManager.Instance.InGame)
+            {
+                return;
+            }
+
             if (!initialized)
             {
                 initialized = TryToInitialize();

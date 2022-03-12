@@ -10,7 +10,7 @@
 
         public static bool AutoAttackAfterTeleport { get; set; } = true;
 
-        public static bool CheatsWindow { get; set; }
+        public static bool CheatsWindow { get; set; } = true;
 
         public static bool ChamsEnabled
         {
@@ -30,7 +30,7 @@
 
         public static bool EspEnabled { get; set; } = true;
 
-        public static bool DebugWindow { get; set; }
+        public static bool DebugWindow { get; set; } = true;
 
         public static bool Speedhack { get; set; }
 

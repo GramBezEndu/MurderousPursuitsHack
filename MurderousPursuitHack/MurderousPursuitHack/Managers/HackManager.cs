@@ -3,12 +3,14 @@
     using BG.UI;
     using BG.Utils;
     using ProjectX.Levels;
+    using ProjectX.Networking;
     using ProjectX.Player;
     using ProjectX.UI.HUD;
     using System;
     using System.Collections;
     using System.Collections.Generic;
     using UnityEngine;
+    using UnityEngine.SceneManagement;
 
     public class HackManager : MonoBehaviour
     {
@@ -23,26 +25,37 @@
             Instance = this;
         }
 
+        public bool InGame { get; private set; }
+
         public bool IsHost { get; private set; }
 
-        public List<PlayerData> Players = new List<PlayerData>(8);
+        public List<PlayerData> Players { get; private set; } = new List<PlayerData>(8);
 
-        public XPlayer LocalPlayer;
+        public XPlayer LocalPlayer { get; private set; }
 
-        public uint LocalPlayerId;
+        public uint LocalPlayerId { get; private set; }
 
-        public QuarryLocatorBarHUD QuarryBar;
+        public QuarryLocatorBarHUD QuarryBar { get; private set; }
 
-        public uint? CurrentQuarry;
+        public uint? CurrentQuarry { get; private set; }
 
-        public HunterHUD HunterHUD;
+        public HunterHUD HunterHUD { get; private set; }
 
-        public List<uint> HunterIDs = new List<uint>();
+        public List<uint> HunterIDs { get; private set; } = new List<uint>();
 
-        public List<uint> BotIDs = new List<uint>();
+        public List<uint> BotIDs { get; private set; } = new List<uint>();
 
         public void Update()
         {
+            LevelType levelFromSceneName = Singleton<LevelManager>.Instance.GetLevelFromSceneName(SceneManager.GetActiveScene().name);
+            InGame = levelFromSceneName > LevelType.None;
+
+            if (!InGame)
+            {
+                ClearData();
+                return;
+            }
+
             if (Singleton<LevelManager>.Instance != null)
             {
                 IsHost = Singleton<LevelManager>.Instance.IsHost;
@@ -74,6 +87,14 @@
                 Camera camera = Camera.main;
                 Players = CreatePlayerDataList(camera);
             }
+        }
+
+        private void ClearData()
+        {
+            HunterHUD = null;
+            QuarryBar = null;
+            LocalPlayer = null;
+            Players.Clear();
         }
 
         private void FindHUD()

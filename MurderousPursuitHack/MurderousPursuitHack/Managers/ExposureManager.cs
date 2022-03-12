@@ -10,6 +10,11 @@
 
         public void Update()
         {
+            if (!HackManager.Instance.InGame)
+            {
+                return false;
+            }
+
             if (Settings.ZeroExposure && HackManager.Instance.IsHost)
             {
                 UpdateExposureDictionary();

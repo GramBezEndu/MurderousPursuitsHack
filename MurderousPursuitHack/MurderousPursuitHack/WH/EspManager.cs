@@ -15,6 +15,11 @@
 
         public void OnGUI()
         {
+            if (!HackManager.Instance.InGame)
+            {
+                return;
+            }
+
             if (Event.current.type != EventType.Repaint)
             {
                 // Optimization: repaint ESP only once per frame

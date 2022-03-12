@@ -10,7 +10,7 @@
     {
         public static bool TeleportToQuarry()
         {
-            if (HackManager.Instance == null)
+            if (!HackManager.Instance.InGame)
             {
                 return false;
             }
@@ -26,7 +26,7 @@
 
         public static bool TeleportToClosestHunter()
         {
-            if (HackManager.Instance == null)
+            if (!HackManager.Instance.InGame)
             {
                 return false;
             }
@@ -42,6 +42,11 @@
 
         public static bool TeleportQuarry()
         {
+            if (!HackManager.Instance.InGame)
+            {
+                return false;
+            }
+
             PlayerData quarry = HackManager.Instance.Players.Find(x => x.IsQuarryForLocal);
             if (quarry == null)
             {
@@ -53,7 +58,7 @@
 
         public static bool TeleportHunter()
         {
-            if (HackManager.Instance == null)
+            if (!HackManager.Instance.InGame)
             {
                 return false;
             }
@@ -112,11 +117,6 @@
 
         private static bool TeleportPlayer(PlayerData playerData, Vector3 position)
         {
-            if (HackManager.Instance == null)
-            {
-                return false;
-            }
-
             if (playerData == null)
             {
                 return false;
@@ -134,11 +134,6 @@
 
         private static PlayerData GetClosestHunter()
         {
-            if (HackManager.Instance == null)
-            {
-                return null;
-            }
-
             PlayerData[] hunters = HackManager.Instance.Players.FindAll(x => x.IsHunterForLocal).ToArray();
             if (hunters == null || hunters.Length == 0)
             {

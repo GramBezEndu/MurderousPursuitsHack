@@ -8,7 +8,7 @@
     {
         public static bool StartAbility<LoadoutAbility>()
         {
-            if (HackManager.Instance == null)
+            if (!HackManager.Instance.InGame)
             {
                 return false;
             }
@@ -31,7 +31,7 @@
 
         public static bool StartAttack(XPlayer victim)
         {
-            if (HackManager.Instance == null)
+            if (!HackManager.Instance.InGame)
             {
                 return false;
             }

@@ -12,6 +12,11 @@
     {
         public static bool ChangeLocalPlayerSkin()
         {
+            if (!HackManager.Instance.InGame)
+            {
+                return false;
+            }
+
             XPlayer player = HackManager.Instance.LocalPlayer;
             if (player == null)
             {
@@ -28,6 +33,11 @@
 
         public static bool RestoreSkin(XPlayer player)
         {
+            if (!HackManager.Instance.InGame)
+            {
+                return false;
+            }
+
             if (player == null)
             {
                 return false;

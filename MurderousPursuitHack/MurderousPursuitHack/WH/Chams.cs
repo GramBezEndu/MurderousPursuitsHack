@@ -28,6 +28,11 @@
 
         public void Update()
         {
+            if (!HackManager.Instance.InGame)
+            {
+                return;
+            }
+
             foreach (PlayerData playerInfo in HackManager.Instance.Players)
             {
                 UpdateGlow(playerInfo);
