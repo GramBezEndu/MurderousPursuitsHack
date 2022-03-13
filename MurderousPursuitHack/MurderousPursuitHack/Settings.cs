@@ -1,17 +1,19 @@
-﻿using System;
-
-namespace MurderousPursuitHack
+﻿namespace MurderousPursuitHack
 {
+    using System;
+
     public static class Settings
     {
         private static bool chamsEnabled = true;
 
         public static event EventHandler OnChamsDisabled;
 
-        public static bool CheatsWindow { get; set; }
+        public static bool AutoAttackAfterTeleport { get; set; } = true;
 
-        public static bool ChamsEnabled 
-        { 
+        public static bool CheatsWindow { get; set; } = true;
+
+        public static bool ChamsEnabled
+        {
             get => chamsEnabled;
             set
             {
@@ -28,7 +30,7 @@ namespace MurderousPursuitHack
 
         public static bool EspEnabled { get; set; } = true;
 
-        public static bool DebugWindow { get; set; }
+        public static bool DebugWindow { get; set; } = true;
 
         public static bool Speedhack { get; set; }
 

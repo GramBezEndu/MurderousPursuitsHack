@@ -1,21 +1,21 @@
 ﻿namespace MurderousPursuitHack.WH
 {
-    using MurderousPursuitHack.Skins;
+    using MurderousPursuitHack.Managers;
+    using MurderousPursuitHack.Visuals;
     using ProjectX.Player;
-    using System;
     using UnityEngine;
 
     public class Chams : MonoBehaviour
     {
-        Material neutralGlow;
-
-        Material hunterGlow;
-
-        Material quarryGlow;
-
-        Material localPlayerGlow;
-
         private readonly bool drawLocalPlayerChams = true;
+
+        private Material neutralGlow;
+
+        private Material hunterGlow;
+
+        private Material quarryGlow;
+
+        private Material localPlayerGlow;
 
         public void Start()
         {
@@ -28,7 +28,12 @@
 
         public void Update()
         {
-            foreach (PlayerData playerInfo in GameInfoManager.Instance.Players)
+            if (!HackManager.Instance.InGame)
+            {
+                return;
+            }
+
+            foreach (PlayerData playerInfo in HackManager.Instance.Players)
             {
                 UpdateGlow(playerInfo);
             }
@@ -61,7 +66,7 @@
 
         private Material CreateHunterMaterial(Material neutral)
         {
-            var newMaterial = new Material(Shader.Find("Hidden/Internal-Colored"))
+            Material newMaterial = new Material(Shader.Find("Hidden/Internal-Colored"))
             {
                 hideFlags = HideFlags.DontSaveInEditor | HideFlags.HideInHierarchy
             };
@@ -72,7 +77,7 @@
 
         private Material CreateLocalPlayerMaterial(Material neutral)
         {
-            var newMaterial = new Material(Shader.Find("Hidden/Internal-Colored"))
+            Material newMaterial = new Material(Shader.Find("Hidden/Internal-Colored"))
             {
                 hideFlags = HideFlags.DontSaveInEditor | HideFlags.HideInHierarchy
             };
@@ -83,7 +88,7 @@
 
         private Material CreateQuarryMaterial(Material neutral)
         {
-            var newMaterial = new Material(Shader.Find("Hidden/Internal-Colored"))
+            Material newMaterial = new Material(Shader.Find("Hidden/Internal-Colored"))
             {
                 hideFlags = HideFlags.DontSaveInEditor | HideFlags.HideInHierarchy
             };
@@ -132,7 +137,6 @@
             }
         }
 
-        // TODO: Refactor, maybe extension method
         private void ApplyMaterial(Renderer renderer, Material material)
         {
             renderer.material = material;
@@ -147,10 +151,10 @@
 
         private void ClearChams()
         {
-            foreach (PlayerData playerData in GameInfoManager.Instance.Players)
+            foreach (PlayerData playerData in HackManager.Instance.Players)
             {
                 XPlayer player = playerData.Player;
-                SkinsHelper.RestoreSkin(player);
+                Skins.RestoreSkin(player);
             }
         }
     }

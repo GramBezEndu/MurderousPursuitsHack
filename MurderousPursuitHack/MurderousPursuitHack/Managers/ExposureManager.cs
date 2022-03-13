@@ -1,4 +1,4 @@
-﻿namespace MurderousPursuitHack
+﻿namespace MurderousPursuitHack.Managers
 {
     using System.Collections.Generic;
     using UnityEngine;
@@ -10,10 +10,15 @@
 
         public void Update()
         {
-            if (Settings.ZeroExposure && GameInfoManager.Instance.IsHost)
+            if (!HackManager.Instance.InGame)
+            {
+                return;
+            }
+
+            if (Settings.ZeroExposure && HackManager.Instance.IsHost)
             {
                 UpdateExposureDictionary();
-                exposure[GameInfoManager.Instance.LocalPlayerId].exposure = 0f;
+                exposure[HackManager.Instance.LocalPlayerId].exposure = 0f;
             }
         }
 

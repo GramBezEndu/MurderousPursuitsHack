@@ -1,26 +1,28 @@
-﻿using MurderousPursuitHack.Drawing;
-using MurderousPursuitHack.Input;
-using MurderousPursuitHack.Skins;
-using ProjectX.Abilities;
-using System;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace MurderousPursuitHack
+﻿namespace MurderousPursuitHack.Windows
 {
-    class HackSettingsManager : MonoBehaviour
+    using MurderousPursuitHack.Drawing;
+    using MurderousPursuitHack.Input;
+    using MurderousPursuitHack.Managers;
+    using MurderousPursuitHack.Movement;
+    using MurderousPursuitHack.Visuals;
+    using ProjectX.Abilities;
+    using System;
+    using System.Collections.Generic;
+    using UnityEngine;
+
+    public class SettingsWindow : MonoBehaviour
     {
         public static float[] SpeedhackMultipliers;
 
         public static int CurrentSpeedMultiplierIndex = 3; // Equals to 1f speed
 
+        private readonly float elementHeight = 25f;
+
         private WindowBuilder builder;
 
         private Vector2 windowPosition = new Vector2(10f, 260f);
 
-        private Vector2 windowSize = new Vector2(300, 610);
-
-        private readonly float elementHeight = 25f;
+        private Vector2 windowSize = new Vector2(300, 635);
 
         public void Start()
         {
@@ -45,7 +47,7 @@ namespace MurderousPursuitHack
                 DebugSection(builder);
             }
 
-            if (!Settings.CheatsWindow)
+            if (Settings.CheatsWindow)
             {
                 builder.CreateWindow(CreateElements, 1, "CHEATS");
             }
@@ -59,7 +61,7 @@ namespace MurderousPursuitHack
             Settings.EspEnabled = builder.Toggle(Settings.EspEnabled, DrawingHelper.DisplayKeybind("ESP", InputManager.Instance.Keybindings.Esp));
             if (builder.Button(DrawingHelper.DisplayKeybind("Change skin", InputManager.Instance.Keybindings.ChangeSkin)))
             {
-                SkinsHelper.ClientSwitchSkin();
+                Skins.ChangeLocalPlayerSkin();
             }
 
             builder.EndSection();
@@ -75,14 +77,28 @@ namespace MurderousPursuitHack
         private void TeleportsSection(WindowBuilder builder)
         {
             builder.StartSection("TELEPORTS");
+            Settings.AutoAttackAfterTeleport = builder.Toggle(
+                Settings.AutoAttackAfterTeleport,
+                DrawingHelper.DisplayKeybind("Auto attack after teleport", InputManager.Instance.Keybindings.AutoAttackAfterTeleport));
+
             if (builder.Button(DrawingHelper.DisplayKeybind("Teleport to Quarry", InputManager.Instance.Keybindings.TeleportToQuarry)))
             {
-                TeleportManager.TeleportToQuarry();
+                Teleports.TeleportToQuarry();
             }
 
-            if (builder.Button(DrawingHelper.DisplayKeybind("Teleport to Any Hunter", InputManager.Instance.Keybindings.TeleportToAnyHunter)))
+            if (builder.Button(DrawingHelper.DisplayKeybind("Teleport to Closest Hunter", InputManager.Instance.Keybindings.TeleportToClosestHunter)))
             {
-                TeleportManager.TeleportToAnyHunter();
+                Teleports.TeleportToClosestHunter();
+            }
+
+            if (builder.Button(DrawingHelper.DisplayKeybind("Teleport Quarry To Local", InputManager.Instance.Keybindings.TeleportQuarryToLocal)))
+            {
+                Teleports.TeleportQuarry();
+            }
+
+            if (builder.Button(DrawingHelper.DisplayKeybind("Teleport Hunter To Local", InputManager.Instance.Keybindings.TeleportHunter)))
+            {
+                Teleports.TeleportHunter();
             }
 
             builder.EndSection();
@@ -98,7 +114,7 @@ namespace MurderousPursuitHack
 
         private void HostOnlySection(WindowBuilder builder)
         {
-            bool isHosting = GameInfoManager.Instance.IsHost;
+            bool isHosting = HackManager.Instance.IsHost;
             builder.StartSection("HOST ONLY");
             Settings.ZeroExposure = builder.Toggle(Settings.ZeroExposure, DrawingHelper.DisplayKeybind("Zero Exposure", InputManager.Instance.Keybindings.ZeroExposure));
             if (!isHosting)
@@ -134,7 +150,7 @@ namespace MurderousPursuitHack
             float max = 5f;
             float step = 0.2f;
             List<float> results = new List<float>();
-            while(min < max)
+            while (min < max)
             {
                 results.Add(min);
                 min += step;

@@ -1,11 +1,5 @@
 ﻿namespace MurderousPursuitHack.Drawing
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-
     public class Section
     {
         public bool Expanded { get; set; } = true;

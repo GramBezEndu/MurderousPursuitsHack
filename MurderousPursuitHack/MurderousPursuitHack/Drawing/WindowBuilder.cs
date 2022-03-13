@@ -5,19 +5,11 @@
 
     public class WindowBuilder
     {
-        public Vector2 Position { get; set; }
-
-        public Vector2 Size { get; set; }
-
-        public float ElementHeight { get; set; }
-
         private Vector2 currentElementPosition;
 
-        private float elementsMarginY = 5f;
+        private readonly float elementsMarginY = 5f;
 
-        private WindowStyle style;
-
-        private List<Section> sections = new List<Section>();
+        private readonly List<Section> sections = new List<Section>();
 
         private int currentSectionIndex = -1;
 
@@ -28,14 +20,22 @@
             Position = position;
             Size = windowSize;
             ElementHeight = elementHeight;
-            style = new WindowStyle();
+            Style = new WindowStyle();
         }
+
+        public Vector2 Position { get; set; }
+
+        public Vector2 Size { get; set; }
+
+        public float ElementHeight { get; set; }
+
+        public WindowStyle Style { get; private set; }
 
         public void Start()
         {
             if (!initialized)
             {
-                style.Init();
+                Style.Init();
                 initialized = true;
             }
 
@@ -45,12 +45,12 @@
 
         public void OnDestroy()
         {
-            style.OnDestroy();
+            Style.OnDestroy();
         }
 
         public void CreateWindow(GUI.WindowFunction windowFunction, int windowID, string name)
         {
-            GUI.Window(windowID, new Rect(Position, Size), windowFunction, name, style.Window);
+            GUI.Window(windowID, new Rect(Position, Size), windowFunction, name, Style.Window);
         }
 
         public void StartSection(string name)
@@ -58,7 +58,7 @@
             int index = sections.FindIndex(x => x.Name == name);
             if (index == -1)
             {
-                var section = new Section();
+                Section section = new Section();
                 section.Name = name;
                 section.Expanded = Expander(name, section.Expanded);
                 sections.Add(section);
@@ -80,7 +80,7 @@
         {
             if (currentSectionIndex == -1 || sections[currentSectionIndex].Expanded)
             {
-                return GUI.Button(NextRect(0.8f), message, style.Button);
+                return GUI.Button(NextRect(0.8f), message, Style.Button);
             }
             else
             {
@@ -92,7 +92,7 @@
         {
             if (currentSectionIndex == -1 || sections[currentSectionIndex].Expanded)
             {
-                return GUI.Toggle(NextRect(), value, message, style.Toggle);
+                return GUI.Toggle(NextRect(), value, message, Style.Toggle);
             }
             else
             {
@@ -105,7 +105,7 @@
         {
             if (currentSectionIndex == -1 || sections[currentSectionIndex].Expanded)
             {
-                return (int)GUI.HorizontalSlider(NextRect(), current, leftValue, rightValue, style.HorizontalSlider, style.Thumb);
+                return (int)GUI.HorizontalSlider(NextRect(), current, leftValue, rightValue, Style.HorizontalSlider, Style.Thumb);
             }
             else
             {
@@ -115,14 +115,14 @@
 
         public bool Expander(string message, bool value)
         {
-            return GUI.Toggle(NextRect(0.98f), value, message, style.Expander);
+            return GUI.Toggle(NextRect(0.98f), value, message, Style.Expander);
         }
 
         public void Label(string message)
         {
             if (currentSectionIndex == -1 || sections[currentSectionIndex].Expanded)
             {
-                GUI.Label(NextRect(), message, style.Label);
+                GUI.Label(NextRect(), message, Style.Label);
             }
         }
 

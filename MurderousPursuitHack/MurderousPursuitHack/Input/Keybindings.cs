@@ -1,4 +1,4 @@
-﻿namespace MurderousPursuitHack
+﻿namespace MurderousPursuitHack.Input
 {
     using UnityEngine;
 
@@ -22,8 +22,14 @@
 
         public KeyCode Disrupt { get; set; } = KeyCode.C;
 
+        public KeyCode AutoAttackAfterTeleport { get; set; } = KeyCode.None;
+
         public KeyCode TeleportToQuarry { get; set; } = KeyCode.Alpha1;
 
-        public KeyCode TeleportToAnyHunter { get; set; } = KeyCode.Alpha2;
+        public KeyCode TeleportToClosestHunter { get; set; } = KeyCode.Alpha2;
+
+        public KeyCode TeleportQuarryToLocal { get; set; } = KeyCode.Alpha3;
+
+        public KeyCode TeleportHunter { get; set; } = KeyCode.Alpha4;
     }
 }

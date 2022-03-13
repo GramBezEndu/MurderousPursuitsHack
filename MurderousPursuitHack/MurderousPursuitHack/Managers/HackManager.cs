@@ -1,48 +1,61 @@
-﻿namespace MurderousPursuitHack
+﻿namespace MurderousPursuitHack.Managers
 {
     using BG.UI;
     using BG.Utils;
     using ProjectX.Levels;
+    using ProjectX.Networking;
     using ProjectX.Player;
     using ProjectX.UI.HUD;
     using System;
     using System.Collections;
     using System.Collections.Generic;
     using UnityEngine;
+    using UnityEngine.SceneManagement;
 
-    public class GameInfoManager : MonoBehaviour
+    public class HackManager : MonoBehaviour
     {
         // Known singletons:
         // Singleton<PlayerManager>
         // Singleton<GameDataManager>
 
-        public static GameInfoManager Instance { get; private set; }
+        public static HackManager Instance { get; private set; }
 
         public void Start()
         {
             Instance = this;
         }
 
+        public bool InGame { get; private set; }
+
         public bool IsHost { get; private set; }
 
-        public List<PlayerData> Players = new List<PlayerData>(8);
+        public List<PlayerData> Players { get; private set; } = new List<PlayerData>(8);
 
-        public XPlayer LocalPlayer;
+        public XPlayer LocalPlayer { get; private set; }
 
-        public uint LocalPlayerId;
+        public uint LocalPlayerId { get; private set; }
 
-        public QuarryLocatorBarHUD QuarryBar;
+        public QuarryLocatorBarHUD QuarryBar { get; private set; }
 
-        public uint? CurrentQuarry;
+        public uint? CurrentQuarry { get; private set; }
 
-        public HunterHUD HunterHUD;
+        public HunterHUD HunterHUD { get; private set; }
 
-        public List<uint> HunterIDs = new List<uint>();
+        public List<uint> HunterIDs { get; private set; } = new List<uint>();
 
-        public List<uint> BotIDs = new List<uint>();
+        public List<uint> BotIDs { get; private set; } = new List<uint>();
 
         public void Update()
         {
+            LevelType levelFromSceneName = Singleton<LevelManager>.Instance.GetLevelFromSceneName(SceneManager.GetActiveScene().name);
+            InGame = levelFromSceneName > LevelType.None;
+
+            if (!InGame)
+            {
+                ClearData();
+                return;
+            }
+
             if (Singleton<LevelManager>.Instance != null)
             {
                 IsHost = Singleton<LevelManager>.Instance.IsHost;
@@ -51,7 +64,7 @@
             {
                 IsHost = false;
             }
-            
+
             if (Singleton<PlayerManager>.Instance != null)
             {
                 LocalPlayer = Singleton<PlayerManager>.Instance.GetLocalPlayer();
@@ -70,8 +83,18 @@
 
                 UpdateHunterList();
                 UpdateCurrentQuarry();
-                Players = CreatePlayerDataList();
+                // Note: Caching camera might improve performance but it will add additional checks
+                Camera camera = Camera.main;
+                Players = CreatePlayerDataList(camera);
             }
+        }
+
+        private void ClearData()
+        {
+            HunterHUD = null;
+            QuarryBar = null;
+            LocalPlayer = null;
+            Players.Clear();
         }
 
         private void FindHUD()
@@ -84,20 +107,24 @@
             }
         }
 
-        private List<PlayerData> CreatePlayerDataList()
+        private List<PlayerData> CreatePlayerDataList(Camera camera)
         {
-            List<PlayerData> players = new List<PlayerData>();
+            List<PlayerData> playerDataList = new List<PlayerData>();
             if (Singleton<PlayerManager>.Instance.thePlayers == null)
             {
-                return players;
+                return playerDataList;
             }
 
             foreach (XPlayer player in Singleton<PlayerManager>.Instance.thePlayers.Values)
             {
-                players.Add(CreatePlayerData(player));
+                PlayerData playerData = CreatePlayerData(player, camera);
+                if (playerData != null)
+                {
+                    playerDataList.Add(CreatePlayerData(player, camera));
+                }
             }
 
-            return players;
+            return playerDataList;
         }
 
         private void UpdateCurrentQuarry()
@@ -131,16 +158,13 @@
             }
         }
 
-        private PlayerData CreatePlayerData(XPlayer player)
+        private PlayerData CreatePlayerData(XPlayer player, Camera camera)
         {
             // Note: Need to be "XPlayer" type
             XCharacterMovement xCharacterMovement = (XCharacterMovement)(typeof(XPlayer).GetField("characterMovement", ReflectionHelper.FieldGetFlags).GetValue(player));
             if (xCharacterMovement == null)
             {
-                return new PlayerData()
-                {
-                    PlayerId = 0,
-                };
+                return null;
             }
 
             Transform characterTransform = (Transform)(xCharacterMovement.GetFieldValue("characterTransform"));
@@ -153,9 +177,9 @@
                 DisplayName = player.name,
                 IsLocalPlayer = xCharacterMovement.isLocalPlayer,
                 IsAlive = player.IsAlive,
-                IsBot = BotIDs.Contains(player.PlayerID) ? true : false,
-                IsHunterForLocal = HunterIDs.Contains(player.PlayerID) ? true : false,
-                IsQuarryForLocal = player.PlayerID == CurrentQuarry ? true : false,
+                IsBot = BotIDs.Contains(player.PlayerID),
+                IsHunterForLocal = HunterIDs.Contains(player.PlayerID),
+                IsQuarryForLocal = player.PlayerID == CurrentQuarry,
                 // Note: use characterTransform.position (not transform.position)
                 Position = characterTransform.position,
                 Velocity = xCharacterMovement.Velocity,
@@ -165,8 +189,7 @@
                 PlayerPerk = player.PlayerPerk,
                 Collider = collider,
             };
-            // Note: Caching camera might improve performance but it will add additional checks
-            playerData.OnScreenPosition = Camera.main.WorldToScreenPoint(playerData.Position);
+            playerData.OnScreenPosition = camera.WorldToScreenPoint(playerData.Position);
             return playerData;
         }
     }
