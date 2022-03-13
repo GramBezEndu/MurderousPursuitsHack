@@ -19,12 +19,11 @@
 
         public void Update()
         {
+            UpdateKeys();
             if (!HackManager.Instance.InGame)
             {
                 return;
             }
-
-            UpdateKeys();
 
             if (HackManager.Instance.IsHost)
             {
