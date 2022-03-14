@@ -22,7 +22,7 @@
 
         private Vector2 windowPosition = new Vector2(10f, 260f);
 
-        private Vector2 windowSize = new Vector2(300, 635);
+        private Vector2 windowSize = new Vector2(300, 660);
 
         public void Start()
         {
@@ -58,6 +58,8 @@
             builder.StartSection("VISUALS");
 
             Settings.ChamsEnabled = builder.Toggle(Settings.ChamsEnabled, DrawingHelper.DisplayKeybind("Chams", InputManager.Instance.Keybindings.Chams));
+            Settings.DrawLocalPlayerChams = 
+                builder.Toggle(Settings.DrawLocalPlayerChams, DrawingHelper.DisplayKeybind("Local Player Chams", InputManager.Instance.Keybindings.LocalPlayerChams));
             Settings.EspEnabled = builder.Toggle(Settings.EspEnabled, DrawingHelper.DisplayKeybind("ESP", InputManager.Instance.Keybindings.Esp));
             if (builder.Button(DrawingHelper.DisplayKeybind("Change skin", InputManager.Instance.Keybindings.ChangeSkin)))
             {

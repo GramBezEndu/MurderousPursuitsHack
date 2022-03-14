@@ -6,7 +6,27 @@
     {
         private static bool chamsEnabled = true;
 
+        private static bool drawLocalPlayerChams = true;
+
         public static event EventHandler OnChamsDisabled;
+
+        public static event EventHandler OnLocalChamsDisabled;
+
+        public static bool DrawLocalPlayerChams 
+        { 
+            get => drawLocalPlayerChams;
+            set
+            {
+                if (drawLocalPlayerChams != value)
+                {
+                    drawLocalPlayerChams = value;
+                    if (drawLocalPlayerChams == false)
+                    {
+                        OnLocalChamsDisabled.Invoke(null, new EventArgs());
+                    }
+                }
+            }
+        }
 
         public static bool AutoAttackAfterTeleport { get; set; } = true;
 

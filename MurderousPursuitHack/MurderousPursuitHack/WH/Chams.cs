@@ -7,8 +7,6 @@
 
     public class Chams : MonoBehaviour
     {
-        private readonly bool drawLocalPlayerChams = true;
-
         private Material neutralGlow;
 
         private Material hunterGlow;
@@ -24,6 +22,7 @@
             quarryGlow = CreateQuarryMaterial(neutralGlow);
             localPlayerGlow = CreateLocalPlayerMaterial(neutralGlow);
             Settings.OnChamsDisabled += (o, e) => ClearChams();
+            Settings.OnLocalChamsDisabled += (o, e) => ClearLocalPlayerChams();
         }
 
         public void Update()
@@ -82,7 +81,7 @@
                 hideFlags = HideFlags.DontSaveInEditor | HideFlags.HideInHierarchy
             };
             newMaterial.CopyPropertiesFromMaterial(neutral);
-            newMaterial.SetColor("_Color", Color.white);
+            newMaterial.SetColor("_Color", new Color(1f, 0.9f, 0f, 1f));
             return newMaterial;
         }
 
@@ -100,7 +99,7 @@
         private void UpdateGlow(PlayerData playerInfo)
         {
             XPlayer player = playerInfo.Player;
-            if (player.isLocalPlayer && drawLocalPlayerChams == false)
+            if (player.isLocalPlayer && Settings.DrawLocalPlayerChams == false)
             {
                 return;
             }
@@ -154,6 +153,15 @@
             foreach (PlayerData playerData in HackManager.Instance.Players)
             {
                 XPlayer player = playerData.Player;
+                Skins.RestoreSkin(player);
+            }
+        }
+
+        private void ClearLocalPlayerChams()
+        {
+            if (Settings.ChamsEnabled)
+            {
+                XPlayer player = HackManager.Instance.LocalPlayer;
                 Skins.RestoreSkin(player);
             }
         }
