@@ -21,7 +21,7 @@
                 return false;
             }
 
-            return TeleportLocalToPlayer(target, Settings.AutoAttackAfterTeleport);
+            return TeleportLocalToPlayer(target, Settings.Current.AutoAttackAfterTeleport);
         }
 
         public static bool TeleportToClosestHunter()
@@ -37,7 +37,7 @@
                 return false;
             }
 
-            return TeleportLocalToPlayer(closestHunter, Settings.AutoAttackAfterTeleport);
+            return TeleportLocalToPlayer(closestHunter, Settings.Current.AutoAttackAfterTeleport);
         }
 
         public static bool TeleportQuarry()
@@ -53,7 +53,7 @@
                 return false;
             }
 
-            return TeleportPlayerToLocal(quarry, Settings.AutoAttackAfterTeleport);
+            return TeleportPlayerToLocal(quarry, Settings.Current.AutoAttackAfterTeleport);
         }
 
         public static bool TeleportHunter()
@@ -69,7 +69,7 @@
                 return false;
             }
 
-            return TeleportPlayerToLocal(closestHunter, Settings.AutoAttackAfterTeleport);
+            return TeleportPlayerToLocal(closestHunter, Settings.Current.AutoAttackAfterTeleport);
         }
 
         private static bool TeleportPlayerToLocal(PlayerData from, bool attackAutomatically)

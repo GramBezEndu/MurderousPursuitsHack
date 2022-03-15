@@ -26,7 +26,7 @@
                 return;
             }
 
-            if (Settings.EspEnabled)
+            if (Settings.Current.EspEnabled)
             {
                 DrawPlayerESP();
             }

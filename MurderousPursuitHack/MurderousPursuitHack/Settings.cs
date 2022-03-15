@@ -3,23 +3,34 @@
     using System;
     using System.Collections.Generic;
 
-    public static class Settings
+    public class Settings
     {
+        public static Settings Current { get => Default; }
+
+        private static Settings Default { get; set; } = new Settings()
+        {
+            ChamsEnabled = true,
+            DrawLocalPlayerChams = true,
+            EspEnabled = true,
+            CheatsWindow = true,
+            ZeroExposure = true,
+        };
+
         public static float[] SpeedhackMultipliers = GeneratePossibleMultipliers();
 
-        public static int CurrentSpeedMultiplierIndex = 3;
+        private bool chamsEnabled;
 
-        public static float SpeedMultiplier { get => SpeedhackMultipliers[CurrentSpeedMultiplierIndex]; }
+        private bool drawLocalPlayerChams;
 
-        private static bool chamsEnabled = true;
+        public event EventHandler OnChamsDisabled;
 
-        private static bool drawLocalPlayerChams = true;
+        public event EventHandler OnLocalChamsDisabled;
 
-        public static event EventHandler OnChamsDisabled;
+        public int CurrentSpeedMultiplierIndex { get; set; } = 3;
 
-        public static event EventHandler OnLocalChamsDisabled;
+        public float SpeedMultiplier { get => SpeedhackMultipliers[CurrentSpeedMultiplierIndex]; }
 
-        public static bool DrawLocalPlayerChams 
+        public bool DrawLocalPlayerChams 
         { 
             get => drawLocalPlayerChams;
             set
@@ -35,11 +46,11 @@
             }
         }
 
-        public static bool AutoAttackAfterTeleport { get; set; } = true;
+        public bool AutoAttackAfterTeleport { get; set; }
 
-        public static bool CheatsWindow { get; set; } = true;
+        public bool CheatsWindow { get; set; }
 
-        public static bool ChamsEnabled
+        public bool ChamsEnabled
         {
             get => chamsEnabled;
             set
@@ -55,13 +66,13 @@
             }
         }
 
-        public static bool EspEnabled { get; set; } = true;
+        public bool EspEnabled { get; set; }
 
-        public static bool Speedhack { get; set; }
+        public bool Speedhack { get; set; }
 
-        public static bool ZeroExposure { get; set; } = true;
+        public bool ZeroExposure { get; set; }
 
-        public static float[] GeneratePossibleMultipliers()
+        private static float[] GeneratePossibleMultipliers()
         {
             float min = 0.4f;
             float max = 5f;

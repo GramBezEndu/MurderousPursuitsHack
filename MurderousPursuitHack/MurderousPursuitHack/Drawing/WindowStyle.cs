@@ -47,16 +47,20 @@
 
         private void CreateButtonStyle()
         {
-            Button = new GUIStyle(GUI.skin.button);
-            Button.fontStyle = FontStyle.Bold;
+            Button = new GUIStyle(GUI.skin.button)
+            {
+                fontStyle = FontStyle.Bold
+            };
             Button.normal.background = CreateTexture(2, 2, new Color(0f, 0.55f, 0.8f, 1f));
             Button.hover.background = CreateTexture(2, 2, new Color(0f, 0.75f, 1f, 1f));
         }
 
         private void CreateExpanderStyle()
         {
-            Expander = new GUIStyle(GUI.skin.button);
-            Expander.fontStyle = FontStyle.Bold;
+            Expander = new GUIStyle(GUI.skin.button)
+            {
+                fontStyle = FontStyle.Bold
+            };
             Expander.normal.background = CreateTexture(2, 2, new Color(0f, 0.55f, 0.55f, 1f));
             Expander.onNormal.background = CreateTexture(2, 2, new Color(0f, 0.55f, 0.55f, 1f));
 
@@ -74,8 +78,10 @@
 
         private void CreateToggleStyle()
         {
-            Toggle = new GUIStyle(GUI.skin.toggle);
-            Toggle.fontStyle = FontStyle.Bold;
+            Toggle = new GUIStyle(GUI.skin.toggle)
+            {
+                fontStyle = FontStyle.Bold
+            };
         }
 
         private void CreateWindowStyle()

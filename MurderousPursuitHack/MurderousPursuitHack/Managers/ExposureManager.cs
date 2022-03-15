@@ -15,7 +15,7 @@
                 return;
             }
 
-            if (Settings.ZeroExposure && HackManager.Instance.IsHost)
+            if (Settings.Current.ZeroExposure && HackManager.Instance.IsHost)
             {
                 UpdateExposureDictionary();
                 exposure[HackManager.Instance.LocalPlayerId].exposure = 0f;

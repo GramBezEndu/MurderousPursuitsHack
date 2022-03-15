@@ -19,13 +19,13 @@
         {
             Builder.Start();
             Builder.StartSection("CHAMS");
-            Settings.ChamsEnabled = Builder.Toggle(Settings.ChamsEnabled, DrawingHelper.DisplayKeybind("Chams", InputManager.Instance.Keybindings.Chams));
-            Settings.DrawLocalPlayerChams =
-                Builder.Toggle(Settings.DrawLocalPlayerChams, DrawingHelper.DisplayKeybind("Local Player Chams", InputManager.Instance.Keybindings.LocalPlayerChams));
+            Settings.Current.ChamsEnabled = Builder.Toggle(Settings.Current.ChamsEnabled, DrawingHelper.DisplayKeybind("Chams", InputManager.Instance.Keybindings.Chams));
+            Settings.Current.DrawLocalPlayerChams =
+                Builder.Toggle(Settings.Current.DrawLocalPlayerChams, DrawingHelper.DisplayKeybind("Local Player Chams", InputManager.Instance.Keybindings.LocalPlayerChams));
             Builder.EndSection();
 
             Builder.StartSection("ESP");
-            Settings.EspEnabled = Builder.Toggle(Settings.EspEnabled, DrawingHelper.DisplayKeybind("Player ESP", InputManager.Instance.Keybindings.PlayerESP));
+            Settings.Current.EspEnabled = Builder.Toggle(Settings.Current.EspEnabled, DrawingHelper.DisplayKeybind("Player ESP", InputManager.Instance.Keybindings.PlayerESP));
             Builder.EndSection();
 
             Builder.StartSection("SKINS");

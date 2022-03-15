@@ -41,12 +41,12 @@
 
             if (Input.GetKeyDown(Keybindings.Chams))
             {
-                Settings.ChamsEnabled = !Settings.ChamsEnabled;
+                Settings.Current.ChamsEnabled = !Settings.Current.ChamsEnabled;
             }
 
             if (Input.GetKeyDown(Keybindings.PlayerESP))
             {
-                Settings.EspEnabled = !Settings.EspEnabled;
+                Settings.Current.EspEnabled = !Settings.Current.EspEnabled;
             }
 
             if (Input.GetKeyDown(Keybindings.ChangeSkin))
@@ -79,7 +79,7 @@
         {
             if (Input.GetKeyDown(Keybindings.ZeroExposure))
             {
-                Settings.ZeroExposure = !Settings.ZeroExposure;
+                Settings.Current.ZeroExposure = !Settings.Current.ZeroExposure;
             }
 
             if (Input.GetKeyDown(Keybindings.PieBomb))

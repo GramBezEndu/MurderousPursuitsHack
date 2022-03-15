@@ -21,8 +21,8 @@
             hunterGlow = CreateHunterMaterial(neutralGlow);
             quarryGlow = CreateQuarryMaterial(neutralGlow);
             localPlayerGlow = CreateLocalPlayerMaterial(neutralGlow);
-            Settings.OnChamsDisabled += (o, e) => ClearChams();
-            Settings.OnLocalChamsDisabled += (o, e) => ClearLocalPlayerChams();
+            Settings.Current.OnChamsDisabled += (o, e) => ClearChams();
+            Settings.Current.OnLocalChamsDisabled += (o, e) => ClearLocalPlayerChams();
         }
 
         public void Update()
@@ -99,7 +99,7 @@
         private void UpdateGlow(PlayerData playerInfo)
         {
             XPlayer player = playerInfo.Player;
-            if (player.isLocalPlayer && Settings.DrawLocalPlayerChams == false)
+            if (player.isLocalPlayer && Settings.Current.DrawLocalPlayerChams == false)
             {
                 return;
             }
@@ -108,7 +108,7 @@
 
             for (int i = 0; i < allRenderers.Length; i++)
             {
-                if (Settings.ChamsEnabled)
+                if (Settings.Current.ChamsEnabled)
                 {
                     ApplyChams(playerInfo, allRenderers, i);
                 }
@@ -159,7 +159,7 @@
 
         private void ClearLocalPlayerChams()
         {
-            if (Settings.ChamsEnabled)
+            if (Settings.Current.ChamsEnabled)
             {
                 XPlayer player = HackManager.Instance.LocalPlayer;
                 Skins.RestoreSkin(player);

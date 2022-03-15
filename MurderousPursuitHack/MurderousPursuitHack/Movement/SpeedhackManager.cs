@@ -41,7 +41,7 @@
                 return;
             }
 
-            if (Settings.Speedhack)
+            if (Settings.Current.Speedhack)
             {
                 EnableSpeedhack();
             }
@@ -54,7 +54,7 @@
         public void EnableSpeedhack()
         {
             PlayerData local = HackManager.Instance.Players.Find(x => x.IsLocalPlayer);
-            float multiplier = Settings.SpeedMultiplier;
+            float multiplier = Settings.Current.SpeedMultiplier;
 
             local.CharacterMovement.SetFieldValue("defaultRunMoveSpeed", multiplier * defaultRunMoveSpeed);
             local.CharacterMovement.SetFieldValue("defaultFastWalkMoveSpeed", multiplier * defaultFastWalkMoveSpeed);

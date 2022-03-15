@@ -32,7 +32,7 @@
             Size = new Vector2(160, 360);
             ElementHeight = 45f;
             ElementsMarginY = 25f;
-            Visible = Settings.CheatsWindow;
+            Visible = Settings.Current.CheatsWindow;
             OnVisibleChanged += (o, e) => OnVisibilityChanged();
             Instance = this;
         }

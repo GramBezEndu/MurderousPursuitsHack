@@ -21,7 +21,7 @@
             bool isHosting = HackManager.Instance.IsHost;
             Builder.Start();
             Builder.StartSection("HOST ONLY");
-            Settings.ZeroExposure = Builder.Toggle(Settings.ZeroExposure, DrawingHelper.DisplayKeybind("Zero Exposure", InputManager.Instance.Keybindings.ZeroExposure));
+            Settings.Current.ZeroExposure = Builder.Toggle(Settings.Current.ZeroExposure, DrawingHelper.DisplayKeybind("Zero Exposure", InputManager.Instance.Keybindings.ZeroExposure));
             if (!isHosting)
             {
                 Builder.StartDisabled();

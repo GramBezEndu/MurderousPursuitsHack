@@ -20,8 +20,8 @@
         {
             Builder.Start();
             Builder.StartSection("TELEPORTS");
-            Settings.AutoAttackAfterTeleport = Builder.Toggle(
-                Settings.AutoAttackAfterTeleport,
+            Settings.Current.AutoAttackAfterTeleport = Builder.Toggle(
+                Settings.Current.AutoAttackAfterTeleport,
                 DrawingHelper.DisplayKeybind("Auto attack after teleport", InputManager.Instance.Keybindings.AutoAttackAfterTeleport));
 
             if (Builder.Button(DrawingHelper.DisplayKeybind("Teleport to Quarry", InputManager.Instance.Keybindings.TeleportToQuarry)))
@@ -47,9 +47,9 @@
             Builder.EndSection();
 
             Builder.StartSection("SPEEDHACK");
-            Settings.Speedhack = 
-                Builder.Toggle(Settings.Speedhack, String.Format("Speedhack: {0}", Math.Round(Settings.SpeedMultiplier, 3)));
-            Settings.CurrentSpeedMultiplierIndex = Builder.Slider(Settings.CurrentSpeedMultiplierIndex, 0, Settings.SpeedhackMultipliers.Length - 1);
+            Settings.Current.Speedhack = 
+                Builder.Toggle(Settings.Current.Speedhack, String.Format("Speedhack: {0}", Math.Round(Settings.Current.SpeedMultiplier, 3)));
+            Settings.Current.CurrentSpeedMultiplierIndex = Builder.Slider(Settings.Current.CurrentSpeedMultiplierIndex, 0, Settings.SpeedhackMultipliers.Length - 1);
             Builder.EndSection();
         }
     }
