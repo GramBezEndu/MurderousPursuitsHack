@@ -7,6 +7,7 @@
     public class Window : MonoBehaviour
     {
         public event EventHandler OnVisibleChanged;
+
         private static int GlobalId = 3;
 
         private bool visible = true;
@@ -15,7 +16,7 @@
 
         public Vector2 Position { get; set; } = new Vector2(170, 260);
 
-        public Vector2 Size { get; set; } = new Vector2(300, 360);
+        public Vector2 Size { get; set; } = new Vector2(300, 420);
 
         public float ElementHeight { get; set; } = 30f;
 

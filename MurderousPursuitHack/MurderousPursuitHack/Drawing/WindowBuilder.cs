@@ -99,11 +99,23 @@
             }
         }
 
-        public int Slider(int current, int leftValue, int rightValue)
+        public int Slider(int current, int leftValue, int rightValue, float elementWidthMultiplier = 0.96f)
         {
             if (currentSectionIndex == -1 || sections[currentSectionIndex].Expanded)
             {
-                return (int)GUI.HorizontalSlider(NextRect(), current, leftValue, rightValue, Style.HorizontalSlider, Style.Thumb);
+                return (int)GUI.HorizontalSlider(NextRect(elementWidthMultiplier), current, leftValue, rightValue, Style.HorizontalSlider, Style.Thumb);
+            }
+            else
+            {
+                return current;
+            }
+        }
+
+        public int Slider(int current, int leftValue, int rightValue, GUIStyle sliderStyle, float elementWidthMultiplier = 0.96f)
+        {
+            if (currentSectionIndex == -1 || sections[currentSectionIndex].Expanded)
+            {
+                return (int)GUI.HorizontalSlider(NextRect(elementWidthMultiplier), current, leftValue, rightValue, sliderStyle, Style.Thumb);
             }
             else
             {

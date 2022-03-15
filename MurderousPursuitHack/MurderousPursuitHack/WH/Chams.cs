@@ -23,6 +23,7 @@
             localPlayerGlow = CreateLocalPlayerMaterial(neutralGlow);
             Settings.Current.OnChamsDisabled += (o, e) => ClearChams();
             Settings.Current.OnLocalChamsDisabled += (o, e) => ClearLocalPlayerChams();
+            Settings.Current.LocalChamsColor.OnColorChanged += (o, e) => localPlayerGlow.SetColor("_Color", Settings.Current.LocalChamsColor.Color);
         }
 
         public void Update()
@@ -81,7 +82,7 @@
                 hideFlags = HideFlags.DontSaveInEditor | HideFlags.HideInHierarchy
             };
             newMaterial.CopyPropertiesFromMaterial(neutral);
-            newMaterial.SetColor("_Color", new Color(1f, 0.9f, 0f, 1f));
+            newMaterial.SetColor("_Color", Settings.Current.LocalChamsColor.Color);
             return newMaterial;
         }
 

@@ -29,7 +29,7 @@
             base.Start();
             Name = string.Empty;
             Position = new Vector2(10f, 260f);
-            Size = new Vector2(160, 360);
+            Size = new Vector2(160, 420);
             ElementHeight = 45f;
             ElementsMarginY = 25f;
             Visible = Settings.Current.CheatsWindow;
@@ -61,6 +61,11 @@
                 ActiveWindow = HostOnlyWindow.Instance;
             }
 
+            if (ColorSection(Builder))
+            {
+                ActiveWindow = ColorsWindow.Instance;
+            }
+
             if (DebugSection(Builder))
             {
                 DebugWindow.Instance.Visible = !DebugWindow.Instance.Visible;
@@ -72,11 +77,6 @@
             return builder.Button("VISUALS");
         }
 
-        private bool DebugSection(WindowBuilder builder)
-        {
-            return builder.Button("DEBUG");
-        }
-
         private bool MovementSection(WindowBuilder builder)
         {
             return builder.Button("MOVEMENT");
@@ -85,6 +85,16 @@
         private bool HostOnlySection(WindowBuilder builder)
         {
             return builder.Button("HOST ONLY");
+        }
+
+        private bool ColorSection(WindowBuilder builder)
+        {
+            return builder.Button("COLORS");
+        }
+
+        private bool DebugSection(WindowBuilder builder)
+        {
+            return builder.Button("DEBUG");
         }
 
         private void OnVisibilityChanged()
@@ -109,6 +119,7 @@
             VisualsWindow.Instance.Visible = false;
             MovementWindow.Instance.Visible = false;
             HostOnlyWindow.Instance.Visible = false;
+            ColorsWindow.Instance.Visible = false;
         }
     }
 }

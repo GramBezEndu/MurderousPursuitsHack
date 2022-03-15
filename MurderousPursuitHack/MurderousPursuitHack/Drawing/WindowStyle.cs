@@ -1,5 +1,6 @@
 ﻿namespace MurderousPursuitHack.Drawing
 {
+    using System;
     using System.Collections.Generic;
     using UnityEngine;
 
@@ -16,6 +17,14 @@
         public GUIStyle Window { get; private set; }
 
         public GUIStyle HorizontalSlider { get; private set; }
+
+        public GUIStyle RedSlider { get; private set; }
+
+        public GUIStyle GreenSlider { get; private set; }
+
+        public GUIStyle BlueSlider { get; private set; }
+
+        public GUIStyle WhiteSlider { get; private set; }
 
         public GUIStyle Thumb { get; private set; }
 
@@ -42,7 +51,35 @@
             CreateToggleStyle();
             CreateWindowStyle();
             CreateSliderStyle();
+            CreateRedSlider();
+            CreateGreenSlider();
+            CreateBlueSlider();
+            CreateWhiteSlider();
             CreateThumbStyle();
+        }
+
+        private void CreateWhiteSlider()
+        {
+            WhiteSlider = new GUIStyle(GUI.skin.horizontalSlider);
+            WhiteSlider.normal.background = CreateTexture(2, 2, Color.white);
+        }
+
+        private void CreateBlueSlider()
+        {
+            BlueSlider = new GUIStyle(GUI.skin.horizontalSlider);
+            BlueSlider.normal.background = CreateTexture(2, 2, Color.blue);
+        }
+
+        private void CreateGreenSlider()
+        {
+            GreenSlider = new GUIStyle(GUI.skin.horizontalSlider);
+            GreenSlider.normal.background = CreateTexture(2, 2, Color.green);
+        }
+
+        private void CreateRedSlider()
+        {
+            RedSlider = new GUIStyle(GUI.skin.horizontalSlider);
+            RedSlider.normal.background = CreateTexture(2, 2, Color.red);
         }
 
         private void CreateButtonStyle()

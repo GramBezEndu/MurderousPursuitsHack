@@ -1,5 +1,6 @@
 ﻿namespace MurderousPursuitHack
 {
+    using MurderousPursuitHack.Windows;
     using System;
     using System.Collections.Generic;
 
@@ -21,6 +22,8 @@
         private bool chamsEnabled;
 
         private bool drawLocalPlayerChams;
+
+        public ColorData LocalChamsColor { get; set; } = new ColorData();
 
         public event EventHandler OnChamsDisabled;
 

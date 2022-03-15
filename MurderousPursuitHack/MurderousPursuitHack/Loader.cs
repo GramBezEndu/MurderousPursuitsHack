@@ -22,6 +22,7 @@
             Loader.Load.AddComponent<VisualsWindow>();
             Loader.Load.AddComponent<MovementWindow>();
             Loader.Load.AddComponent<HostOnlyWindow>();
+            Loader.Load.AddComponent<ColorsWindow>();
             Loader.Load.AddComponent<SettingsWindow>();
             UnityEngine.Object.DontDestroyOnLoad(Loader.Load);
         }
