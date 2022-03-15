@@ -2,6 +2,7 @@
 {
     using MurderousPursuitHack.Drawing;
     using System;
+    using System.Collections.Generic;
     using UnityEngine;
 
     public class SettingsWindow : Window
@@ -9,6 +10,8 @@
         private Window activeWindow;
 
         public static SettingsWindow Instance { get; private set; }
+
+        private List<Window> windows = new List<Window>();
 
         public Window ActiveWindow 
         { 
@@ -18,8 +21,7 @@
                 if (activeWindow != value)
                 {
                     activeWindow = value;
-                    HideAllWindows();
-                    activeWindow.Visible = true;
+                    ShowActiveWindow();
                 }
             }
         }
@@ -33,6 +35,13 @@
             ElementHeight = 45f;
             ElementsMarginY = 25f;
             Visible = Settings.Current.CheatsWindow;
+            windows = new List<Window>()
+            {
+                VisualsWindow.Instance,
+                MovementWindow.Instance,
+                HostOnlyWindow.Instance,
+                ColorsWindow.Instance,
+            };
             OnVisibleChanged += (o, e) => OnVisibilityChanged();
             Instance = this;
         }
@@ -114,12 +123,19 @@
             }
         }
 
-        private void HideAllWindows()
+        private void ShowActiveWindow()
         {
-            VisualsWindow.Instance.Visible = false;
-            MovementWindow.Instance.Visible = false;
-            HostOnlyWindow.Instance.Visible = false;
-            ColorsWindow.Instance.Visible = false;
+            foreach (Window window in windows)
+            {
+                if (window == activeWindow)
+                {
+                    window.Visible = true;
+                }
+                else
+                {
+                    window.Visible = false;
+                }
+            }
         }
     }
 }

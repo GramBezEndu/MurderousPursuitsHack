@@ -8,7 +8,7 @@
     {
         public event EventHandler OnVisibleChanged;
 
-        private static int GlobalId = 3;
+        private static int GlobalId = 1;
 
         private bool visible = true;
 

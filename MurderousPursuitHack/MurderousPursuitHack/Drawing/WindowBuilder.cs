@@ -8,6 +8,8 @@
     {
         public Vector2 CurrentElementPosition;
 
+        private Vector2 cachedElementPosition;
+
         private readonly Window window;
 
         private readonly List<Section> sections = new List<Section>();
@@ -36,6 +38,7 @@
 
             ResetPosition();
             elementsCount = 0;
+            cachedElementPosition = Vector2.zero;
             currentSectionIndex = -1;
         }
 
@@ -130,7 +133,7 @@
                 Rect nextRect = NextRect(new Vector2(0.05f, 1f), Allignement.Left);
                 GUI.Label(nextRect, label, Style.Label);
                 return (int)GUI.HorizontalSlider(
-                    new Rect(nextRect.x + nextRect.width, nextRect.y + 5f, window.Size.x * 0.65f, window.ElementHeight * 0.65f),
+                    new Rect(nextRect.x + nextRect.width, nextRect.y + 5f, window.Size.x * 0.55f, window.ElementHeight * 0.55f),
                     current,
                     leftValue,
                     rightValue,
@@ -164,6 +167,33 @@
         public void EndDisabled()
         {
             GUI.enabled = true;
+        }
+
+        public Vector2 StartScrollView(Vector2 scrollPosition, Vector2 viewSize)
+        {
+            if (currentSectionIndex == -1 || sections[currentSectionIndex].Expanded)
+            {
+                Rect nextRect = NextRect();
+                cachedElementPosition = CurrentElementPosition + new Vector2(window.Size.x, 350f) - new Vector2(0f, window.ElementHeight);
+                CurrentElementPosition = new Vector2(0f, - window.ElementHeight);
+                return GUI.BeginScrollView(
+                    new Rect(nextRect.position, new Vector2(window.Size.x, 350f)),
+                    scrollPosition,
+                    new Rect(Vector2.zero, new Vector2(viewSize.x, viewSize.y)));
+            }
+            else
+            {
+                return scrollPosition;
+            }
+        }
+
+        public void EndScrollView()
+        {
+            if (currentSectionIndex == -1 || sections[currentSectionIndex].Expanded)
+            {
+                CurrentElementPosition = cachedElementPosition;
+                GUI.EndScrollView();
+            }
         }
 
         private Rect NextRect(float widthElementScale = 0.96f)

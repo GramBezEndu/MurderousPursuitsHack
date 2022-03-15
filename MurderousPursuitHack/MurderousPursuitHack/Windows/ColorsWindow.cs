@@ -8,6 +8,8 @@ namespace MurderousPursuitHack.Windows
 
         private Vector2 sliderScale = new Vector2(0.9f, 0.75f);
 
+        public Vector2 scrollPosition = Vector2.zero;
+
         public override void Start()
         {
             base.Start();
@@ -19,8 +21,10 @@ namespace MurderousPursuitHack.Windows
         {
             Builder.Start();
             Builder.StartSection("CHAMS");
+            scrollPosition = Builder.StartScrollView(scrollPosition, new Vector2(Size.x, 600f));
             LocalPlayerChams();
             QuarryChams();
+            Builder.EndScrollView();
             Builder.EndSection();
         }
 
@@ -39,7 +43,7 @@ namespace MurderousPursuitHack.Windows
         private void BuildColorPicker(ColorData colorData)
         {
             float cachedMargin = ElementsMarginY;
-            ElementsMarginY = 3f;
+            ElementsMarginY = 1f;
             colorData.R = Builder.LabelSlider("R", colorData.R, 0, 255, Builder.Style.RedSlider);
             colorData.G = Builder.LabelSlider("G", colorData.G, 0, 255, Builder.Style.GreenSlider);
             colorData.B = Builder.LabelSlider("B", colorData.B, 0, 255, Builder.Style.BlueSlider);
