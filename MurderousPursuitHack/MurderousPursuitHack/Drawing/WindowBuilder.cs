@@ -205,7 +205,7 @@
         {
             if (elementsCount > 0 || (elementsCount == 0 && window.Name != string.Empty))
             {
-                CurrentElementPosition.y += window.ElementHeight * elementScale.y + window.ElementsMarginY;
+                CurrentElementPosition.y += (window.ElementHeight * elementScale.y) + window.ElementsMarginY;
             }
 
             elementsCount++;

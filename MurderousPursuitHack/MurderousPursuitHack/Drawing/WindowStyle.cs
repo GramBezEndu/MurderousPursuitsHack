@@ -129,8 +129,10 @@
 
         private void CreateLabelStyle()
         {
-            Label = new GUIStyle(GUI.skin.label);
-            Label.fontStyle = FontStyle.Bold;
+            Label = new GUIStyle(GUI.skin.label)
+            {
+                fontStyle = FontStyle.Bold
+            };
         }
 
         private void CreateToggleStyle()
@@ -143,8 +145,10 @@
 
         private void CreateWindowStyle()
         {
-            Window = new GUIStyle(GUI.skin.window);
-            Window.fontSize = 14;
+            Window = new GUIStyle(GUI.skin.window)
+            {
+                fontSize = 14
+            };
             Window.normal.background = CreateTexture(2, 2, Color.black);
             Window.onNormal.background = CreateTexture(2, 2, Color.black);
             Window.active.background = CreateTexture(2, 2, Color.black);

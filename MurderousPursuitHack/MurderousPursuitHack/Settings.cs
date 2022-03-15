@@ -23,13 +23,27 @@
 
         private bool drawLocalPlayerChams;
 
-        public ColorData LocalChamsColor { get; set; } = new ColorData();
+        public ColorData LocalChamsColor { get; set; } = new ColorData()
+        {
+            R = 0,
+            G = 100,
+            B = 0,
+            A = 255,
+        };
 
         public ColorData QuarryChams { get; set; } = new ColorData()
         {
             R = 0,
             G = 127,
             B = 178,
+            A = 255,
+        };
+
+        public ColorData HunterChams { get; set; } = new ColorData()
+        {
+            R = 140,
+            G = 0,
+            B = 0,
             A = 255,
         };
 

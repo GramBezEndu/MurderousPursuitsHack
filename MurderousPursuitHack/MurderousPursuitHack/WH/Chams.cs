@@ -25,6 +25,7 @@
             Settings.Current.OnLocalChamsDisabled += (o, e) => ClearLocalPlayerChams();
             Settings.Current.LocalChamsColor.OnColorChanged += (o, e) => localPlayerGlow.SetColor("_Color", Settings.Current.LocalChamsColor.Color);
             Settings.Current.QuarryChams.OnColorChanged += (o, e) => quarryGlow.SetColor("_Color", Settings.Current.QuarryChams.Color);
+            Settings.Current.HunterChams.OnColorChanged += (o, e) => hunterGlow.SetColor("_Color", Settings.Current.HunterChams.Color);
         }
 
         public void Update()
@@ -72,7 +73,7 @@
                 hideFlags = HideFlags.DontSaveInEditor | HideFlags.HideInHierarchy
             };
             newMaterial.CopyPropertiesFromMaterial(neutral);
-            newMaterial.SetColor("_Color", new Color(0.55f, 0f, 0f, 1f));
+            newMaterial.SetColor("_Color", Settings.Current.HunterChams.Color);
             return newMaterial;
         }
 

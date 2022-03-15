@@ -1,12 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace MurderousPursuitHack.Windows
 {
     public class ColorsWindow : Window
     {
         public static ColorsWindow Instance { get; private set; }
-
-        private Vector2 sliderScale = new Vector2(0.9f, 0.75f);
 
         public Vector2 scrollPosition = Vector2.zero;
 
@@ -24,6 +23,7 @@ namespace MurderousPursuitHack.Windows
             scrollPosition = Builder.StartScrollView(scrollPosition, new Vector2(Size.x, 600f));
             LocalPlayerChams();
             QuarryChams();
+            HunterChams();
             Builder.EndScrollView();
             Builder.EndSection();
         }
@@ -38,6 +38,12 @@ namespace MurderousPursuitHack.Windows
         {
             Builder.Label("QUARRY");
             BuildColorPicker(Settings.Current.QuarryChams);
+        }
+
+        private void HunterChams()
+        {
+            Builder.Label("HUNTER");
+            BuildColorPicker(Settings.Current.HunterChams);
         }
 
         private void BuildColorPicker(ColorData colorData)
