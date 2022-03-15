@@ -1,50 +1,36 @@
 ﻿namespace MurderousPursuitHack.Windows
 {
-    using MurderousPursuitHack.Drawing;
     using MurderousPursuitHack.Managers;
     using ProjectX.Networking;
     using System;
     using UnityEngine;
 
-    public class DebugWindow : MonoBehaviour
+    public class DebugWindow : Window
     {
-        private Vector2 windowPosition = new Vector2(10f, 5f);
+        public static DebugWindow Instance { get; private set; }
 
-        private Vector2 windowSize = new Vector2(300f, 235f);
-
-        private WindowBuilder builder;
-
-        public void Start()
+        public override void Start()
         {
-            builder = new WindowBuilder(windowPosition, windowSize, 30f);
+            base.Start();
+            Name = "DEBUG";
+            Position = new Vector2(10f, 10f);
+            Size = new Vector2(300f, 240f);
+            Instance = this;
         }
 
-        public void OnGUI()
+        protected override void CreateElements(int windowID)
         {
-            void CreateDebugWindow(int windowID)
+            bool inGame = HackManager.Instance.InGame;
+            Builder.Start();
+            Builder.Label("Mono memory: " + Math.Round(System.GC.GetTotalMemory(false) / Math.Pow(10, 6), 1) + " MB");
+            Builder.Label("In Game: " + inGame);
+            if (inGame)
             {
-                bool inGame = HackManager.Instance.InGame;
-                builder.Start();
-                builder.Label("Mono memory: " + Math.Round(System.GC.GetTotalMemory(false) / Math.Pow(10, 6), 1) + " MB");
-                builder.Label("In Game: " + inGame);
-                if (inGame)
-                {
-                    builder.Label("Is Host: " + HackManager.Instance.IsHost.ToString());
-                    builder.Label("Game Type: " + UNetManager.Instance.GameType);
-                    builder.Label("Quarry Bar found: " + ((HackManager.Instance.QuarryBar != null) ? "True" : "False"));
-                    builder.Label("Hunter HUD found: " + ((HackManager.Instance.HunterHUD != null) ? "True" : "False"));
-                }
+                Builder.Label("Is Host: " + HackManager.Instance.IsHost.ToString());
+                Builder.Label("Game Type: " + UNetManager.Instance.GameType);
+                Builder.Label("Quarry Bar found: " + ((HackManager.Instance.QuarryBar != null) ? "True" : "False"));
+                Builder.Label("Hunter HUD found: " + ((HackManager.Instance.HunterHUD != null) ? "True" : "False"));
             }
-
-            if (Settings.DebugWindow)
-            {
-                builder.CreateWindow(CreateDebugWindow, 0, "DEBUG");
-            }
-        }
-
-        public void OnDestroy()
-        {
-            builder.OnDestroy();
         }
     }
 }

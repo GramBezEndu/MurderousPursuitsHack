@@ -1,9 +1,16 @@
 ﻿namespace MurderousPursuitHack
 {
     using System;
+    using System.Collections.Generic;
 
     public static class Settings
     {
+        public static float[] SpeedhackMultipliers = GeneratePossibleMultipliers();
+
+        public static int CurrentSpeedMultiplierIndex = 3;
+
+        public static float SpeedMultiplier { get => SpeedhackMultipliers[CurrentSpeedMultiplierIndex]; }
+
         private static bool chamsEnabled = true;
 
         private static bool drawLocalPlayerChams = true;
@@ -50,10 +57,22 @@
 
         public static bool EspEnabled { get; set; } = true;
 
-        public static bool DebugWindow { get; set; } = true;
-
         public static bool Speedhack { get; set; }
 
         public static bool ZeroExposure { get; set; } = true;
+
+        public static float[] GeneratePossibleMultipliers()
+        {
+            float min = 0.4f;
+            float max = 5f;
+            float step = 0.2f;
+            List<float> results = new List<float>();
+            while (min < max)
+            {
+                results.Add(min);
+                min += step;
+            }
+            return results.ToArray();
+        }
     }
 }

@@ -3,6 +3,7 @@
     using MurderousPursuitHack.Managers;
     using MurderousPursuitHack.Movement;
     using MurderousPursuitHack.Visuals;
+    using MurderousPursuitHack.Windows;
     using ProjectX.Abilities;
     using UnityEngine;
 
@@ -35,7 +36,7 @@
         {
             if (Input.GetKeyDown(Keybindings.CheatWindow))
             {
-                Settings.CheatsWindow = !Settings.CheatsWindow;
+                SettingsWindow.Instance.Visible = !SettingsWindow.Instance.Visible;
             }
 
             if (Input.GetKeyDown(Keybindings.Chams))
@@ -43,14 +44,9 @@
                 Settings.ChamsEnabled = !Settings.ChamsEnabled;
             }
 
-            if (Input.GetKeyDown(Keybindings.Esp))
+            if (Input.GetKeyDown(Keybindings.PlayerESP))
             {
                 Settings.EspEnabled = !Settings.EspEnabled;
-            }
-
-            if (Input.GetKeyDown(Keybindings.DebugInfo))
-            {
-                Settings.DebugWindow = !Settings.DebugWindow;
             }
 
             if (Input.GetKeyDown(Keybindings.ChangeSkin))

@@ -1,13 +1,14 @@
 ﻿namespace MurderousPursuitHack.Drawing
 {
+    using MurderousPursuitHack.Windows;
     using System.Collections.Generic;
     using UnityEngine;
 
     public class WindowBuilder
     {
-        private Vector2 currentElementPosition;
+        public Vector2 CurrentElementPosition;
 
-        private readonly float elementsMarginY = 5f;
+        private readonly Window window;
 
         private readonly List<Section> sections = new List<Section>();
 
@@ -15,21 +16,15 @@
 
         private bool initialized;
 
-        public WindowBuilder(Vector2 position, Vector2 windowSize, float elementHeight)
-        {
-            Position = position;
-            Size = windowSize;
-            ElementHeight = elementHeight;
-            Style = new WindowStyle();
-        }
-
-        public Vector2 Position { get; set; }
-
-        public Vector2 Size { get; set; }
-
-        public float ElementHeight { get; set; }
+        private int elementsCount;
 
         public WindowStyle Style { get; private set; }
+
+        public WindowBuilder(Window window)
+        {
+            this.window = window;
+            Style = new WindowStyle();
+        }
 
         public void Start()
         {
@@ -40,6 +35,7 @@
             }
 
             ResetPosition();
+            elementsCount = 0;
             currentSectionIndex = -1;
         }
 
@@ -48,9 +44,9 @@
             Style.OnDestroy();
         }
 
-        public void CreateWindow(GUI.WindowFunction windowFunction, int windowID, string name)
+        public void CreateWindow(GUI.WindowFunction windowFunction, int windowID)
         {
-            GUI.Window(windowID, new Rect(Position, Size), windowFunction, name, Style.Window);
+            GUI.Window(windowID, new Rect(window.Position, window.Size), windowFunction, window.Name, Style.Window);
         }
 
         public void StartSection(string name)
@@ -58,8 +54,10 @@
             int index = sections.FindIndex(x => x.Name == name);
             if (index == -1)
             {
-                Section section = new Section();
-                section.Name = name;
+                Section section = new Section
+                {
+                    Name = name
+                };
                 section.Expanded = Expander(name, section.Expanded);
                 sections.Add(section);
                 currentSectionIndex = sections.Count - 1;
@@ -136,18 +134,23 @@
             GUI.enabled = true;
         }
 
-        private Rect NextRect(float widthElementScale = 0.95f)
+        private Rect NextRect(float widthElementScale = 0.96f)
         {
-            currentElementPosition.y += ElementHeight + elementsMarginY;
-            float windowCentreX = Size.x / 2f;
-            float halfElementWidth = Size.x * widthElementScale / 2f;
+            if (elementsCount > 0 || (elementsCount == 0 && window.Name != string.Empty))
+            {
+                CurrentElementPosition.y += window.ElementHeight + window.ElementsMarginY;
+            }
+
+            elementsCount++;
+            float windowCentreX = window.Size.x / 2f;
+            float halfElementWidth = window.Size.x * widthElementScale / 2f;
             float posX = windowCentreX - halfElementWidth;
-            return new Rect(posX, currentElementPosition.y, Size.x * widthElementScale, ElementHeight);
+            return new Rect(posX, CurrentElementPosition.y, window.Size.x * widthElementScale, window.ElementHeight);
         }
 
         private void ResetPosition()
         {
-            currentElementPosition = new Vector2(0f, 0f);
+            CurrentElementPosition = new Vector2(0f, 0f);
         }
     }
 }

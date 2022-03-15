@@ -1,163 +1,114 @@
 ﻿namespace MurderousPursuitHack.Windows
 {
     using MurderousPursuitHack.Drawing;
-    using MurderousPursuitHack.Input;
-    using MurderousPursuitHack.Managers;
-    using MurderousPursuitHack.Movement;
-    using MurderousPursuitHack.Visuals;
-    using ProjectX.Abilities;
     using System;
-    using System.Collections.Generic;
     using UnityEngine;
 
-    public class SettingsWindow : MonoBehaviour
+    public class SettingsWindow : Window
     {
-        public static float[] SpeedhackMultipliers;
+        private Window activeWindow;
 
-        public static int CurrentSpeedMultiplierIndex = 3; // Equals to 1f speed
+        public static SettingsWindow Instance { get; private set; }
 
-        private readonly float elementHeight = 25f;
-
-        private WindowBuilder builder;
-
-        private Vector2 windowPosition = new Vector2(10f, 260f);
-
-        private Vector2 windowSize = new Vector2(300, 660);
-
-        public void Start()
-        {
-            SpeedhackMultipliers = GeneratePossibleMultipliers();
-            builder = new WindowBuilder(windowPosition, windowSize, elementHeight);
-        }
-
-        public void OnDestroy()
-        {
-            builder.OnDestroy();
-        }
-
-        public void OnGUI()
-        {
-            void CreateElements(int windowID)
+        public Window ActiveWindow 
+        { 
+            get => activeWindow; 
+            private set
             {
-                builder.Start();
-                VisualsSection(builder);
-                TeleportsSection(builder);
-                SpeedhackSection(builder);
-                HostOnlySection(builder);
-                DebugSection(builder);
-            }
-
-            if (Settings.CheatsWindow)
-            {
-                builder.CreateWindow(CreateElements, 1, "CHEATS");
+                if (activeWindow != value)
+                {
+                    activeWindow = value;
+                    HideAllWindows();
+                    activeWindow.Visible = true;
+                }
             }
         }
 
-        private void VisualsSection(WindowBuilder builder)
+        public override void Start()
         {
-            builder.StartSection("VISUALS");
-
-            Settings.ChamsEnabled = builder.Toggle(Settings.ChamsEnabled, DrawingHelper.DisplayKeybind("Chams", InputManager.Instance.Keybindings.Chams));
-            Settings.DrawLocalPlayerChams = 
-                builder.Toggle(Settings.DrawLocalPlayerChams, DrawingHelper.DisplayKeybind("Local Player Chams", InputManager.Instance.Keybindings.LocalPlayerChams));
-            Settings.EspEnabled = builder.Toggle(Settings.EspEnabled, DrawingHelper.DisplayKeybind("ESP", InputManager.Instance.Keybindings.Esp));
-            if (builder.Button(DrawingHelper.DisplayKeybind("Change skin", InputManager.Instance.Keybindings.ChangeSkin)))
-            {
-                Skins.ChangeLocalPlayerSkin();
-            }
-
-            builder.EndSection();
+            base.Start();
+            Name = string.Empty;
+            Position = new Vector2(10f, 260f);
+            Size = new Vector2(160, 360);
+            ElementHeight = 45f;
+            ElementsMarginY = 25f;
+            Visible = Settings.CheatsWindow;
+            OnVisibleChanged += (o, e) => OnVisibilityChanged();
+            Instance = this;
         }
 
-        private void DebugSection(WindowBuilder builder)
+        protected override void CreateElements(int windowID)
         {
-            builder.StartSection("DEBUG");
-            Settings.DebugWindow = builder.Toggle(Settings.DebugWindow, DrawingHelper.DisplayKeybind("Debug window", InputManager.Instance.Keybindings.DebugInfo));
-            builder.EndSection();
-        }
-
-        private void TeleportsSection(WindowBuilder builder)
-        {
-            builder.StartSection("TELEPORTS");
-            Settings.AutoAttackAfterTeleport = builder.Toggle(
-                Settings.AutoAttackAfterTeleport,
-                DrawingHelper.DisplayKeybind("Auto attack after teleport", InputManager.Instance.Keybindings.AutoAttackAfterTeleport));
-
-            if (builder.Button(DrawingHelper.DisplayKeybind("Teleport to Quarry", InputManager.Instance.Keybindings.TeleportToQuarry)))
+            if (ActiveWindow == null)
             {
-                Teleports.TeleportToQuarry();
+                ActiveWindow = VisualsWindow.Instance;
             }
 
-            if (builder.Button(DrawingHelper.DisplayKeybind("Teleport to Closest Hunter", InputManager.Instance.Keybindings.TeleportToClosestHunter)))
+            Builder.Start();
+            Builder.CurrentElementPosition = new Vector2(0f, 50f);
+            if (VisualsSection(Builder))
             {
-                Teleports.TeleportToClosestHunter();
+                ActiveWindow = VisualsWindow.Instance;
             }
 
-            if (builder.Button(DrawingHelper.DisplayKeybind("Teleport Quarry To Local", InputManager.Instance.Keybindings.TeleportQuarryToLocal)))
+            if (MovementSection(Builder))
             {
-                Teleports.TeleportQuarry();
+                ActiveWindow = MovementWindow.Instance;
             }
 
-            if (builder.Button(DrawingHelper.DisplayKeybind("Teleport Hunter To Local", InputManager.Instance.Keybindings.TeleportHunter)))
+            if (HostOnlySection(Builder))
             {
-                Teleports.TeleportHunter();
+                ActiveWindow = HostOnlyWindow.Instance;
             }
 
-            builder.EndSection();
-        }
-
-        private void SpeedhackSection(WindowBuilder builder)
-        {
-            builder.StartSection("SPEED HACK");
-            Settings.Speedhack = builder.Toggle(Settings.Speedhack, String.Format("Speedhack: {0}", Math.Round(SpeedhackMultipliers[CurrentSpeedMultiplierIndex], 3)));
-            CurrentSpeedMultiplierIndex = builder.Slider(CurrentSpeedMultiplierIndex, 0, SpeedhackMultipliers.Length - 1);
-            builder.EndSection();
-        }
-
-        private void HostOnlySection(WindowBuilder builder)
-        {
-            bool isHosting = HackManager.Instance.IsHost;
-            builder.StartSection("HOST ONLY");
-            Settings.ZeroExposure = builder.Toggle(Settings.ZeroExposure, DrawingHelper.DisplayKeybind("Zero Exposure", InputManager.Instance.Keybindings.ZeroExposure));
-            if (!isHosting)
+            if (DebugSection(Builder))
             {
-                builder.StartDisabled();
-            }
-
-            if (builder.Button(DrawingHelper.DisplayKeybind("Pie Bomb", InputManager.Instance.Keybindings.PieBomb)))
-            {
-                Managers.AbilityManager.StartAbility<XPlacePieBomb>();
-            }
-
-            if (builder.Button(DrawingHelper.DisplayKeybind("Flash", InputManager.Instance.Keybindings.Flash)))
-            {
-                Managers.AbilityManager.StartAbility<XFlash>();
-            }
-
-            if (builder.Button(DrawingHelper.DisplayKeybind("Disrupt", InputManager.Instance.Keybindings.Disrupt)))
-            {
-                Managers.AbilityManager.StartAbility<XDisrupt>();
-            }
-
-            builder.EndSection();
-            if (!isHosting)
-            {
-                builder.EndDisabled();
+                DebugWindow.Instance.Visible = !DebugWindow.Instance.Visible;
             }
         }
 
-        private float[] GeneratePossibleMultipliers()
+        private bool VisualsSection(WindowBuilder builder)
         {
-            float min = 0.4f;
-            float max = 5f;
-            float step = 0.2f;
-            List<float> results = new List<float>();
-            while (min < max)
+            return builder.Button("VISUALS");
+        }
+
+        private bool DebugSection(WindowBuilder builder)
+        {
+            return builder.Button("DEBUG");
+        }
+
+        private bool MovementSection(WindowBuilder builder)
+        {
+            return builder.Button("MOVEMENT");
+        }
+
+        private bool HostOnlySection(WindowBuilder builder)
+        {
+            return builder.Button("HOST ONLY");
+        }
+
+        private void OnVisibilityChanged()
+        {
+            if (ActiveWindow == null)
             {
-                results.Add(min);
-                min += step;
+                return;
             }
-            return results.ToArray();
+
+            if (Visible)
+            {
+                ActiveWindow.Visible = true;
+            }
+            else
+            {
+                ActiveWindow.Visible = false;
+            }
+        }
+
+        private void HideAllWindows()
+        {
+            VisualsWindow.Instance.Visible = false;
+            MovementWindow.Instance.Visible = false;
+            HostOnlyWindow.Instance.Visible = false;
         }
     }
 }

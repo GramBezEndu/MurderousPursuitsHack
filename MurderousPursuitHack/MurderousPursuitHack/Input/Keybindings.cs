@@ -10,7 +10,7 @@
 
         public KeyCode LocalPlayerChams { get; set; } = KeyCode.None;
 
-        public KeyCode Esp { get; set; } = KeyCode.None;
+        public KeyCode PlayerESP { get; set; } = KeyCode.None;
 
         public KeyCode ChangeSkin { get; set; } = KeyCode.F2;
 

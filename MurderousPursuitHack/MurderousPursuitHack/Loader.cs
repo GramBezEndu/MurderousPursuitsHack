@@ -13,13 +13,16 @@
         {
             Loader.Load = new GameObject();
             Loader.Load.AddComponent<InputManager>();
-            Loader.Load.AddComponent<DebugWindow>();
-            Loader.Load.AddComponent<SettingsWindow>();
             Loader.Load.AddComponent<HackManager>();
             Loader.Load.AddComponent<SpeedhackManager>();
             Loader.Load.AddComponent<ExposureManager>();
             Loader.Load.AddComponent<EspManager>();
             Loader.Load.AddComponent<Chams>();
+            Loader.Load.AddComponent<DebugWindow>();
+            Loader.Load.AddComponent<VisualsWindow>();
+            Loader.Load.AddComponent<MovementWindow>();
+            Loader.Load.AddComponent<HostOnlyWindow>();
+            Loader.Load.AddComponent<SettingsWindow>();
             UnityEngine.Object.DontDestroyOnLoad(Loader.Load);
         }
 
