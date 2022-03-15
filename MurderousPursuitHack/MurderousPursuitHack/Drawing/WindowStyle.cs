@@ -10,6 +10,8 @@
 
         public GUIStyle Expander { get; private set; }
 
+        public GUIStyle SecondaryExpander { get; private set; }
+
         public GUIStyle Label { get; private set; }
 
         public GUIStyle Toggle { get; private set; }
@@ -47,6 +49,7 @@
         {
             CreateButtonStyle();
             CreateExpanderStyle();
+            CreateSecondaryExpander();
             CreateLabelStyle();
             CreateToggleStyle();
             CreateWindowStyle();
@@ -56,6 +59,22 @@
             CreateBlueSlider();
             CreateWhiteSlider();
             CreateThumbStyle();
+        }
+
+        private void CreateSecondaryExpander()
+        {
+            SecondaryExpander = new GUIStyle(GUI.skin.button)
+            {
+                fontStyle = FontStyle.Bold
+            };
+            SecondaryExpander.normal.background = CreateTexture(2, 2, new Color(0.75f, 0.26f, 0.95f, 1f));
+            SecondaryExpander.onNormal.background = CreateTexture(2, 2, new Color(0.75f, 0.26f, 0.95f, 1f));
+
+            // brigther
+            SecondaryExpander.active.background = CreateTexture(2, 2, new Color(0.83f, 0.49f, 0.95f, 1f));
+            SecondaryExpander.onActive.background = CreateTexture(2, 2, new Color(0.83f, 0.49f, 0.95f, 1f));
+            SecondaryExpander.hover.background = CreateTexture(2, 2, new Color(0.83f, 0.49f, 0.95f, 1f));
+            SecondaryExpander.onHover.background = CreateTexture(2, 2, new Color(0.83f, 0.49f, 0.95f, 1f));
         }
 
         private void CreateWhiteSlider()
@@ -73,7 +92,7 @@
         private void CreateGreenSlider()
         {
             GreenSlider = new GUIStyle(GUI.skin.horizontalSlider);
-            GreenSlider.normal.background = CreateTexture(2, 2, Color.green);
+            GreenSlider.normal.background = CreateTexture(2, 2, new Color(0f, 0.8f, 0f, 1f));
         }
 
         private void CreateRedSlider()
@@ -111,6 +130,7 @@
         private void CreateLabelStyle()
         {
             Label = new GUIStyle(GUI.skin.label);
+            Label.fontStyle = FontStyle.Bold;
         }
 
         private void CreateToggleStyle()
@@ -124,6 +144,7 @@
         private void CreateWindowStyle()
         {
             Window = new GUIStyle(GUI.skin.window);
+            Window.fontSize = 14;
             Window.normal.background = CreateTexture(2, 2, Color.black);
             Window.onNormal.background = CreateTexture(2, 2, Color.black);
             Window.active.background = CreateTexture(2, 2, Color.black);

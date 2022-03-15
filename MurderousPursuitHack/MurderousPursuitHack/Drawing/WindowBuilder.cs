@@ -111,11 +111,31 @@
             }
         }
 
-        public int Slider(int current, int leftValue, int rightValue, GUIStyle sliderStyle, float elementWidthMultiplier = 0.96f)
+        public int Slider(int current, int leftValue, int rightValue, GUIStyle sliderStyle, Vector2 elementScale)
         {
             if (currentSectionIndex == -1 || sections[currentSectionIndex].Expanded)
             {
-                return (int)GUI.HorizontalSlider(NextRect(elementWidthMultiplier), current, leftValue, rightValue, sliderStyle, Style.Thumb);
+                return (int)GUI.HorizontalSlider(NextRect(elementScale), current, leftValue, rightValue, sliderStyle, Style.Thumb);
+            }
+            else
+            {
+                return current;
+            }
+        }
+
+        public int LabelSlider(string label, int current, int leftValue, int rightValue, GUIStyle sliderStyle)
+        {
+            if (currentSectionIndex == -1 || sections[currentSectionIndex].Expanded)
+            {
+                Rect nextRect = NextRect(new Vector2(0.05f, 1f), Allignement.Left);
+                GUI.Label(nextRect, label, Style.Label);
+                return (int)GUI.HorizontalSlider(
+                    new Rect(nextRect.x + nextRect.width, nextRect.y + 5f, window.Size.x * 0.65f, window.ElementHeight * 0.65f),
+                    current,
+                    leftValue,
+                    rightValue,
+                    sliderStyle,
+                    Style.Thumb);
             }
             else
             {
@@ -148,21 +168,39 @@
 
         private Rect NextRect(float widthElementScale = 0.96f)
         {
+            return NextRect(new Vector2(widthElementScale, 1f));
+        }
+
+        private Rect NextRect(Vector2 elementScale, Allignement allignement = Allignement.Center)
+        {
             if (elementsCount > 0 || (elementsCount == 0 && window.Name != string.Empty))
             {
-                CurrentElementPosition.y += window.ElementHeight + window.ElementsMarginY;
+                CurrentElementPosition.y += window.ElementHeight * elementScale.y + window.ElementsMarginY;
             }
 
             elementsCount++;
-            float windowCentreX = window.Size.x / 2f;
-            float halfElementWidth = window.Size.x * widthElementScale / 2f;
-            float posX = windowCentreX - halfElementWidth;
-            return new Rect(posX, CurrentElementPosition.y, window.Size.x * widthElementScale, window.ElementHeight);
+            switch(allignement)
+            {
+                case Allignement.Center:
+                    float windowCentreX = window.Size.x / 2f;
+                    float halfElementWidth = window.Size.x * elementScale.x / 2f;
+                    float posX = windowCentreX - halfElementWidth;
+                    return new Rect(posX, CurrentElementPosition.y, window.Size.x * elementScale.x, window.ElementHeight * elementScale.y);
+                case Allignement.Left:
+                default:
+                    return new Rect(CurrentElementPosition.x + 10f, CurrentElementPosition.y, window.Size.x * elementScale.x, window.ElementHeight * elementScale.y);
+            }
         }
 
         private void ResetPosition()
         {
             CurrentElementPosition = new Vector2(0f, 0f);
         }
+
+        private enum Allignement
+        {
+            Center,
+            Left,
+        };
     }
 }

@@ -25,6 +25,14 @@
 
         public ColorData LocalChamsColor { get; set; } = new ColorData();
 
+        public ColorData QuarryChams { get; set; } = new ColorData()
+        {
+            R = 0,
+            G = 127,
+            B = 178,
+            A = 255,
+        };
+
         public event EventHandler OnChamsDisabled;
 
         public event EventHandler OnLocalChamsDisabled;
