@@ -1,5 +1,6 @@
 ﻿namespace MurderousPursuitHack.Managers
 {
+    using Opsive.ThirdPersonController;
     using ProjectX.Abilities;
     using ProjectX.Player;
     using System;
@@ -9,8 +10,6 @@
     public class AbilityManager : MonoBehaviour
     {
         public static AbilityManager Instance { get; private set; }
-
-        private bool flyhackEnabled = false;
 
         public void Start()
         {
@@ -98,21 +97,13 @@
             fly.SetFieldValue("speedNormal", 4f);
             fly.SetFieldValue("speedFast", 10f);
 
-            if (flyhackEnabled == false)
+            if (fly.IsActive == false)
             {
                 playerData.CharacterAbilities.ClientTryStartAbility(fly, false);
-                PlayerCharacter character = (PlayerCharacter)fly.GetFieldValue("playerChar");
-                if (character != null)
-                {
-                    character.BodyObj.SetActive(true);
-                }
-
-                flyhackEnabled = true;
             }
             else
             {
                 playerData.CharacterAbilities.ClientTryStopAbility(fly, true);
-                flyhackEnabled = false;
             }
 
             return true;

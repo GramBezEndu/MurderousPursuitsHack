@@ -11,7 +11,6 @@
         private static Settings Default { get; set; } = new Settings()
         {
             ChamsEnabled = true,
-            DrawLocalPlayerChams = true,
             EspEnabled = true,
             CheatsWindow = true,
             ZeroExposure = true,
