@@ -78,6 +78,11 @@
             {
                 Managers.AbilityManager.Instance.ToggleFlyhack();
             }
+
+            if (Input.GetKeyDown(Keybindings.FreezeAnimation))
+            {
+                Animations.ToggleAnimationFreeze();
+            }
         }
 
         private void UpdateHostFeaturesKeys()

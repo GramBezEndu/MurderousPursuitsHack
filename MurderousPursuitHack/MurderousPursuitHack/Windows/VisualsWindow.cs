@@ -34,6 +34,13 @@
                 Skins.ChangeLocalPlayerSkin();
             }
             Builder.EndSection();
+
+            Builder.StartSection("ANIMATIONS");
+            if (Builder.Button(DrawingHelper.DisplayKeybind("Animation freeze", InputManager.Instance.Keybindings.FreezeAnimation)))
+            {
+                Animations.ToggleAnimationFreeze();
+            }
+            Builder.EndSection();
         }
     }
 }

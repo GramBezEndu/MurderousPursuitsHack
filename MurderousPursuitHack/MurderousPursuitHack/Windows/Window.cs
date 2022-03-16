@@ -10,7 +10,7 @@
 
         private static int GlobalId = 1;
 
-        private bool visible = true;
+        private bool visible;
 
         public int Id { get; private set; }
 
