@@ -78,7 +78,7 @@
             {
                 if (attackAutomatically)
                 {
-                    return AbilityManager.StartAttack(from.Player);
+                    return Managers.AbilityManager.Instance.StartAttack(from.Player);
                 }
                 else
                 {
@@ -97,7 +97,7 @@
             {
                 if (attackAutomatically)
                 {
-                    return AbilityManager.StartAttack(to.Player);
+                    return Managers.AbilityManager.Instance.StartAttack(to.Player);
                 }
                 else
                 {

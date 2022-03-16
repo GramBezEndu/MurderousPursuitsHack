@@ -16,6 +16,7 @@
             Loader.Load.AddComponent<HackManager>();
             Loader.Load.AddComponent<SpeedhackManager>();
             Loader.Load.AddComponent<ExposureManager>();
+            Loader.Load.AddComponent<AbilityManager>();
             Loader.Load.AddComponent<EspManager>();
             Loader.Load.AddComponent<Chams>();
             Loader.Load.AddComponent<DebugWindow>();

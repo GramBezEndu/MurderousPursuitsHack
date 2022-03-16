@@ -28,17 +28,17 @@
 
             if (Builder.Button(DrawingHelper.DisplayKeybind("Pie Bomb", InputManager.Instance.Keybindings.PieBomb)))
             {
-                Managers.AbilityManager.StartAbility<XPlacePieBomb>();
+                Managers.AbilityManager.Instance.StartAbility<XPlacePieBomb>();
             }
 
             if (Builder.Button(DrawingHelper.DisplayKeybind("Flash", InputManager.Instance.Keybindings.Flash)))
             {
-                Managers.AbilityManager.StartAbility<XFlash>();
+                Managers.AbilityManager.Instance.StartAbility<XFlash>();
             }
 
             if (Builder.Button(DrawingHelper.DisplayKeybind("Disrupt", InputManager.Instance.Keybindings.Disrupt)))
             {
-                Managers.AbilityManager.StartAbility<XDisrupt>();
+                Managers.AbilityManager.Instance.StartAbility<XDisrupt>();
             }
 
             if (!isHosting)

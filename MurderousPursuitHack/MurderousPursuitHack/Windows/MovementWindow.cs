@@ -51,6 +51,14 @@
                 Builder.Toggle(Settings.Current.Speedhack, String.Format("Speedhack: {0}", Math.Round(Settings.Current.SpeedMultiplier, 3)));
             Settings.Current.CurrentSpeedMultiplierIndex = Builder.Slider(Settings.Current.CurrentSpeedMultiplierIndex, 0, Settings.SpeedhackMultipliers.Length - 1);
             Builder.EndSection();
+
+            Builder.StartSection("FLYHACK");
+            if (Builder.Button(DrawingHelper.DisplayKeybind("Fly hack", InputManager.Instance.Keybindings.FlyHack)))
+            {
+                Managers.AbilityManager.Instance.ToggleFlyhack();
+            }
+
+            Builder.EndSection();
         }
     }
 }

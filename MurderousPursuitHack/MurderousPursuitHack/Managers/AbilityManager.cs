@@ -1,12 +1,23 @@
 ﻿namespace MurderousPursuitHack.Managers
 {
+    using ProjectX.Abilities;
     using ProjectX.Player;
     using System;
     using System.Reflection;
+    using UnityEngine;
 
-    public static class AbilityManager
+    public class AbilityManager : MonoBehaviour
     {
-        public static bool StartAbility<LoadoutAbility>()
+        public static AbilityManager Instance { get; private set; }
+
+        private bool flyhackEnabled = false;
+
+        public void Start()
+        {
+            Instance = this;
+        }
+
+        public bool StartAbility<LoadoutAbility>()
         {
             if (!HackManager.Instance.InGame)
             {
@@ -29,7 +40,7 @@
             return true;
         }
 
-        public static bool StartAttack(XPlayer victim)
+        public bool StartAttack(XPlayer victim)
         {
             if (!HackManager.Instance.InGame)
             {
@@ -68,5 +79,44 @@
             methodInfo.Invoke(attack, new object[] { });
             return true;
         }
+
+        public bool ToggleFlyhack()
+        {
+            if (!HackManager.Instance.InGame)
+            {
+                return false;
+            }
+
+            PlayerData playerData = HackManager.Instance.Players.Find(x => x.IsLocalPlayer);
+            if (playerData == null)
+            {
+                return false;
+            }
+
+            XPlayerFly fly = (XPlayerFly)Array.Find(playerData.CharacterMovement.Abilities.Abilities, x => typeof(XPlayerFly).Equals(x.GetType()));
+            fly.enabled = true;
+            fly.SetFieldValue("speedNormal", 4f);
+            fly.SetFieldValue("speedFast", 10f);
+
+            if (flyhackEnabled == false)
+            {
+                playerData.CharacterAbilities.ClientTryStartAbility(fly, false);
+                PlayerCharacter character = (PlayerCharacter)fly.GetFieldValue("playerChar");
+                if (character != null)
+                {
+                    character.BodyObj.SetActive(true);
+                }
+
+                flyhackEnabled = true;
+            }
+            else
+            {
+                playerData.CharacterAbilities.ClientTryStopAbility(fly, true);
+                flyhackEnabled = false;
+            }
+
+            return true;
+        }
+
     }
 }

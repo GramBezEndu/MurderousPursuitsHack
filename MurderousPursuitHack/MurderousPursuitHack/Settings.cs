@@ -55,8 +55,8 @@
 
         public float SpeedMultiplier { get => SpeedhackMultipliers[CurrentSpeedMultiplierIndex]; }
 
-        public bool DrawLocalPlayerChams 
-        { 
+        public bool DrawLocalPlayerChams
+        {
             get => drawLocalPlayerChams;
             set
             {

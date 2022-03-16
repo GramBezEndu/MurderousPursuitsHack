@@ -73,6 +73,11 @@
             {
                 Teleports.TeleportHunter();
             }
+
+            if (Input.GetKeyDown(Keybindings.FlyHack))
+            {
+                Managers.AbilityManager.Instance.ToggleFlyhack();
+            }
         }
 
         private void UpdateHostFeaturesKeys()
@@ -84,17 +89,17 @@
 
             if (Input.GetKeyDown(Keybindings.PieBomb))
             {
-                Managers.AbilityManager.StartAbility<XPlacePieBomb>();
+                Managers.AbilityManager.Instance.StartAbility<XPlacePieBomb>();
             }
 
             if (Input.GetKeyDown(Keybindings.Flash))
             {
-                Managers.AbilityManager.StartAbility<XFlash>();
+                Managers.AbilityManager.Instance.StartAbility<XFlash>();
             }
 
             if (Input.GetKeyDown(Keybindings.Disrupt))
             {
-                Managers.AbilityManager.StartAbility<XDisrupt>();
+                Managers.AbilityManager.Instance.StartAbility<XDisrupt>();
             }
         }
     }

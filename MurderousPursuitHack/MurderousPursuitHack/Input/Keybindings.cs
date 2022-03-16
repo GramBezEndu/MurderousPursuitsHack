@@ -14,7 +14,7 @@
 
         public KeyCode ChangeSkin { get; set; } = KeyCode.F2;
 
-        public KeyCode DebugInfo { get; set; } = KeyCode.F5;
+        public KeyCode FlyHack { get; set; } = KeyCode.F3;
 
         public KeyCode ZeroExposure { get; set; } = KeyCode.None;
 
