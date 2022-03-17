@@ -11,6 +11,7 @@ Mod for "Murderous Pursuits". Tested on <b>1.7.0</b> version of the game.
 - Player ESP
 - Teleports
 - Speedhack
+- Flyhack
 
 ## Usage:
 Inject the dll with any Mono Injector. Recommended injector: "SharpMonoInjector wh0am1 Mod".
