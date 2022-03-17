@@ -72,7 +72,7 @@
             return TeleportPlayerToLocal(closestHunter, Settings.Current.AutoAttackAfterTeleport);
         }
 
-        private static bool TeleportPlayerToLocal(PlayerData from, bool attackAutomatically)
+        public static bool TeleportPlayerToLocal(PlayerData from, bool attackAutomatically)
         {
             if (TeleportPlayer(from, HackManager.Instance.Players.Find(x => x.IsLocalPlayer).Position))
             {
@@ -132,7 +132,7 @@
             return true;
         }
 
-        private static PlayerData GetClosestHunter()
+        public static PlayerData GetClosestHunter()
         {
             PlayerData[] hunters = HackManager.Instance.Players.FindAll(x => x.IsHunterForLocal).ToArray();
             if (hunters == null || hunters.Length == 0)

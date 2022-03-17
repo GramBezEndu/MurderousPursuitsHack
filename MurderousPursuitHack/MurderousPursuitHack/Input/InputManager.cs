@@ -1,6 +1,7 @@
 ﻿namespace MurderousPursuitHack.Input
 {
     using MurderousPursuitHack.Managers;
+    using MurderousPursuitHack.Misc;
     using MurderousPursuitHack.Movement;
     using MurderousPursuitHack.Visuals;
     using MurderousPursuitHack.Windows;
@@ -82,6 +83,11 @@
             if (Input.GetKeyDown(Keybindings.FreezeAnimation))
             {
                 Animations.ToggleAnimationFreeze();
+            }
+
+            if (Input.GetKeyDown(Keybindings.AutoKill))
+            {
+                AutoKill.Instance.enabled = !AutoKill.Instance.enabled;
             }
         }
 

@@ -12,6 +12,8 @@
 
         public KeyCode FreezeAnimation { get; set; } = KeyCode.F4;
 
+        public KeyCode AutoKill { get; set; } = KeyCode.F6;
+
         public KeyCode LocalPlayerChams { get; set; } = KeyCode.None;
 
         public KeyCode PlayerESP { get; set; } = KeyCode.None;

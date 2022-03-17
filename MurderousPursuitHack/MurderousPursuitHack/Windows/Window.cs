@@ -16,7 +16,7 @@
 
         public Vector2 Position { get; set; } = new Vector2(170, 260);
 
-        public Vector2 Size { get; set; } = new Vector2(300, 420);
+        public Vector2 Size { get; set; } = new Vector2(300, 430);
 
         public float ElementHeight { get; set; } = 30f;
 

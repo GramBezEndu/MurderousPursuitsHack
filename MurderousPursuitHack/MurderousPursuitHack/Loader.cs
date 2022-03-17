@@ -2,6 +2,7 @@
 {
     using MurderousPursuitHack.Input;
     using MurderousPursuitHack.Managers;
+    using MurderousPursuitHack.Misc;
     using MurderousPursuitHack.Movement;
     using MurderousPursuitHack.WH;
     using MurderousPursuitHack.Windows;
@@ -19,11 +20,13 @@
             Loader.Load.AddComponent<AbilityManager>();
             Loader.Load.AddComponent<EspManager>();
             Loader.Load.AddComponent<Chams>();
+            Loader.Load.AddComponent<AutoKill>();
             Loader.Load.AddComponent<DebugWindow>();
             Loader.Load.AddComponent<VisualsWindow>();
             Loader.Load.AddComponent<MovementWindow>();
             Loader.Load.AddComponent<HostOnlyWindow>();
             Loader.Load.AddComponent<ColorsWindow>();
+            Loader.Load.AddComponent<MiscWindow>();
             Loader.Load.AddComponent<SettingsWindow>();
             UnityEngine.Object.DontDestroyOnLoad(Loader.Load);
         }

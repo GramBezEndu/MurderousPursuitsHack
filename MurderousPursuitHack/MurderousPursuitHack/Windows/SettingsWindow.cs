@@ -31,14 +31,15 @@
             base.Start();
             Name = string.Empty;
             Position = new Vector2(10f, 260f);
-            Size = new Vector2(160, 420);
+            Size = new Vector2(160, 430);
             ElementHeight = 45f;
-            ElementsMarginY = 25f;
+            ElementsMarginY = 15f;
             Visible = Settings.Current.CheatsWindow;
             windows = new List<Window>()
             {
                 VisualsWindow.Instance,
                 MovementWindow.Instance,
+                MiscWindow.Instance,
                 HostOnlyWindow.Instance,
                 ColorsWindow.Instance,
             };
@@ -65,6 +66,11 @@
                 ActiveWindow = MovementWindow.Instance;
             }
 
+            if (MiscSection(Builder))
+            {
+                ActiveWindow = MiscWindow.Instance;
+            }
+
             if (HostOnlySection(Builder))
             {
                 ActiveWindow = HostOnlyWindow.Instance;
@@ -79,6 +85,11 @@
             {
                 DebugWindow.Instance.Visible = !DebugWindow.Instance.Visible;
             }
+        }
+
+        private bool MiscSection(WindowBuilder builder)
+        {
+            return builder.Button("MISC");
         }
 
         private bool VisualsSection(WindowBuilder builder)
