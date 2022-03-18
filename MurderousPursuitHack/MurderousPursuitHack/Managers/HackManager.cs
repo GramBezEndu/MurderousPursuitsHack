@@ -30,8 +30,6 @@
 
         public XPlayer LocalPlayer { get; private set; }
 
-        public XPlayerCamera LocalPlayerCamera { get; private set; }
-
         public uint LocalPlayerId { get; private set; }
 
         public QuarryLocatorBarHUD QuarryBar { get; private set; }
@@ -73,7 +71,6 @@
                 }
 
                 LocalPlayerId = LocalPlayer.PlayerID;
-                LocalPlayerCamera = Utility.GetComponentForType<XPlayerCamera>(this.LocalPlayer.gameObject);
                 FindHUD();
 
                 if (Singleton<PlayerManager>.Instance.BotIDs != null)
@@ -83,7 +80,8 @@
 
                 UpdateHunterList();
                 UpdateCurrentQuarry();
-                Players = CreatePlayerDataList(LocalPlayerCamera.PlayerCamera);
+                Camera camera = Camera.main;
+                Players = CreatePlayerDataList(camera);
             }
         }
 

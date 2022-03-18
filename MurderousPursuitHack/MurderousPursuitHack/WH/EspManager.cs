@@ -1,11 +1,23 @@
 ﻿namespace MurderousPursuitHack.WH
 {
     using MurderousPursuitHack.Managers;
-    using ProjectX;
     using UnityEngine;
 
     public class EspManager : MonoBehaviour
     {
+        private GUIStyle quarry;
+
+        private GUIStyle hunter;
+
+        private GUIStyle neutral;
+
+        public void Start()
+        {
+            quarry = CreateTextStyle(Colors.Quarry);
+            hunter = CreateTextStyle(Colors.Hunter);
+            neutral = CreateTextStyle(Colors.Neutral);
+        }
+
         public EspColors Colors { get; set; } = new EspColors()
         {
             Quarry = Color.cyan,
@@ -63,26 +75,26 @@
 
         private void DrawPlayer(PlayerData playerData)
         {
-            SetGuiColorBasedOnPlayerType(playerData);
-
-            GUI.Label(
-                new Rect(playerData.OnScreenPosition.x, Screen.height - playerData.OnScreenPosition.y, 150, 50),
-                playerData.DisplayName + " " + FormatDistance(DistanceToLocalPlayer(playerData)));
+            GUIStyle currentStyle = GetStyleBasedOnPlayerType(playerData);
+            string display = playerData.DisplayName + " " + FormatDistance(DistanceToLocalPlayer(playerData));
+            Vector2 size = currentStyle.CalcSize(new GUIContent(display));
+            Vector2 position = new Vector2(playerData.OnScreenPosition.x - (size.x / 2f), Screen.height - playerData.OnScreenPosition.y);
+            GUI.Label(new Rect(position, 2f * size), display, currentStyle);
         }
 
-        private void SetGuiColorBasedOnPlayerType(PlayerData p)
+        private GUIStyle GetStyleBasedOnPlayerType(PlayerData p)
         {
             if (p.IsHunterForLocal)
             {
-                GUI.color = Colors.Hunter;
+                return hunter;
             }
             else if (p.IsQuarryForLocal)
             {
-                GUI.color = Colors.Quarry;
+                return quarry;
             }
             else
             {
-                GUI.color = Colors.Neutral;
+                return neutral;
             }
         }
 
@@ -94,6 +106,16 @@
         private string FormatDistance(int distance)
         {
             return string.Format("[{0}]", distance.ToString());
+        }
+
+        private GUIStyle CreateTextStyle(Color color)
+        {
+            var style = new GUIStyle
+            {
+                fontStyle = FontStyle.Bold,
+            };
+            style.normal.textColor = color;
+            return style;
         }
     }
 }
