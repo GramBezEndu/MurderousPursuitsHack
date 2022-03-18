@@ -2,8 +2,9 @@
 {
     using BG.UI;
     using BG.Utils;
+    using Opsive.ThirdPersonController;
+    using ProjectX;
     using ProjectX.Levels;
-    using ProjectX.Networking;
     using ProjectX.Player;
     using ProjectX.UI.HUD;
     using System;
@@ -14,10 +15,6 @@
 
     public class HackManager : MonoBehaviour
     {
-        // Known singletons:
-        // Singleton<PlayerManager>
-        // Singleton<GameDataManager>
-
         public static HackManager Instance { get; private set; }
 
         public void Start()
@@ -32,6 +29,8 @@
         public List<PlayerData> Players { get; private set; } = new List<PlayerData>(8);
 
         public XPlayer LocalPlayer { get; private set; }
+
+        public XPlayerCamera LocalPlayerCamera { get; private set; }
 
         public uint LocalPlayerId { get; private set; }
 
@@ -74,6 +73,7 @@
                 }
 
                 LocalPlayerId = LocalPlayer.PlayerID;
+                LocalPlayerCamera = Utility.GetComponentForType<XPlayerCamera>(this.LocalPlayer.gameObject);
                 FindHUD();
 
                 if (Singleton<PlayerManager>.Instance.BotIDs != null)
@@ -83,9 +83,7 @@
 
                 UpdateHunterList();
                 UpdateCurrentQuarry();
-                // Note: Caching camera might improve performance but it will add additional checks
-                Camera camera = Camera.main;
-                Players = CreatePlayerDataList(camera);
+                Players = CreatePlayerDataList(LocalPlayerCamera.PlayerCamera);
             }
         }
 
@@ -168,13 +166,11 @@
             }
 
             Transform characterTransform = (Transform)(xCharacterMovement.GetFieldValue("characterTransform"));
-            Collider collider = xCharacterMovement.GetComponent<Collider>();
 
             PlayerData playerData = new PlayerData()
             {
                 PlayerId = player.PlayerID,
                 Player = player,
-                DisplayName = player.name,
                 IsLocalPlayer = xCharacterMovement.isLocalPlayer,
                 IsAlive = player.IsAlive,
                 IsBot = BotIDs.Contains(player.PlayerID),
@@ -182,15 +178,32 @@
                 IsQuarryForLocal = player.PlayerID == CurrentQuarry,
                 // Note: use characterTransform.position (not transform.position)
                 Position = characterTransform.position,
-                Velocity = xCharacterMovement.Velocity,
-                Size = collider.bounds.size,
                 CharacterMovement = xCharacterMovement,
                 CharacterAbilities = xCharacterMovement.Abilities,
                 PlayerPerk = player.PlayerPerk,
-                Collider = collider,
             };
+
+            playerData.DisplayName = SetDisplayName(playerData);
             playerData.OnScreenPosition = camera.WorldToScreenPoint(playerData.Position);
             return playerData;
+        }
+
+        private string SetDisplayName(PlayerData playerData)
+        {
+            string defaultName = "UNKNOWN";
+            if (playerData.IsBot)
+            {
+                return "BOT";
+            }
+            else
+            {
+                if (LobbyNetworkManager.Instance != null)
+                {
+                    return LobbyNetworkManager.Instance.GetPlayerName(playerData.PlayerId);
+                }
+            }
+
+            return defaultName;
         }
     }
 }

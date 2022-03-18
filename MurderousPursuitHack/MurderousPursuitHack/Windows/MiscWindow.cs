@@ -23,7 +23,7 @@
             {
                 AutoKill.Instance.enabled = !AutoKill.Instance.enabled;
             }
-            
+
             Builder.EndSection();
         }
     }

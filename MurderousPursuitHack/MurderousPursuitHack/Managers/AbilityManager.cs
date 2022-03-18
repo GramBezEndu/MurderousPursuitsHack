@@ -1,6 +1,5 @@
 ﻿namespace MurderousPursuitHack.Managers
 {
-    using Opsive.ThirdPersonController;
     using ProjectX.Abilities;
     using ProjectX.Player;
     using System;

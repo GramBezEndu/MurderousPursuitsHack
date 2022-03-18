@@ -2,7 +2,6 @@
 {
     using MurderousPursuitHack.Managers;
     using MurderousPursuitHack.Movement;
-    using System;
     using UnityEngine;
 
     public class AutoKill : MonoBehaviour
@@ -13,6 +12,7 @@
 
         public void Start()
         {
+            enabled = false;
             Instance = this;
         }
 

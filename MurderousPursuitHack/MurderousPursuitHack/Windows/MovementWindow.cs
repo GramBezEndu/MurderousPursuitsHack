@@ -47,7 +47,7 @@
             Builder.EndSection();
 
             Builder.StartSection("SPEEDHACK");
-            Settings.Current.Speedhack = 
+            Settings.Current.Speedhack =
                 Builder.Toggle(Settings.Current.Speedhack, String.Format("Speedhack: {0}", Math.Round(Settings.Current.SpeedMultiplier, 3)));
             Settings.Current.CurrentSpeedMultiplierIndex = Builder.Slider(Settings.Current.CurrentSpeedMultiplierIndex, 0, Settings.SpeedhackMultipliers.Length - 1);
             Builder.EndSection();

@@ -1,7 +1,6 @@
 ﻿namespace MurderousPursuitHack.Movement
 {
     using MurderousPursuitHack.Managers;
-    using MurderousPursuitHack.Windows;
     using ProjectX.Player;
     using UnityEngine;
 

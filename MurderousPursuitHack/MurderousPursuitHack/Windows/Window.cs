@@ -24,7 +24,7 @@
 
         public string Name { get; set; } = "UNNAMED";
 
-        public bool Visible 
+        public bool Visible
         {
             get => visible;
             set

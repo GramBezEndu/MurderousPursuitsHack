@@ -1,6 +1,5 @@
 ﻿namespace MurderousPursuitHack.Drawing
 {
-    using System;
     using System.Collections.Generic;
     using UnityEngine;
 

@@ -7,9 +7,9 @@ namespace MurderousPursuitHack.Windows
     public class ColorData
     {
         private int r = 255;
-        
+
         private int g = 255;
-        
+
         private int b = 255;
 
         private int a = 255;
@@ -34,7 +34,7 @@ namespace MurderousPursuitHack.Windows
             }
         }
 
-        public int R 
+        public int R
         {
             get => r;
             set

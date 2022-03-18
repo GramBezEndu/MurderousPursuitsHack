@@ -6,13 +6,11 @@
 
     public class WindowBuilder
     {
-        public Vector2 CurrentElementPosition;
-
-        private Vector2 cachedElementPosition;
-
         private readonly Window window;
 
         private readonly List<Section> sections = new List<Section>();
+
+        private Vector2 cachedElementPosition;
 
         private int currentSectionIndex = -1;
 
@@ -20,13 +18,15 @@
 
         private int elementsCount;
 
-        public WindowStyle Style { get; private set; }
-
         public WindowBuilder(Window window)
         {
             this.window = window;
             Style = new WindowStyle();
         }
+
+        public Vector2 CurrentElementPosition { get; set; }
+
+        public WindowStyle Style { get; private set; }
 
         public void Start()
         {
@@ -175,7 +175,7 @@
             {
                 Rect nextRect = NextRect();
                 cachedElementPosition = CurrentElementPosition + new Vector2(window.Size.x, 350f) - new Vector2(0f, window.ElementHeight);
-                CurrentElementPosition = new Vector2(0f, - window.ElementHeight);
+                CurrentElementPosition = new Vector2(0f, -window.ElementHeight);
                 return GUI.BeginScrollView(
                     new Rect(nextRect.position, new Vector2(window.Size.x, 350f)),
                     scrollPosition,
@@ -205,11 +205,12 @@
         {
             if (elementsCount > 0 || (elementsCount == 0 && window.Name != string.Empty))
             {
-                CurrentElementPosition.y += (window.ElementHeight * elementScale.y) + window.ElementsMarginY;
+                CurrentElementPosition =
+                    new Vector2(CurrentElementPosition.x, CurrentElementPosition.y + (window.ElementHeight * elementScale.y) + window.ElementsMarginY);
             }
 
             elementsCount++;
-            switch(allignement)
+            switch (allignement)
             {
                 case Allignement.Center:
                     float windowCentreX = window.Size.x / 2f;

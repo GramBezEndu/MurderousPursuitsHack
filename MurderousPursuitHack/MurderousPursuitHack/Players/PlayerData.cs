@@ -28,15 +28,9 @@
         // Vector3 is needed to check if player is behind camera
         public Vector3 OnScreenPosition { get; set; } = Vector3.zero;
 
-        public Vector3 Velocity { get; set; } = Vector3.zero;
-
-        public Vector3 Size { get; set; } = Vector3.zero;
-
         public CharacterAbilities CharacterAbilities { get; set; }
 
         public XPlayerPerk PlayerPerk { get; set; }
-
-        public Collider Collider { get; set; }
 
         public XCharacterMovement CharacterMovement { get; set; }
     }

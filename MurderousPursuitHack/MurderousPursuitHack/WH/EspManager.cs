@@ -61,30 +61,13 @@
             }
         }
 
-        private void DrawPlayer(PlayerData playerInfo)
+        private void DrawPlayer(PlayerData playerData)
         {
-            SetGuiColorBasedOnPlayerType(playerInfo);
-
-            string name = "PLAYER ";
-            if (playerInfo.IsBot)
-            {
-                name = "BOT ";
-            }
-            else
-            {
-                if (LobbyNetworkManager.Instance != null)
-                {
-                    string nickname = LobbyNetworkManager.Instance.GetPlayerName(playerInfo.PlayerId);
-                    if (nickname != string.Empty)
-                    {
-                        name = nickname;
-                    }
-                }
-            }
+            SetGuiColorBasedOnPlayerType(playerData);
 
             GUI.Label(
-                new Rect(playerInfo.OnScreenPosition.x, Screen.height - playerInfo.OnScreenPosition.y, 150, 50),
-                name + FormatDistance(DistanceToLocalPlayer(playerInfo)));
+                new Rect(playerData.OnScreenPosition.x, Screen.height - playerData.OnScreenPosition.y, 150, 50),
+                playerData.DisplayName + " " + FormatDistance(DistanceToLocalPlayer(playerData)));
         }
 
         private void SetGuiColorBasedOnPlayerType(PlayerData p)

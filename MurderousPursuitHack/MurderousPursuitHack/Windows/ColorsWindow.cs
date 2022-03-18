@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MurderousPursuitHack.Windows
 {
@@ -30,7 +29,7 @@ namespace MurderousPursuitHack.Windows
 
         private void LocalPlayerChams()
         {
-            Builder.Label("LOCAL PLAYER");  
+            Builder.Label("LOCAL PLAYER");
             BuildColorPicker(Settings.Current.LocalChamsColor);
         }
 

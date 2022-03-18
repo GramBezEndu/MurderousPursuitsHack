@@ -1,7 +1,6 @@
 ﻿namespace MurderousPursuitHack.Windows
 {
     using MurderousPursuitHack.Drawing;
-    using System;
     using System.Collections.Generic;
     using UnityEngine;
 
@@ -13,9 +12,9 @@
 
         private List<Window> windows = new List<Window>();
 
-        public Window ActiveWindow 
-        { 
-            get => activeWindow; 
+        public Window ActiveWindow
+        {
+            get => activeWindow;
             private set
             {
                 if (activeWindow != value)
