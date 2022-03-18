@@ -31,7 +31,6 @@
             Loader.Load.AddComponent<VisualsWindow>();
             Loader.Load.AddComponent<ColorPickerWindow>();
             Loader.Load.AddComponent<MovementWindow>();
-            Loader.Load.AddComponent<ColorsWindow>();
             Loader.Load.AddComponent<MiscWindow>();
             Loader.Load.AddComponent<SettingsWindow>();
         }

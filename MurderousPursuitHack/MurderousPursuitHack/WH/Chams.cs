@@ -3,6 +3,7 @@
     using MurderousPursuitHack.Managers;
     using MurderousPursuitHack.Visuals;
     using ProjectX.Player;
+    using System;
     using UnityEngine;
 
     public class Chams : MonoBehaviour
@@ -27,15 +28,24 @@
         {
             glowShader = Shader.Find(GlowPath);
             neutralChams = CreateNeutralMaterial();
-            hunterChams = CloneMaterial(neutralChams, Settings.Current.HunterChams.Color);
-            quarryChams = CloneMaterial(neutralChams, Settings.Current.QuarryChams.Color);
+            hunterChams = CloneMaterial(neutralChams, Settings.Current.HunterGlow.Color);
+            quarryChams = CloneMaterial(neutralChams, Settings.Current.QuarryGlow.Color);
             localPlayerChams = CloneMaterial(neutralChams, Color.magenta);
-            Settings.Current.OnChamsDisabled += (o, e) => ClearChams();
-            Settings.Current.OnLocalChamsDisabled += (o, e) => ClearLocalPlayerChams();
-            Settings.Current.NeutralChams.OnColorChanged += (o, e) => neutralChams.SetColor("_Color", Settings.Current.NeutralChams.Color);
-            Settings.Current.LocalChamsColor.OnColorChanged += (o, e) => localPlayerChams.SetColor("_Color", Settings.Current.LocalChamsColor.Color);
-            Settings.Current.QuarryChams.OnColorChanged += (o, e) => quarryChams.SetColor("_Color", Settings.Current.QuarryChams.Color);
-            Settings.Current.HunterChams.OnColorChanged += (o, e) => hunterChams.SetColor("_Color", Settings.Current.HunterChams.Color);
+
+            SubscribeToChamsSettingsChange();
+        }
+
+        private void SubscribeToChamsSettingsChange()
+        {
+            Settings.Current.OnQuarryChamsDisabled += (o, e) => ClearQuarryChams();
+            Settings.Current.OnLocalChamsDisabled += (o, e) => ClearLocalChams();
+            Settings.Current.OnHunterChamsDisabled += (o, e) => ClearHunterChams();
+            Settings.Current.OnNeutralChamsDisabled += (o, e) => ClearNeutralChams();
+
+            Settings.Current.NeutralGlow.OnColorChanged += (o, e) => neutralChams.SetColor("_Color", Settings.Current.NeutralGlow.Color);
+            Settings.Current.LocalGlow.OnColorChanged += (o, e) => localPlayerChams.SetColor("_Color", Settings.Current.LocalGlow.Color);
+            Settings.Current.QuarryGlow.OnColorChanged += (o, e) => quarryChams.SetColor("_Color", Settings.Current.QuarryGlow.Color);
+            Settings.Current.HunterGlow.OnColorChanged += (o, e) => hunterChams.SetColor("_Color", Settings.Current.HunterGlow.Color);
         }
 
         public void Update()
@@ -71,7 +81,7 @@
             material.SetInt("_Cull", 0);
             material.SetInt("_ZTest", 8); // Render through walls.
             material.SetInt("_ZWrite", 0);
-            material.SetColor("_Color", Settings.Current.NeutralChams.Color);
+            material.SetColor("_Color", Settings.Current.NeutralGlow.Color);
 
             return material;
         }
@@ -86,7 +96,7 @@
         private void UpdateGlow(PlayerData playerInfo)
         {
             XPlayer player = playerInfo.Player;
-            if (player.isLocalPlayer && Settings.Current.DrawLocalPlayerChams == false)
+            if (player.isLocalPlayer && Settings.Current.LocalChams == false)
             {
                 return;
             }
@@ -95,7 +105,7 @@
 
             for (int i = 0; i < allRenderers.Length; i++)
             {
-                if (Settings.Current.ChamsEnabled)
+                if (Settings.Current.QuarryChams)
                 {
                     ApplyChams(playerInfo, allRenderers, i);
                 }
@@ -135,22 +145,46 @@
             renderer.sharedMaterials = shared;
         }
 
-        private void ClearChams()
+        private void ClearQuarryChams()
         {
             foreach (PlayerData playerData in HackManager.Instance.Players)
             {
                 XPlayer player = playerData.Player;
-                Skins.RestoreSkin(player);
+                if (playerData.IsQuarryForLocal)
+                {
+                    Skins.RestoreSkin(player);
+                }
             }
         }
 
-        private void ClearLocalPlayerChams()
+        private void ClearHunterChams()
         {
-            if (Settings.Current.ChamsEnabled)
+            foreach (PlayerData playerData in HackManager.Instance.Players)
             {
-                XPlayer player = HackManager.Instance.LocalPlayer;
-                Skins.RestoreSkin(player);
+                XPlayer player = playerData.Player;
+                if (playerData.IsHunterForLocal)
+                {
+                    Skins.RestoreSkin(player);
+                }
             }
+        }
+
+        private void ClearNeutralChams()
+        {
+            foreach (PlayerData playerData in HackManager.Instance.Players)
+            {
+                XPlayer player = playerData.Player;
+                if (!playerData.IsHunterForLocal && !playerData.IsHunterForLocal)
+                {
+                    Skins.RestoreSkin(player);
+                }
+            }
+        }
+
+        private void ClearLocalChams()
+        {
+            XPlayer player = HackManager.Instance.LocalPlayer;
+            Skins.RestoreSkin(player);
         }
     }
 }

@@ -42,7 +42,7 @@
 
             if (Input.GetKeyDown(Keybindings.Chams))
             {
-                Settings.Current.ChamsEnabled = !Settings.Current.ChamsEnabled;
+                Settings.Current.QuarryChams = !Settings.Current.QuarryChams;
             }
 
             if (Input.GetKeyDown(Keybindings.PlayerESP))

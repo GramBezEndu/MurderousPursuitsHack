@@ -10,7 +10,7 @@
 
         private static Settings Default { get; set; } = new Settings()
         {
-            ChamsEnabled = true,
+            QuarryChams = true,
             EspEnabled = true,
             CheatsWindow = true,
             ZeroExposure = true,
@@ -18,59 +18,40 @@
 
         public static float[] SpeedhackMultipliers = GeneratePossibleMultipliers();
 
-        private bool chamsEnabled;
-
-        private bool drawLocalPlayerChams;
-
-        public ColorData LocalChamsColor { get; set; } = new ColorData()
-        {
-            R = 0,
-            G = 100,
-            B = 0,
-            A = 255,
-        };
-
-        public ColorData QuarryChams { get; set; } = new ColorData()
-        {
-            R = 0,
-            G = 127,
-            B = 178,
-            A = 255,
-        };
-
-        public ColorData HunterChams { get; set; } = new ColorData()
-        {
-            R = 140,
-            G = 0,
-            B = 0,
-            A = 255,
-        };
-
-        public ColorData NeutralChams { get; set; } = new ColorData()
-        {
-            R = 0,
-            G = 140,
-            B = 0,
-            A = 255,
-        };
-
-        public event EventHandler OnChamsDisabled;
+        #region Chams
+        public event EventHandler OnQuarryChamsDisabled;
 
         public event EventHandler OnLocalChamsDisabled;
 
-        public int CurrentSpeedMultiplierIndex { get; set; } = 3;
+        public event EventHandler OnHunterChamsDisabled;
 
-        public float SpeedMultiplier { get => SpeedhackMultipliers[CurrentSpeedMultiplierIndex]; }
+        public event EventHandler OnNeutralChamsDisabled;
 
-        public bool DrawLocalPlayerChams
+        public bool QuarryChams
         {
-            get => drawLocalPlayerChams;
+            get => quarryChams;
             set
             {
-                if (drawLocalPlayerChams != value)
+                if (quarryChams != value)
                 {
-                    drawLocalPlayerChams = value;
-                    if (drawLocalPlayerChams == false)
+                    quarryChams = value;
+                    if (quarryChams == false)
+                    {
+                        OnQuarryChamsDisabled?.Invoke(null, new EventArgs());
+                    }
+                }
+            }
+        }
+
+        public bool LocalChams
+        {
+            get => localChams;
+            set
+            {
+                if (localChams != value)
+                {
+                    localChams = value;
+                    if (localChams == false)
                     {
                         OnLocalChamsDisabled.Invoke(null, new EventArgs());
                     }
@@ -78,25 +59,87 @@
             }
         }
 
-        public bool AutoAttackAfterTeleport { get; set; }
-
-        public bool CheatsWindow { get; set; }
-
-        public bool ChamsEnabled
+        public bool HunterChams
         {
-            get => chamsEnabled;
+            get => hunterChams;
             set
             {
-                if (chamsEnabled != value)
+                if (hunterChams != value)
                 {
-                    chamsEnabled = value;
-                    if (chamsEnabled == false)
+                    hunterChams = value;
+                    if (hunterChams == false)
                     {
-                        OnChamsDisabled?.Invoke(null, new EventArgs());
+                        OnHunterChamsDisabled.Invoke(null, new EventArgs());
                     }
                 }
             }
         }
+
+        public bool NeutralChams
+        {
+            get => neutralChams;
+            set
+            {
+                if (neutralChams != value)
+                {
+                    neutralChams = value;
+                    if (neutralChams == false)
+                    {
+                        OnNeutralChamsDisabled.Invoke(null, new EventArgs());
+                    }
+                }
+            }
+        }
+
+        private bool quarryChams;
+
+        private bool localChams;
+
+        private bool hunterChams;
+
+        private bool neutralChams;
+
+        public ColorData LocalGlow { get; set; } = new ColorData()
+        {
+            R = 0,
+            G = 100,
+            B = 0,
+            A = 255,
+        };
+
+        public ColorData QuarryGlow { get; set; } = new ColorData()
+        {
+            R = 0,
+            G = 127,
+            B = 178,
+            A = 255,
+        };
+
+        public ColorData HunterGlow { get; set; } = new ColorData()
+        {
+            R = 140,
+            G = 0,
+            B = 0,
+            A = 255,
+        };
+
+        public ColorData NeutralGlow { get; set; } = new ColorData()
+        {
+            R = 0,
+            G = 140,
+            B = 0,
+            A = 255,
+        };
+
+        #endregion
+
+        public int CurrentSpeedMultiplierIndex { get; set; } = 3;
+
+        public float SpeedMultiplier { get => SpeedhackMultipliers[CurrentSpeedMultiplierIndex]; }
+
+        public bool AutoAttackAfterTeleport { get; set; }
+
+        public bool CheatsWindow { get; set; }
 
         public bool EspEnabled { get; set; }
 

@@ -39,7 +39,6 @@
                 VisualsWindow.Instance,
                 MovementWindow.Instance,
                 MiscWindow.Instance,
-                ColorsWindow.Instance,
             };
             OnVisibleChanged += (o, e) => OnVisibilityChanged();
             Instance = this;
@@ -69,11 +68,6 @@
                 ActiveWindow = MiscWindow.Instance;
             }
 
-            if (ColorSection(Builder))
-            {
-                ActiveWindow = ColorsWindow.Instance;
-            }
-
             if (DebugSection(Builder))
             {
                 DebugWindow.Instance.Visible = !DebugWindow.Instance.Visible;
@@ -93,11 +87,6 @@
         private bool MovementSection(WindowBuilder builder)
         {
             return builder.Button("MOVEMENT");
-        }
-
-        private bool ColorSection(WindowBuilder builder)
-        {
-            return builder.Button("COLORS");
         }
 
         private bool DebugSection(WindowBuilder builder)

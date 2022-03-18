@@ -167,17 +167,24 @@
             }
         }
 
-        public void ColorPreview(ColorPreview colorPreview)
+        public bool ColorPreview(ColorPreview colorPreview)
         {
             if (currentSectionIndex == -1 || sections[currentSectionIndex].Expanded)
             {
+                bool clicked;
                 Vector2 colorPreviewSize = new Vector2(30f, 17f);
                 Color cachedColor = GUI.color;
                 GUI.color = colorPreview.ColorData.Color;
-                GUI.DrawTexture(
+                clicked = GUI.Button(
                     new Rect(window.Size.x - (colorPreviewSize.x * 1.2f), CurrentElementPosition.y, colorPreviewSize.x, colorPreviewSize.y),
-                    colorPreview.Texture);
+                    colorPreview.Texture,
+                    colorPreview.Button);
                 GUI.color = cachedColor;
+                return clicked;
+            }
+            else
+            {
+                return false;
             }
         }
 

@@ -6,6 +6,8 @@
 
     public class VisualsWindow : Window
     {
+        private bool initialized;
+
         public static VisualsWindow Instance { get; private set; }
 
         public ColorPreview LocalGlowColor { get; private set; }
@@ -19,27 +21,50 @@
         public override void Start()
         {
             base.Start();
-            LocalGlowColor = new ColorPreview(Settings.Current.LocalChamsColor);
-            QuarryGlowColor = new ColorPreview(Settings.Current.QuarryChams);
-            HunterGlowColor = new ColorPreview(Settings.Current.HunterChams);
-            NeutralGlowColor = new ColorPreview(Settings.Current.NeutralChams);
+            LocalGlowColor = new ColorPreview(Settings.Current.LocalGlow);
+            QuarryGlowColor = new ColorPreview(Settings.Current.QuarryGlow);
+            HunterGlowColor = new ColorPreview(Settings.Current.HunterGlow);
+            NeutralGlowColor = new ColorPreview(Settings.Current.NeutralGlow);
             Name = "VISUALS";
             Instance = this;
         }
 
         protected override void CreateElements(int windowID)
         {
+            if (!initialized)
+            {
+                LocalGlowColor.Initialize();
+                QuarryGlowColor.Initialize();
+                HunterGlowColor.Initialize();
+                NeutralGlowColor.Initialize();
+                initialized = true;
+            }
+
             Builder.Start();
             Builder.StartSection("PLAYER GLOW", 175f);
-            Settings.Current.DrawLocalPlayerChams =
-                Builder.Toggle(Settings.Current.DrawLocalPlayerChams, DrawingHelper.DisplayKeybind("Local Player", InputManager.Instance.Keybindings.LocalPlayerChams));
-            Builder.ColorPreview(LocalGlowColor);
+            Settings.Current.LocalChams =
+                Builder.Toggle(Settings.Current.LocalChams, DrawingHelper.DisplayKeybind("Local Player", InputManager.Instance.Keybindings.LocalPlayerChams));
+            if (Builder.ColorPreview(LocalGlowColor))
+            {
+                ManageColorPickerContext(LocalGlowColor);
+            }
+
             Builder.Toggle(true, "Quarry");
-            Builder.ColorPreview(QuarryGlowColor);
+            if (Builder.ColorPreview(QuarryGlowColor))
+            {
+                ManageColorPickerContext(QuarryGlowColor);
+            }
+
             Builder.Toggle(true, "Hunter");
-            Builder.ColorPreview(HunterGlowColor);
+            if (Builder.ColorPreview(HunterGlowColor))
+            {
+                ManageColorPickerContext(HunterGlowColor);
+            }
             Builder.Toggle(true, "Neutral");
-            Builder.ColorPreview(NeutralGlowColor);
+            if (Builder.ColorPreview(NeutralGlowColor))
+            {
+                ManageColorPickerContext(NeutralGlowColor);
+            }
             Builder.EndSection();
 
             Builder.StartSection("PLAYER ESP", 70f);
@@ -59,6 +84,18 @@
                 Animations.ToggleAnimationFreeze();
             }
             Builder.EndSection();
+        }
+
+        private void ManageColorPickerContext(ColorPreview preview)
+        {
+            if (ColorPickerWindow.Instance.ColorData == preview.ColorData)
+            {
+                ColorPickerWindow.Instance.SetContext(null);
+            }
+            else
+            {
+                ColorPickerWindow.Instance.SetContext(preview.ColorData);
+            }
         }
     }
 }
