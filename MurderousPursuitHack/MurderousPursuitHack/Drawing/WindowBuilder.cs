@@ -10,6 +10,10 @@
 
         private readonly List<Section> sections = new List<Section>();
 
+        private readonly float sectionIndent = 15f;
+
+        private readonly float spacingAfterSection = 20f;
+
         private Vector2 cachedElementPosition;
 
         private int currentSectionIndex = -1;
@@ -21,18 +25,18 @@
         public WindowBuilder(Window window)
         {
             this.window = window;
-            Style = new WindowStyle();
+            Styles = new Styles();
         }
 
         public Vector2 CurrentElementPosition { get; set; }
 
-        public WindowStyle Style { get; private set; }
+        public Styles Styles { get; private set; }
 
         public void Start()
         {
             if (!initialized)
             {
-                Style.Init();
+                Styles.Init();
                 initialized = true;
             }
 
@@ -44,30 +48,33 @@
 
         public void OnDestroy()
         {
-            Style.OnDestroy();
+            Styles.OnDestroy();
         }
 
         public void CreateWindow(GUI.WindowFunction windowFunction, int windowID)
         {
-            GUI.Window(windowID, new Rect(window.Position, window.Size), windowFunction, window.Name, Style.Window);
+            GUI.Window(windowID, new Rect(window.Position, window.Size), windowFunction, window.Name, Styles.Window);
         }
 
-        public void StartSection(string name)
+        public void StartSection(string name, float height)
         {
             int index = sections.FindIndex(x => x.Name == name);
+            Rect rectangle = NextRect(new Vector2(0.98f, 0.75f), Allignement.Center);
+            GUI.Box(new Rect(CurrentElementPosition, new Vector2(window.Size.x * 0.99f, height)), name, Styles.Box);
+
             if (index == -1)
             {
                 Section section = new Section
                 {
                     Name = name
                 };
-                section.Expanded = Expander(name, section.Expanded);
+                //section.Expanded = Expander(new Rect(rectangle.x, rectangle.y + 5f, rectangle.width, rectangle.height), name, section.Expanded);
                 sections.Add(section);
                 currentSectionIndex = sections.Count - 1;
             }
             else
             {
-                sections[index].Expanded = Expander(name, sections[index].Expanded);
+                //sections[index].Expanded = Expander(new Rect(rectangle.x, rectangle.y + 5f, rectangle.width, rectangle.height), name, sections[index].Expanded);
                 currentSectionIndex = index;
             }
         }
@@ -75,13 +82,14 @@
         public void EndSection()
         {
             currentSectionIndex = -1;
+            CurrentElementPosition = new Vector2(CurrentElementPosition.x, CurrentElementPosition.y + spacingAfterSection);
         }
 
         public bool Button(string message)
         {
             if (currentSectionIndex == -1 || sections[currentSectionIndex].Expanded)
             {
-                return GUI.Button(NextRect(0.8f), message, Style.Button);
+                return GUI.Button(NextRect(new Vector2(0.9f, 1f), Allignement.Center), message, Styles.Button);
             }
             else
             {
@@ -93,7 +101,7 @@
         {
             if (currentSectionIndex == -1 || sections[currentSectionIndex].Expanded)
             {
-                return GUI.Toggle(NextRect(), value, message, Style.Toggle);
+                return GUI.Toggle(NextRect(), value, message, Styles.Toggle);
             }
             else
             {
@@ -106,7 +114,7 @@
         {
             if (currentSectionIndex == -1 || sections[currentSectionIndex].Expanded)
             {
-                return (int)GUI.HorizontalSlider(NextRect(elementWidthMultiplier), current, leftValue, rightValue, Style.HorizontalSlider, Style.Thumb);
+                return (int)GUI.HorizontalSlider(NextRect(elementWidthMultiplier), current, leftValue, rightValue, Styles.HorizontalSlider, Styles.Thumb);
             }
             else
             {
@@ -118,7 +126,7 @@
         {
             if (currentSectionIndex == -1 || sections[currentSectionIndex].Expanded)
             {
-                return (int)GUI.HorizontalSlider(NextRect(elementScale), current, leftValue, rightValue, sliderStyle, Style.Thumb);
+                return (int)GUI.HorizontalSlider(NextRect(elementScale), current, leftValue, rightValue, sliderStyle, Styles.Thumb);
             }
             else
             {
@@ -131,14 +139,14 @@
             if (currentSectionIndex == -1 || sections[currentSectionIndex].Expanded)
             {
                 Rect nextRect = NextRect(new Vector2(0.05f, 1f), Allignement.Left);
-                GUI.Label(nextRect, label, Style.Label);
+                GUI.Label(nextRect, label, Styles.Label);
                 return (int)GUI.HorizontalSlider(
                     new Rect(nextRect.x + nextRect.width, nextRect.y + 5f, window.Size.x * 0.55f, window.ElementHeight * 0.55f),
                     current,
                     leftValue,
                     rightValue,
                     sliderStyle,
-                    Style.Thumb);
+                    Styles.Thumb);
             }
             else
             {
@@ -146,16 +154,30 @@
             }
         }
 
-        public bool Expander(string message, bool value)
+        public bool Expander(Rect rectangle, string message, bool value)
         {
-            return GUI.Toggle(NextRect(0.98f), value, message, Style.Expander);
+            return GUI.Toggle(rectangle, value, message, Styles.Expander);
         }
 
         public void Label(string message)
         {
             if (currentSectionIndex == -1 || sections[currentSectionIndex].Expanded)
             {
-                GUI.Label(NextRect(), message, Style.Label);
+                GUI.Label(NextRect(), message, Styles.Label);
+            }
+        }
+
+        public void ColorPreview(ColorPreview colorPreview)
+        {
+            if (currentSectionIndex == -1 || sections[currentSectionIndex].Expanded)
+            {
+                Vector2 colorPreviewSize = new Vector2(30f, 17f);
+                Color cachedColor = GUI.color;
+                GUI.color = colorPreview.ColorData.Color;
+                GUI.DrawTexture(
+                    new Rect(window.Size.x - (colorPreviewSize.x * 1.2f), CurrentElementPosition.y, colorPreviewSize.x, colorPreviewSize.y),
+                    colorPreview.Texture);
+                GUI.color = cachedColor;
             }
         }
 
@@ -196,31 +218,48 @@
             }
         }
 
-        private Rect NextRect(float widthElementScale = 0.96f)
+        private Rect NextRect(float widthElementScale = 0.7f)
         {
             return NextRect(new Vector2(widthElementScale, 1f));
         }
 
-        private Rect NextRect(Vector2 elementScale, Allignement allignement = Allignement.Center)
+        private Rect NextRect(Vector2 elementScale, Allignement allignement = Allignement.Left)
         {
             if (elementsCount > 0 || (elementsCount == 0 && window.Name != string.Empty))
             {
-                CurrentElementPosition =
-                    new Vector2(CurrentElementPosition.x, CurrentElementPosition.y + (window.ElementHeight * elementScale.y) + window.ElementsMarginY);
+                CurrentElementPosition = new Vector2(
+                    CurrentElementPosition.x,
+                    CurrentElementPosition.y + (window.ElementHeight * elementScale.y) + window.ElementsMarginY);
+            }
+
+            if (currentSectionIndex != -1 && sections[currentSectionIndex].Expanded)
+            {
+                CurrentElementPosition = new Vector2(CurrentElementPosition.x + sectionIndent, CurrentElementPosition.y);
             }
 
             elementsCount++;
+            Rect elementRectangle;
             switch (allignement)
             {
                 case Allignement.Center:
                     float windowCentreX = window.Size.x / 2f;
                     float halfElementWidth = window.Size.x * elementScale.x / 2f;
                     float posX = windowCentreX - halfElementWidth;
-                    return new Rect(posX, CurrentElementPosition.y, window.Size.x * elementScale.x, window.ElementHeight * elementScale.y);
+                    elementRectangle = new Rect(posX, CurrentElementPosition.y, window.Size.x * elementScale.x, window.ElementHeight * elementScale.y);
+                    break;
                 case Allignement.Left:
                 default:
-                    return new Rect(CurrentElementPosition.x + 10f, CurrentElementPosition.y, window.Size.x * elementScale.x, window.ElementHeight * elementScale.y);
+                    elementRectangle = 
+                        new Rect(CurrentElementPosition.x, CurrentElementPosition.y, window.Size.x * elementScale.x, window.ElementHeight * elementScale.y);
+                    break;
             }
+
+            if (currentSectionIndex != -1 && sections[currentSectionIndex].Expanded)
+            {
+                CurrentElementPosition = new Vector2(CurrentElementPosition.x - sectionIndent, CurrentElementPosition.y);
+            }
+
+            return elementRectangle;
         }
 
         private void ResetPosition()

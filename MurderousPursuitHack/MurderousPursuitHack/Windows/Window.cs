@@ -10,13 +10,13 @@
 
         private static int GlobalId = 1;
 
-        private bool visible;
+        private bool visible = true;
 
         public int Id { get; private set; }
 
         public Vector2 Position { get; set; } = new Vector2(170, 260);
 
-        public Vector2 Size { get; set; } = new Vector2(300, 430);
+        public Vector2 Size { get; set; } = new Vector2(300, 460);
 
         public float ElementHeight { get; set; } = 30f;
 
@@ -57,7 +57,7 @@
         protected virtual void CreateElements(int windowID)
         {
             Builder.Start();
-            Builder.StartSection("EMPTY");
+            Builder.StartSection("EMPTY", 35f);
             Builder.EndSection();
         }
     }

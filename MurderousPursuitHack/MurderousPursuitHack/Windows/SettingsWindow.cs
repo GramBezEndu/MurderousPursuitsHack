@@ -30,16 +30,15 @@
             base.Start();
             Name = string.Empty;
             Position = new Vector2(10f, 260f);
-            Size = new Vector2(160, 430);
+            Size = new Vector2(160, 460);
             ElementHeight = 45f;
-            ElementsMarginY = 15f;
+            ElementsMarginY = 30f;
             Visible = Settings.Current.CheatsWindow;
             windows = new List<Window>()
             {
                 VisualsWindow.Instance,
                 MovementWindow.Instance,
                 MiscWindow.Instance,
-                HostOnlyWindow.Instance,
                 ColorsWindow.Instance,
             };
             OnVisibleChanged += (o, e) => OnVisibilityChanged();
@@ -70,11 +69,6 @@
                 ActiveWindow = MiscWindow.Instance;
             }
 
-            if (HostOnlySection(Builder))
-            {
-                ActiveWindow = HostOnlyWindow.Instance;
-            }
-
             if (ColorSection(Builder))
             {
                 ActiveWindow = ColorsWindow.Instance;
@@ -99,11 +93,6 @@
         private bool MovementSection(WindowBuilder builder)
         {
             return builder.Button("MOVEMENT");
-        }
-
-        private bool HostOnlySection(WindowBuilder builder)
-        {
-            return builder.Button("HOST ONLY");
         }
 
         private bool ColorSection(WindowBuilder builder)

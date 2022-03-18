@@ -8,9 +8,21 @@
     {
         public static VisualsWindow Instance { get; private set; }
 
+        public ColorPreview LocalGlowColor { get; private set; }
+
+        public ColorPreview QuarryGlowColor { get; private set; }
+
+        public ColorPreview HunterGlowColor { get; private set; }
+
+        public ColorPreview NeutralGlowColor { get; private set; }
+
         public override void Start()
         {
             base.Start();
+            LocalGlowColor = new ColorPreview(Settings.Current.LocalChamsColor);
+            QuarryGlowColor = new ColorPreview(Settings.Current.QuarryChams);
+            HunterGlowColor = new ColorPreview(Settings.Current.HunterChams);
+            NeutralGlowColor = new ColorPreview(Settings.Current.NeutralChams);
             Name = "VISUALS";
             Instance = this;
         }
@@ -18,24 +30,30 @@
         protected override void CreateElements(int windowID)
         {
             Builder.Start();
-            Builder.StartSection("CHAMS");
-            Settings.Current.ChamsEnabled = Builder.Toggle(Settings.Current.ChamsEnabled, DrawingHelper.DisplayKeybind("Chams", InputManager.Instance.Keybindings.Chams));
+            Builder.StartSection("PLAYER GLOW", 175f);
             Settings.Current.DrawLocalPlayerChams =
-                Builder.Toggle(Settings.Current.DrawLocalPlayerChams, DrawingHelper.DisplayKeybind("Local Player Chams", InputManager.Instance.Keybindings.LocalPlayerChams));
+                Builder.Toggle(Settings.Current.DrawLocalPlayerChams, DrawingHelper.DisplayKeybind("Local Player", InputManager.Instance.Keybindings.LocalPlayerChams));
+            Builder.ColorPreview(LocalGlowColor);
+            Builder.Toggle(true, "Quarry");
+            Builder.ColorPreview(QuarryGlowColor);
+            Builder.Toggle(true, "Hunter");
+            Builder.ColorPreview(HunterGlowColor);
+            Builder.Toggle(true, "Neutral");
+            Builder.ColorPreview(NeutralGlowColor);
             Builder.EndSection();
 
-            Builder.StartSection("ESP");
+            Builder.StartSection("PLAYER ESP", 70f);
             Settings.Current.EspEnabled = Builder.Toggle(Settings.Current.EspEnabled, DrawingHelper.DisplayKeybind("Player ESP", InputManager.Instance.Keybindings.PlayerESP));
             Builder.EndSection();
 
-            Builder.StartSection("SKINS");
-            if (Builder.Button(DrawingHelper.DisplayKeybind("Change skin", InputManager.Instance.Keybindings.ChangeSkin)))
+            Builder.StartSection("SKINS", 72f);
+            if (Builder.Button(DrawingHelper.DisplayKeybind("Random skin", InputManager.Instance.Keybindings.ChangeSkin)))
             {
                 Skins.ChangeLocalPlayerSkin();
             }
             Builder.EndSection();
 
-            Builder.StartSection("ANIMATIONS");
+            Builder.StartSection("ANIMATIONS", 72f);
             if (Builder.Button(DrawingHelper.DisplayKeybind("Animation freeze", InputManager.Instance.Keybindings.FreezeAnimation)))
             {
                 Animations.ToggleAnimationFreeze();

@@ -18,8 +18,14 @@
 
         protected override void CreateElements(int windowID)
         {
-            bool isHosting = HackManager.Instance.IsHost;
             Builder.Start();
+            HostOnlySection();
+        }
+
+        private void HostOnlySection()
+        {
+            Builder.StartSection("HOST ONLY", 220f);
+            bool isHosting = HackManager.Instance.IsHost;
             Settings.Current.ZeroExposure = Builder.Toggle(Settings.Current.ZeroExposure, DrawingHelper.DisplayKeybind("Zero Exposure", InputManager.Instance.Keybindings.ZeroExposure));
             if (!isHosting)
             {
@@ -45,6 +51,8 @@
             {
                 Builder.EndDisabled();
             }
+
+            Builder.EndSection();
         }
     }
 }

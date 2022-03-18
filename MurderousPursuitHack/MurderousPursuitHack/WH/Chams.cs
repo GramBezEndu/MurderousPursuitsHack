@@ -7,25 +7,35 @@
 
     public class Chams : MonoBehaviour
     {
-        private Material neutralGlow;
+        private const string GlowPath = "Hidden/Internal-Colored";
 
-        private Material hunterGlow;
+        private const string DiffusePath = "Legacy Shaders/Self-Illumin/Diffuse";
 
-        private Material quarryGlow;
+        private const string OutlinePath = "Hidden/cc_frost";
 
-        private Material localPlayerGlow;
+        private Shader glowShader;
+
+        private Material neutralChams;
+
+        private Material hunterChams;
+
+        private Material quarryChams;
+
+        private Material localPlayerChams;
 
         public void Start()
         {
-            neutralGlow = CreateNeutralMaterial();
-            hunterGlow = CreateHunterMaterial(neutralGlow);
-            quarryGlow = CreateQuarryMaterial(neutralGlow);
-            localPlayerGlow = CreateLocalPlayerMaterial(neutralGlow);
+            glowShader = Shader.Find(GlowPath);
+            neutralChams = CreateNeutralMaterial();
+            hunterChams = CloneMaterial(neutralChams, Settings.Current.HunterChams.Color);
+            quarryChams = CloneMaterial(neutralChams, Settings.Current.QuarryChams.Color);
+            localPlayerChams = CloneMaterial(neutralChams, Color.magenta);
             Settings.Current.OnChamsDisabled += (o, e) => ClearChams();
             Settings.Current.OnLocalChamsDisabled += (o, e) => ClearLocalPlayerChams();
-            Settings.Current.LocalChamsColor.OnColorChanged += (o, e) => localPlayerGlow.SetColor("_Color", Settings.Current.LocalChamsColor.Color);
-            Settings.Current.QuarryChams.OnColorChanged += (o, e) => quarryGlow.SetColor("_Color", Settings.Current.QuarryChams.Color);
-            Settings.Current.HunterChams.OnColorChanged += (o, e) => hunterGlow.SetColor("_Color", Settings.Current.HunterChams.Color);
+            Settings.Current.NeutralChams.OnColorChanged += (o, e) => neutralChams.SetColor("_Color", Settings.Current.NeutralChams.Color);
+            Settings.Current.LocalChamsColor.OnColorChanged += (o, e) => localPlayerChams.SetColor("_Color", Settings.Current.LocalChamsColor.Color);
+            Settings.Current.QuarryChams.OnColorChanged += (o, e) => quarryChams.SetColor("_Color", Settings.Current.QuarryChams.Color);
+            Settings.Current.HunterChams.OnColorChanged += (o, e) => hunterChams.SetColor("_Color", Settings.Current.HunterChams.Color);
         }
 
         public void Update()
@@ -43,60 +53,34 @@
 
         public void OnDestroy()
         {
-            GameObject.Destroy(neutralGlow);
-            GameObject.Destroy(hunterGlow);
-            GameObject.Destroy(quarryGlow);
-            GameObject.Destroy(localPlayerGlow);
+            GameObject.Destroy(neutralChams);
+            GameObject.Destroy(hunterChams);
+            GameObject.Destroy(quarryChams);
+            GameObject.Destroy(localPlayerChams);
         }
 
         private Material CreateNeutralMaterial()
         {
-            Material neutralMaterial = new Material(Shader.Find("Hidden/Internal-Colored"))
+            Material material = new Material(glowShader)
             {
                 hideFlags = HideFlags.DontSaveInEditor | HideFlags.HideInHierarchy
             };
             // Good looking glow effect:
-            neutralMaterial.SetInt("_SrcBlend", 5);
-            neutralMaterial.SetInt("_DstBlend", 10);
-            neutralMaterial.SetInt("_Cull", 0);
-            neutralMaterial.SetInt("_ZTest", 8); // Render through walls.
-            neutralMaterial.SetInt("_ZWrite", 0);
-            neutralMaterial.SetColor("_Color", new Color(0.63f, 0f, 0.63f, 1f));
+            material.SetInt("_SrcBlend", 5);
+            material.SetInt("_DstBlend", 10);
+            material.SetInt("_Cull", 0);
+            material.SetInt("_ZTest", 8); // Render through walls.
+            material.SetInt("_ZWrite", 0);
+            material.SetColor("_Color", Settings.Current.NeutralChams.Color);
 
-            return neutralMaterial;
+            return material;
         }
 
-        private Material CreateHunterMaterial(Material neutral)
+        private Material CloneMaterial(Material neutral, Color color)
         {
-            Material newMaterial = new Material(Shader.Find("Hidden/Internal-Colored"))
-            {
-                hideFlags = HideFlags.DontSaveInEditor | HideFlags.HideInHierarchy
-            };
-            newMaterial.CopyPropertiesFromMaterial(neutral);
-            newMaterial.SetColor("_Color", Settings.Current.HunterChams.Color);
-            return newMaterial;
-        }
-
-        private Material CreateLocalPlayerMaterial(Material neutral)
-        {
-            Material newMaterial = new Material(Shader.Find("Hidden/Internal-Colored"))
-            {
-                hideFlags = HideFlags.DontSaveInEditor | HideFlags.HideInHierarchy
-            };
-            newMaterial.CopyPropertiesFromMaterial(neutral);
-            newMaterial.SetColor("_Color", Settings.Current.LocalChamsColor.Color);
-            return newMaterial;
-        }
-
-        private Material CreateQuarryMaterial(Material neutral)
-        {
-            Material newMaterial = new Material(Shader.Find("Hidden/Internal-Colored"))
-            {
-                hideFlags = HideFlags.DontSaveInEditor | HideFlags.HideInHierarchy
-            };
-            newMaterial.CopyPropertiesFromMaterial(neutral);
-            newMaterial.SetColor("_Color", Settings.Current.QuarryChams.Color);
-            return newMaterial;
+            Material material = new Material(neutral);
+            material.SetColor("_Color", color);
+            return material;
         }
 
         private void UpdateGlow(PlayerData playerInfo)
@@ -123,19 +107,19 @@
             Renderer renderer = allRenderers[i];
             if (playerInfo.IsHunterForLocal)
             {
-                ApplyMaterial(renderer, hunterGlow);
+                ApplyMaterial(renderer, hunterChams);
             }
             else if (playerInfo.IsQuarryForLocal)
             {
-                ApplyMaterial(renderer, quarryGlow);
+                ApplyMaterial(renderer, quarryChams);
             }
             else if (playerInfo.IsLocalPlayer)
             {
-                ApplyMaterial(renderer, localPlayerGlow);
+                ApplyMaterial(renderer, localPlayerChams);
             }
             else
             {
-                ApplyMaterial(renderer, neutralGlow);
+                ApplyMaterial(renderer, neutralChams);
             }
         }
 

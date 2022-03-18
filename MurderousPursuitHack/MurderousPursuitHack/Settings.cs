@@ -46,6 +46,14 @@
             A = 255,
         };
 
+        public ColorData NeutralChams { get; set; } = new ColorData()
+        {
+            R = 0,
+            G = 140,
+            B = 0,
+            A = 255,
+        };
+
         public event EventHandler OnChamsDisabled;
 
         public event EventHandler OnLocalChamsDisabled;

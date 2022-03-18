@@ -18,7 +18,7 @@ namespace MurderousPursuitHack.Windows
         protected override void CreateElements(int windowID)
         {
             Builder.Start();
-            Builder.StartSection("CHAMS");
+            Builder.StartSection("CHAMS", 350f);
             scrollPosition = Builder.StartScrollView(scrollPosition, new Vector2(Size.x, 600f));
             LocalPlayerChams();
             QuarryChams();
@@ -49,10 +49,10 @@ namespace MurderousPursuitHack.Windows
         {
             float cachedMargin = ElementsMarginY;
             ElementsMarginY = 1f;
-            colorData.R = Builder.LabelSlider("R", colorData.R, 0, 255, Builder.Style.RedSlider);
-            colorData.G = Builder.LabelSlider("G", colorData.G, 0, 255, Builder.Style.GreenSlider);
-            colorData.B = Builder.LabelSlider("B", colorData.B, 0, 255, Builder.Style.BlueSlider);
-            colorData.A = Builder.LabelSlider("A", colorData.A, 0, 255, Builder.Style.WhiteSlider);
+            colorData.R = Builder.LabelSlider("R", colorData.R, 0, 255, Builder.Styles.RedSlider);
+            colorData.G = Builder.LabelSlider("G", colorData.G, 0, 255, Builder.Styles.GreenSlider);
+            colorData.B = Builder.LabelSlider("B", colorData.B, 0, 255, Builder.Styles.BlueSlider);
+            colorData.A = Builder.LabelSlider("A", colorData.A, 0, 255, Builder.Styles.WhiteSlider);
             ElementsMarginY = cachedMargin;
         }
     }
