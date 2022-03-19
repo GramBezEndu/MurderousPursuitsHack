@@ -2,6 +2,7 @@
 {
     using MurderousPursuitHack.Managers;
     using MurderousPursuitHack.Movement;
+    using MurderousPursuitHack.Players;
     using System.Linq;
     using UnityEngine;
 
@@ -21,7 +22,7 @@
         {
             if (Time.time >= lastCache)
             {
-                lastCache = Time.time + 3f;
+                lastCache = Time.time + 4f;
 
                 ProjectX.Player.XPlayer localPlayer = HackManager.Instance.LocalPlayer;
                 if (localPlayer == null)
@@ -45,22 +46,14 @@
                 return null;
             }
 
-            PlayerData target = HackManager.Instance.Players[HackManager.Instance.CurrentQuarry];
-            if (target == null)
+            PlayerData quarry = PlayersHelper.SafeGetQuarry();
+            if (quarry != null)
             {
-                target = Teleports.GetClosestHunter();
-                if (target == null)
-                {
-                    return null;
-                }
-                else
-                {
-                    return target;
-                }
+                return quarry;
             }
             else
             {
-                return target;
+                return Teleports.GetClosestHunter();
             }
         }
     }

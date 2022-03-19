@@ -14,6 +14,10 @@
 
     public class HackManager : MonoBehaviour
     {
+        private bool inGame;
+
+        private GameObject canvasGameplayHUD;
+
         public static HackManager Instance { get; private set; }
 
         public void Awake()
@@ -21,7 +25,23 @@
             Instance = this;
         }
 
-        public bool InGame { get; private set; }
+        public bool InGame
+        { 
+            get => inGame;
+            private set
+            {
+                if (inGame != value)
+                {
+                    inGame = value;
+                    if (inGame)
+                    {
+                        StartCoroutine(FindHUD());
+                    }
+                }
+            }
+        }
+
+        public const uint InvalidPlayerId = 0;
 
         public bool IsHost { get; private set; }
 
@@ -33,11 +53,11 @@
 
         public QuarryLocatorBarHUD QuarryBar { get; private set; }
 
-        public uint CurrentQuarry { get; private set; }
+        public uint QuarryId { get; private set; }
 
         public HunterHUD HunterHUD { get; private set; }
 
-        public List<PlayerData> Hunters { get; private set; } = new List<PlayerData>();
+        public List<PlayerData> AliveHunters { get; private set; } = new List<PlayerData>();
 
         public List<uint> HunterIDs { get; private set; } = new List<uint>();
 
@@ -54,14 +74,7 @@
                 return;
             }
 
-            if (Singleton<LevelManager>.Instance != null)
-            {
-                IsHost = Singleton<LevelManager>.Instance.IsHost;
-            }
-            else
-            {
-                IsHost = false;
-            }
+            IsHost = Singleton<LevelManager>.Instance.IsHost;
 
             if (Singleton<PlayerManager>.Instance != null)
             {
@@ -72,7 +85,6 @@
                 }
 
                 LocalPlayerId = LocalPlayer.PlayerID;
-                FindHUD();
 
                 if (Singleton<PlayerManager>.Instance.BotIDs != null)
                 {
@@ -80,10 +92,10 @@
                 }
 
                 HunterIDs = GetHunterIDs();
-                CurrentQuarry = GetQuarry();
+                QuarryId = GetQuarry();
                 Camera camera = Camera.main;
                 UpdatePlayersData(camera);
-                Hunters = UpdateHuntersList();
+                AliveHunters = UpdateHuntersList();
             }
         }
 
@@ -92,7 +104,7 @@
             List<PlayerData> hunters = new List<PlayerData>();
             foreach (PlayerData playerData in Players.Values)
             {
-                if (playerData.IsHunterForLocal)
+                if (playerData.IsHunterForLocal && playerData.IsAlive)
                 {
                     hunters.Add(playerData);
                 }
@@ -103,22 +115,29 @@
 
         private void ClearData()
         {
+            canvasGameplayHUD = null;
             HunterHUD = null;
             QuarryBar = null;
             LocalPlayer = null;
+            LocalPlayerId = InvalidPlayerId;
             Players.Clear();
-            CurrentQuarry = 0;
+            QuarryId = InvalidPlayerId;
             HunterIDs.Clear();
-            Hunters.Clear();
+            AliveHunters.Clear();
         }
 
-        private void FindHUD()
+        private IEnumerator FindHUD()
         {
-            GameObject canvasGameplayHUD = GameObject.Find("CanvasGameplayHUD");
-            if (canvasGameplayHUD != null)
+            while (HunterHUD == null || QuarryBar == null)
             {
-                HunterHUD = canvasGameplayHUD.GetComponentInChildren<HunterHUD>();
-                QuarryBar = canvasGameplayHUD.GetComponentInChildren<QuarryLocatorBarHUD>();
+                canvasGameplayHUD = GameObject.Find("CanvasGameplayHUD");
+                if (canvasGameplayHUD != null)
+                {
+                    HunterHUD = canvasGameplayHUD.GetComponentInChildren<HunterHUD>();
+                    QuarryBar = canvasGameplayHUD.GetComponentInChildren<QuarryLocatorBarHUD>();
+                }
+
+                yield return null;
             }
         }
 
@@ -185,7 +204,7 @@
         {
             playerData.IsAlive = player.IsAlive;
             playerData.IsHunterForLocal = HunterIDs.Contains(player.PlayerID);
-            playerData.IsQuarryForLocal = player.PlayerID == CurrentQuarry;
+            playerData.IsQuarryForLocal = player.PlayerID == QuarryId;
             playerData.PlayerPerk = player.PlayerPerk;
             playerData.DisplayName = SetDisplayName(playerData);
             playerData.OnScreenPosition = camera.WorldToScreenPoint(playerData.Transform.position);
@@ -210,7 +229,7 @@
                 IsAlive = player.IsAlive,
                 IsBot = BotIDs.Contains(player.PlayerID),
                 IsHunterForLocal = HunterIDs.Contains(player.PlayerID),
-                IsQuarryForLocal = player.PlayerID == CurrentQuarry,
+                IsQuarryForLocal = player.PlayerID == QuarryId,
                 // Note: use characterTransform.position (not transform.position)
                 Transform = characterTransform,
                 CharacterMovement = xCharacterMovement,

@@ -1,6 +1,7 @@
 ﻿namespace MurderousPursuitHack.Movement
 {
     using MurderousPursuitHack.Managers;
+    using MurderousPursuitHack.Players;
     using System;
     using System.Linq;
     using UnityEngine;
@@ -14,7 +15,13 @@
                 return false;
             }
 
-            PlayerData target = HackManager.Instance.Players[HackManager.Instance.CurrentQuarry];
+            if (HackManager.Instance.QuarryId == HackManager.InvalidPlayerId)
+            {
+                return false;
+            }
+
+            PlayerData target = PlayersHelper.SafeGetQuarry();
+
             if (target == null)
             {
                 return false;
@@ -46,7 +53,7 @@
                 return false;
             }
 
-            PlayerData quarry = HackManager.Instance.Players[HackManager.Instance.CurrentQuarry];
+            PlayerData quarry = PlayersHelper.SafeGetQuarry();
             if (quarry == null)
             {
                 return false;
@@ -73,7 +80,7 @@
 
         public static bool TeleportPlayerToLocal(PlayerData from, bool attackAutomatically)
         {
-            if (TeleportPlayer(from, HackManager.Instance.Players[HackManager.Instance.LocalPlayerId].Transform.position))
+            if (TeleportPlayer(from, PlayersHelper.SafeGetLocalPlayer().Transform.position))
             {
                 if (attackAutomatically)
                 {
@@ -111,7 +118,7 @@
 
         private static bool TeleportLocalPlayer(Vector3 position)
         {
-            return TeleportPlayer(HackManager.Instance.Players[HackManager.Instance.LocalPlayerId], position);
+            return TeleportPlayer(PlayersHelper.SafeGetLocalPlayer(), position);
         }
 
         private static bool TeleportPlayer(PlayerData playerData, Vector3 position)
@@ -133,7 +140,7 @@
 
         public static PlayerData GetClosestHunter()
         {
-            PlayerData[] hunters = HackManager.Instance.Hunters.ToArray();
+            PlayerData[] hunters = HackManager.Instance.AliveHunters.ToArray();
             if (hunters == null || hunters.Length == 0)
             {
                 return null;

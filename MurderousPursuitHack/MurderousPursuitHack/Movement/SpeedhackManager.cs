@@ -1,6 +1,7 @@
 ﻿namespace MurderousPursuitHack.Movement
 {
     using MurderousPursuitHack.Managers;
+    using MurderousPursuitHack.Players;
     using ProjectX.Player;
     using System.Linq;
     using UnityEngine;
@@ -53,7 +54,7 @@
 
         public void EnableSpeedhack()
         {
-            PlayerData local = HackManager.Instance.Players[HackManager.Instance.LocalPlayerId];
+            PlayerData local = PlayersHelper.SafeGetLocalPlayer();
             float multiplier = Settings.Current.SpeedMultiplier;
 
             local.CharacterMovement.SetFieldValue("defaultRunMoveSpeed", multiplier * defaultRunMoveSpeed);
@@ -67,7 +68,7 @@
 
         public void DisableSpeedhack()
         {
-            PlayerData local = HackManager.Instance.Players[HackManager.Instance.LocalPlayerId];
+            PlayerData local = PlayersHelper.SafeGetLocalPlayer();
             local.CharacterMovement.SetFieldValue("defaultRunMoveSpeed", defaultRunMoveSpeed);
             local.CharacterMovement.SetFieldValue("defaultFastWalkMoveSpeed", defaultFastWalkMoveSpeed);
             local.CharacterMovement.SetFieldValue("nimbleRunMoveSpeed", nimbleRunMoveSpeed);

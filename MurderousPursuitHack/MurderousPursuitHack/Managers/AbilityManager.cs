@@ -1,5 +1,6 @@
 ﻿namespace MurderousPursuitHack.Managers
 {
+    using MurderousPursuitHack.Players;
     using ProjectX.Abilities;
     using ProjectX.Player;
     using System;
@@ -23,7 +24,7 @@
                 return false;
             }
 
-            PlayerData playerData = HackManager.Instance.Players[HackManager.Instance.LocalPlayerId];
+            PlayerData playerData = PlayersHelper.SafeGetLocalPlayer();
             if (playerData == null)
             {
                 return false;
@@ -46,7 +47,7 @@
                 return false;
             }
 
-            PlayerData playerData = HackManager.Instance.Players[HackManager.Instance.LocalPlayerId];
+            PlayerData playerData = PlayersHelper.SafeGetLocalPlayer();
             if (playerData == null)
             {
                 return false;
@@ -86,7 +87,7 @@
                 return false;
             }
 
-            PlayerData playerData = HackManager.Instance.Players[HackManager.Instance.LocalPlayerId];
+            PlayerData playerData = PlayersHelper.SafeGetLocalPlayer();
             if (playerData == null)
             {
                 return false;
