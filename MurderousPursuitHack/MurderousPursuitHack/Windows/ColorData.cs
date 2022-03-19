@@ -6,19 +6,23 @@ namespace MurderousPursuitHack.Windows
 
     public class ColorData
     {
-        private int r = 255;
+        private Color32 color;
 
-        private int g = 255;
+        public ColorData() 
+        {
+            Color = new Color32(255, 255, 255, 255);
+        }
 
-        private int b = 255;
-
-        private int a = 255;
+        public ColorData(Color color)
+        {
+            Color = color;
+        }
 
         public event EventHandler OnColorChanged;
 
-        private Color color = Color.white;
+        public string Description { get; set; } = string.Empty;
 
-        public Color Color
+        public Color32 Color
         {
             get
             {
@@ -26,7 +30,7 @@ namespace MurderousPursuitHack.Windows
             }
             set
             {
-                if (color != value)
+                if (color.r != value.r || color.g != value.g || color.b != value.b || color.a != value.a)
                 {
                     color = value;
                     OnColorChanged?.Invoke(this, new EventArgs());
@@ -34,61 +38,56 @@ namespace MurderousPursuitHack.Windows
             }
         }
 
-        public int R
+        public byte R
         {
-            get => r;
+            get => color.r;
             set
             {
-                if (r != value)
+                if (color.r != value)
                 {
-                    r = value;
-                    Color = UpdateColor();
+                    color.r = value;
+                    OnColorChanged?.Invoke(this, new EventArgs());
                 }
             }
         }
 
-        public int G
+        public byte G
         {
-            get => g;
+            get => color.g;
             set
             {
-                if (g != value)
+                if (color.g != value)
                 {
-                    g = value;
-                    Color = UpdateColor();
+                    color.g = value;
+                    OnColorChanged?.Invoke(this, new EventArgs());
                 }
             }
         }
 
-        public int B
+        public byte B
         {
-            get => b;
+            get => color.b;
             set
             {
-                if (b != value)
+                if (color.b != value)
                 {
-                    b = value;
-                    Color = UpdateColor();
+                    color.b = value;
+                    OnColorChanged?.Invoke(this, new EventArgs());
                 }
             }
         }
 
-        public int A
+        public byte A
         {
-            get => a;
+            get => color.a;
             set
             {
-                if (a != value)
+                if (color.a != value)
                 {
-                    a = value;
-                    Color = UpdateColor();
+                    color.a = value;
+                    OnColorChanged?.Invoke(this, new EventArgs());
                 }
             }
-        }
-
-        private Color UpdateColor()
-        {
-            return new Color(r / 255f, g / 255f, b / 255f, a / 255f);
         }
     }
 }

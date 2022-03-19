@@ -9,9 +9,9 @@
     {
         public static HostOnlyWindow Instance { get; private set; }
 
-        public override void Start()
+        public override void Awake()
         {
-            base.Start();
+            base.Awake();
             Name = "HOST ONLY";
             Instance = this;
         }
@@ -26,7 +26,7 @@
         {
             Builder.StartSection("HOST ONLY", 220f);
             bool isHosting = HackManager.Instance.IsHost;
-            Settings.Current.ZeroExposure = Builder.Toggle(Settings.Current.ZeroExposure, DrawingHelper.DisplayKeybind("Zero Exposure", InputManager.Instance.Keybindings.ZeroExposure));
+            Settings.Current.ZeroExposure = Builder.Toggle(Settings.Current.ZeroExposure, "Zero Exposure");
             if (!isHosting)
             {
                 Builder.StartDisabled();

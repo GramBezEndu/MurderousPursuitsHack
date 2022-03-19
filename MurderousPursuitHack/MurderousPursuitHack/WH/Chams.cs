@@ -3,7 +3,6 @@
     using MurderousPursuitHack.Managers;
     using MurderousPursuitHack.Visuals;
     using ProjectX.Player;
-    using System;
     using UnityEngine;
 
     public class Chams : MonoBehaviour
@@ -28,24 +27,26 @@
         {
             glowShader = Shader.Find(GlowPath);
             neutralChams = CreateNeutralMaterial();
-            hunterChams = CloneMaterial(neutralChams, Settings.Current.HunterGlow.Color);
-            quarryChams = CloneMaterial(neutralChams, Settings.Current.QuarryGlow.Color);
-            localPlayerChams = CloneMaterial(neutralChams, Color.magenta);
+            Settings settings = Settings.Current;
+            hunterChams = CloneMaterial(neutralChams, settings.HunterGlow.Color);
+            quarryChams = CloneMaterial(neutralChams, settings.QuarryGlow.Color);
+            localPlayerChams = CloneMaterial(neutralChams, settings.LocalGlow.Color);
 
             SubscribeToChamsSettingsChange();
         }
 
         private void SubscribeToChamsSettingsChange()
         {
-            Settings.Current.OnQuarryChamsDisabled += (o, e) => ClearQuarryChams();
-            Settings.Current.OnLocalChamsDisabled += (o, e) => ClearLocalChams();
-            Settings.Current.OnHunterChamsDisabled += (o, e) => ClearHunterChams();
-            Settings.Current.OnNeutralChamsDisabled += (o, e) => ClearNeutralChams();
+            Settings settings = Settings.Current;
+            settings.OnQuarryChamsDisabled += (o, e) => ClearQuarryChams();
+            settings.OnLocalChamsDisabled += (o, e) => ClearLocalChams();
+            settings.OnHunterChamsDisabled += (o, e) => ClearHunterChams();
+            settings.OnNeutralChamsDisabled += (o, e) => ClearNeutralChams();
 
-            Settings.Current.NeutralGlow.OnColorChanged += (o, e) => neutralChams.SetColor("_Color", Settings.Current.NeutralGlow.Color);
-            Settings.Current.LocalGlow.OnColorChanged += (o, e) => localPlayerChams.SetColor("_Color", Settings.Current.LocalGlow.Color);
-            Settings.Current.QuarryGlow.OnColorChanged += (o, e) => quarryChams.SetColor("_Color", Settings.Current.QuarryGlow.Color);
-            Settings.Current.HunterGlow.OnColorChanged += (o, e) => hunterChams.SetColor("_Color", Settings.Current.HunterGlow.Color);
+            settings.NeutralGlow.OnColorChanged += (o, e) => neutralChams.SetColor("_Color", settings.NeutralGlow.Color);
+            settings.LocalGlow.OnColorChanged += (o, e) => localPlayerChams.SetColor("_Color", settings.LocalGlow.Color);
+            settings.QuarryGlow.OnColorChanged += (o, e) => quarryChams.SetColor("_Color", settings.QuarryGlow.Color);
+            settings.HunterGlow.OnColorChanged += (o, e) => hunterChams.SetColor("_Color", settings.HunterGlow.Color);
         }
 
         public void Update()
@@ -95,8 +96,24 @@
 
         private void UpdateGlow(PlayerData playerInfo)
         {
+            // TODO: Handle cases -> Quarry becoming neutral player and neutral chams disabled
             XPlayer player = playerInfo.Player;
             if (player.isLocalPlayer && Settings.Current.LocalChams == false)
+            {
+                return;
+            }
+
+            if (playerInfo.IsHunterForLocal && Settings.Current.HunterChams == false)
+            {
+                return;
+            }
+
+            if (playerInfo.IsQuarryForLocal && Settings.Current.QuarryChams == false)
+            {
+                return;
+            }
+
+            if (Settings.Current.NeutralChams == false && (!playerInfo.IsQuarryForLocal && !playerInfo.IsHunterForLocal))
             {
                 return;
             }
@@ -105,10 +122,7 @@
 
             for (int i = 0; i < allRenderers.Length; i++)
             {
-                if (Settings.Current.QuarryChams)
-                {
-                    ApplyChams(playerInfo, allRenderers, i);
-                }
+                ApplyChams(playerInfo, allRenderers, i);
             }
         }
 

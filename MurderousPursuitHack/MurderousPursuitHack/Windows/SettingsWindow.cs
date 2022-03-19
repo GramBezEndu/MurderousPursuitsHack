@@ -20,28 +20,35 @@
                 if (activeWindow != value)
                 {
                     activeWindow = value;
+                    ColorPickerWindow.Instance.SetContext(null);
                     ShowActiveWindow();
                 }
             }
         }
 
+        public override void Awake()
+        {
+            base.Awake();
+            Name = string.Empty;
+            Position = new Vector2(10f, 260f);
+            Size = new Vector2(160, 530);
+            ElementHeight = 45f;
+            ElementsMarginY = 30f;
+            Instance = this;
+        }
+
         public override void Start()
         {
             base.Start();
-            Name = string.Empty;
-            Position = new Vector2(10f, 260f);
-            Size = new Vector2(160, 460);
-            ElementHeight = 45f;
-            ElementsMarginY = 30f;
             Visible = Settings.Current.CheatsWindow;
             windows = new List<Window>()
             {
                 VisualsWindow.Instance,
                 MovementWindow.Instance,
                 MiscWindow.Instance,
+                Config.Instance,
             };
             OnVisibleChanged += (o, e) => OnVisibilityChanged();
-            Instance = this;
         }
 
         protected override void CreateElements(int windowID)
@@ -68,6 +75,11 @@
                 ActiveWindow = MiscWindow.Instance;
             }
 
+            if (ConfigSection(Builder))
+            {
+                ActiveWindow = Config.Instance;
+            }
+
             if (DebugSection(Builder))
             {
                 DebugWindow.Instance.Visible = !DebugWindow.Instance.Visible;
@@ -89,6 +101,11 @@
             return builder.Button("MOVEMENT");
         }
 
+        private bool ConfigSection(WindowBuilder builder)
+        {
+            return builder.Button("CONFIG");
+        }
+
         private bool DebugSection(WindowBuilder builder)
         {
             return builder.Button("DEBUG");
@@ -108,6 +125,7 @@
             else
             {
                 ActiveWindow.Visible = false;
+                ColorPickerWindow.Instance.SetContext(null);
             }
         }
 

@@ -2,7 +2,6 @@
 {
     using BG.UI;
     using BG.Utils;
-    using Opsive.ThirdPersonController;
     using ProjectX;
     using ProjectX.Levels;
     using ProjectX.Player;
@@ -17,7 +16,7 @@
     {
         public static HackManager Instance { get; private set; }
 
-        public void Start()
+        public void Awake()
         {
             Instance = this;
         }

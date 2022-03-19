@@ -9,9 +9,9 @@
     {
         public static MovementWindow Instance { get; private set; }
 
-        public override void Start()
+        public override void Awake()
         {
-            base.Start();
+            base.Awake();
             Name = "MOVEMENT";
             Instance = this;
         }
@@ -43,9 +43,7 @@
         private void TeleportsSection()
         {
             Builder.StartSection("TELEPORTS", 210f);
-            Settings.Current.AutoAttackAfterTeleport = Builder.Toggle(
-                Settings.Current.AutoAttackAfterTeleport,
-                DrawingHelper.DisplayKeybind("Auto attack after teleport", InputManager.Instance.Keybindings.AutoAttackAfterTeleport));
+            Settings.Current.AutoAttackAfterTeleport = Builder.Toggle(Settings.Current.AutoAttackAfterTeleport, "Auto attack after teleport");
 
             if (Builder.Button(DrawingHelper.DisplayKeybind("Teleport to Quarry", InputManager.Instance.Keybindings.TeleportToQuarry)))
             {

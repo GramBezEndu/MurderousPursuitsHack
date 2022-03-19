@@ -3,6 +3,7 @@
     using MurderousPursuitHack.Windows;
     using System;
     using System.Collections.Generic;
+    using UnityEngine;
 
     public class Settings
     {
@@ -11,7 +12,11 @@
         private static Settings Default { get; set; } = new Settings()
         {
             QuarryChams = true,
-            EspEnabled = true,
+            HunterChams = true,
+            NeutralChams = true,
+            QuarryEsp = true,
+            HunterEsp = true,
+            NeutralEsp = true,
             CheatsWindow = true,
             ZeroExposure = true,
         };
@@ -101,6 +106,7 @@
 
         public ColorData LocalGlow { get; set; } = new ColorData()
         {
+            Description = "LOCAL PLAYER GLOW",
             R = 0,
             G = 100,
             B = 0,
@@ -109,6 +115,7 @@
 
         public ColorData QuarryGlow { get; set; } = new ColorData()
         {
+            Description = "QUARRY GLOW",
             R = 0,
             G = 127,
             B = 178,
@@ -117,6 +124,7 @@
 
         public ColorData HunterGlow { get; set; } = new ColorData()
         {
+            Description = "HUNTER GLOW",
             R = 140,
             G = 0,
             B = 0,
@@ -125,6 +133,7 @@
 
         public ColorData NeutralGlow { get; set; } = new ColorData()
         {
+            Description = "NEUTRAL PLAYER GLOW",
             R = 0,
             G = 140,
             B = 0,
@@ -132,7 +141,34 @@
         };
 
         #endregion
+        #region Esp
+        public ColorData NeutralEspColor { get; set; } = new ColorData()
+        {
+            Description = "NEUTRAL PLAYER",
+            R = 0,
+            G = 140,
+            B = 0,
+            A = 255,
+        };
 
+        public ColorData QuarryEspColor { get; set; } = new ColorData()
+        {
+            Description = "QUARRY",
+            Color = Color.blue,
+        };
+
+        public ColorData HunterEspColor { get; set; } = new ColorData()
+        {
+            Description = "HUNTER",
+            Color = Color.red,
+        };
+
+        public bool QuarryEsp { get; set; }
+
+        public bool HunterEsp { get; set; }
+
+        public bool NeutralEsp { get; set; }
+        #endregion
         public int CurrentSpeedMultiplierIndex { get; set; } = 3;
 
         public float SpeedMultiplier { get => SpeedhackMultipliers[CurrentSpeedMultiplierIndex]; }
@@ -141,7 +177,7 @@
 
         public bool CheatsWindow { get; set; }
 
-        public bool EspEnabled { get; set; }
+        public bool DebugWindow { get; set; }
 
         public bool Speedhack { get; set; }
 

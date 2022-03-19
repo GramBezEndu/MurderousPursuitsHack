@@ -9,13 +9,19 @@
     {
         public static DebugWindow Instance { get; private set; }
 
-        public override void Start()
+        public override void Awake()
         {
-            base.Start();
+            base.Awake();
             Name = "DEBUG";
             Position = new Vector2(10f, 10f);
             Size = new Vector2(300f, 240f);
             Instance = this;
+        }
+
+        public override void Start()
+        {
+            base.Start();
+            Visible = Settings.Current.DebugWindow;
         }
 
         protected override void CreateElements(int windowID)

@@ -6,9 +6,9 @@ namespace MurderousPursuitHack.Windows
     {
         public static ColorPickerWindow Instance { get; private set; }
 
-        public override void Start()
+        public override void Awake()
         {
-            base.Start();
+            base.Awake();
             Name = "COLOR";
             Position = new Vector2(470f, 260f);
             Size = new Vector2(300f, 200f);
@@ -42,13 +42,13 @@ namespace MurderousPursuitHack.Windows
 
         private void BuildColorPicker(ColorData colorData)
         {
-            Builder.StartSection(string.Empty, 150f);
+            Builder.StartSection(colorData.Description, 150f);
             float cachedMargin = ElementsMarginY;
             ElementsMarginY = 1f;
-            colorData.R = Builder.LabelSlider("R", colorData.R, 0, 255, Builder.Styles.RedSlider);
-            colorData.G = Builder.LabelSlider("G", colorData.G, 0, 255, Builder.Styles.GreenSlider);
-            colorData.B = Builder.LabelSlider("B", colorData.B, 0, 255, Builder.Styles.BlueSlider);
-            colorData.A = Builder.LabelSlider("A", colorData.A, 0, 255, Builder.Styles.WhiteSlider);
+            colorData.R = (byte)Builder.LabelSlider("R", colorData.R, 0, 255, Builder.Styles.RedSlider);
+            colorData.G = (byte)Builder.LabelSlider("G", colorData.G, 0, 255, Builder.Styles.GreenSlider);
+            colorData.B = (byte)Builder.LabelSlider("B", colorData.B, 0, 255, Builder.Styles.BlueSlider);
+            colorData.A = (byte)Builder.LabelSlider("A", colorData.A, 0, 255, Builder.Styles.WhiteSlider);
             ElementsMarginY = cachedMargin;
             Builder.EndSection();
         }

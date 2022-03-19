@@ -1,6 +1,5 @@
 ﻿namespace MurderousPursuitHack.Drawing
 {
-    using System;
     using System.Collections.Generic;
     using UnityEngine;
 
@@ -34,7 +33,7 @@
 
         private readonly List<Texture2D> textures = new List<Texture2D>();
 
-        public void Init()
+        public void Initialize()
         {
             InitStyles();
         }

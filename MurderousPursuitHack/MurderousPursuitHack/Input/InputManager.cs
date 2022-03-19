@@ -14,7 +14,7 @@
 
         public Keybindings Keybindings { get; set; } = new Keybindings();
 
-        public void Start()
+        public void Awake()
         {
             Instance = this;
         }
@@ -38,16 +38,6 @@
             if (Input.GetKeyDown(Keybindings.CheatWindow))
             {
                 SettingsWindow.Instance.Visible = !SettingsWindow.Instance.Visible;
-            }
-
-            if (Input.GetKeyDown(Keybindings.Chams))
-            {
-                Settings.Current.QuarryChams = !Settings.Current.QuarryChams;
-            }
-
-            if (Input.GetKeyDown(Keybindings.PlayerESP))
-            {
-                Settings.Current.EspEnabled = !Settings.Current.EspEnabled;
             }
 
             if (Input.GetKeyDown(Keybindings.ChangeSkin))
@@ -93,11 +83,6 @@
 
         private void UpdateHostFeaturesKeys()
         {
-            if (Input.GetKeyDown(Keybindings.ZeroExposure))
-            {
-                Settings.Current.ZeroExposure = !Settings.Current.ZeroExposure;
-            }
-
             if (Input.GetKeyDown(Keybindings.PieBomb))
             {
                 Managers.AbilityManager.Instance.StartAbility<XPlacePieBomb>();

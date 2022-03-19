@@ -36,7 +36,7 @@
         {
             if (!initialized)
             {
-                Styles.Init();
+                Styles.Initialize();
                 initialized = true;
             }
 
@@ -256,7 +256,7 @@
                     break;
                 case Allignement.Left:
                 default:
-                    elementRectangle = 
+                    elementRectangle =
                         new Rect(CurrentElementPosition.x, CurrentElementPosition.y, window.Size.x * elementScale.x, window.ElementHeight * elementScale.y);
                     break;
             }

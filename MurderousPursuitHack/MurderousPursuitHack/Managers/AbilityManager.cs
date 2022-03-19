@@ -10,7 +10,7 @@
     {
         public static AbilityManager Instance { get; private set; }
 
-        public void Start()
+        public void Awake()
         {
             Instance = this;
         }

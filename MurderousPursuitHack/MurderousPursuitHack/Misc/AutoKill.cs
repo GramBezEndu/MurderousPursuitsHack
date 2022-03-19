@@ -10,7 +10,7 @@
 
         private float lastCache = 0f;
 
-        public void Start()
+        public void Awake()
         {
             enabled = false;
             Instance = this;

@@ -16,7 +16,7 @@
 
         public Vector2 Position { get; set; } = new Vector2(170, 260);
 
-        public Vector2 Size { get; set; } = new Vector2(300, 460);
+        public Vector2 Size { get; set; } = new Vector2(300, 530);
 
         public float ElementHeight { get; set; } = 30f;
 
@@ -39,12 +39,14 @@
 
         public WindowBuilder Builder { get; private set; }
 
-        public virtual void Start()
+        public virtual void Awake()
         {
             Id = GlobalId;
             GlobalId++;
             Builder = new WindowBuilder(this);
         }
+
+        public virtual void Start() { }
 
         public void OnGUI()
         {

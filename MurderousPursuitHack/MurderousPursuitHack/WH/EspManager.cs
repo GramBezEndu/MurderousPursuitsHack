@@ -13,17 +13,15 @@
 
         public void Start()
         {
-            quarry = CreateTextStyle(Colors.Quarry);
-            hunter = CreateTextStyle(Colors.Hunter);
-            neutral = CreateTextStyle(Colors.Neutral);
-        }
+            Settings settings = Settings.Current;
+            quarry = CreateTextStyle(settings.QuarryEspColor.Color);
+            hunter = CreateTextStyle(settings.HunterEspColor.Color);
+            neutral = CreateTextStyle(settings.NeutralEspColor.Color);
 
-        public EspColors Colors { get; set; } = new EspColors()
-        {
-            Quarry = Color.cyan,
-            Hunter = Color.red,
-            Neutral = Color.magenta,
-        };
+            settings.QuarryEspColor.OnColorChanged += (o, e) => quarry.normal.textColor = settings.QuarryEspColor.Color;
+            settings.HunterEspColor.OnColorChanged += (o, e) => hunter.normal.textColor = settings.HunterEspColor.Color;
+            settings.NeutralEspColor.OnColorChanged += (o, e) => neutral.normal.textColor = settings.NeutralEspColor.Color;
+        }
 
         public void OnGUI()
         {
@@ -38,10 +36,7 @@
                 return;
             }
 
-            if (Settings.Current.EspEnabled)
-            {
-                DrawPlayerESP();
-            }
+            DrawPlayerESP();
         }
 
         private void DrawPlayerESP()
@@ -65,6 +60,23 @@
                 }
 
                 if (!p.IsAlive)
+                {
+                    continue;
+                }
+
+                Settings settings = Settings.Current;
+
+                if (!settings.QuarryEsp && p.IsQuarryForLocal)
+                {
+                    continue;
+                }
+
+                if (!settings.HunterEsp && p.IsHunterForLocal)
+                {
+                    continue;
+                }
+
+                if (!settings.NeutralChams && (!p.IsHunterForLocal && !p.IsQuarryForLocal))
                 {
                     continue;
                 }
@@ -110,7 +122,7 @@
 
         private GUIStyle CreateTextStyle(Color color)
         {
-            var style = new GUIStyle
+            GUIStyle style = new GUIStyle
             {
                 fontStyle = FontStyle.Bold,
             };
