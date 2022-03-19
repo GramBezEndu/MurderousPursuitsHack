@@ -2,6 +2,7 @@
 {
     using MurderousPursuitHack.Managers;
     using MurderousPursuitHack.Movement;
+    using System.Linq;
     using UnityEngine;
 
     public class AutoKill : MonoBehaviour
@@ -44,7 +45,7 @@
                 return null;
             }
 
-            PlayerData target = HackManager.Instance.Players.Find(x => x.IsQuarryForLocal);
+            PlayerData target = HackManager.Instance.Players[HackManager.Instance.CurrentQuarry];
             if (target == null)
             {
                 target = Teleports.GetClosestHunter();

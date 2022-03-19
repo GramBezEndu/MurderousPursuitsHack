@@ -23,7 +23,7 @@
 
         public bool IsQuarryForLocal { get; set; }
 
-        public Vector3 Position { get; set; } = Vector3.zero;
+        public Transform Transform { get; set; }
 
         // Vector3 is needed to check if player is behind camera
         public Vector3 OnScreenPosition { get; set; } = Vector3.zero;

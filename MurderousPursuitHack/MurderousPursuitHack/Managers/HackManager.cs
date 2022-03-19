@@ -25,7 +25,7 @@
 
         public bool IsHost { get; private set; }
 
-        public List<PlayerData> Players { get; private set; } = new List<PlayerData>(8);
+        public Dictionary<uint, PlayerData> Players { get; private set; } = new Dictionary<uint, PlayerData>();
 
         public XPlayer LocalPlayer { get; private set; }
 
@@ -33,9 +33,11 @@
 
         public QuarryLocatorBarHUD QuarryBar { get; private set; }
 
-        public uint? CurrentQuarry { get; private set; }
+        public uint CurrentQuarry { get; private set; }
 
         public HunterHUD HunterHUD { get; private set; }
+
+        public List<PlayerData> Hunters { get; private set; } = new List<PlayerData>();
 
         public List<uint> HunterIDs { get; private set; } = new List<uint>();
 
@@ -77,11 +79,26 @@
                     BotIDs = Singleton<PlayerManager>.Instance.BotIDs;
                 }
 
-                UpdateHunterList();
-                UpdateCurrentQuarry();
+                HunterIDs = GetHunterIDs();
+                CurrentQuarry = GetQuarry();
                 Camera camera = Camera.main;
-                Players = CreatePlayerDataList(camera);
+                UpdatePlayersData(camera);
+                Hunters = UpdateHuntersList();
             }
+        }
+
+        private List<PlayerData> UpdateHuntersList()
+        {
+            List<PlayerData> hunters = new List<PlayerData>();
+            foreach (PlayerData playerData in Players.Values)
+            {
+                if (playerData.IsHunterForLocal)
+                {
+                    hunters.Add(playerData);
+                }
+            }
+
+            return hunters;
         }
 
         private void ClearData()
@@ -90,6 +107,9 @@
             QuarryBar = null;
             LocalPlayer = null;
             Players.Clear();
+            CurrentQuarry = 0;
+            HunterIDs.Clear();
+            Hunters.Clear();
         }
 
         private void FindHUD()
@@ -102,41 +122,47 @@
             }
         }
 
-        private List<PlayerData> CreatePlayerDataList(Camera camera)
+        private void UpdatePlayersData(Camera camera)
         {
-            List<PlayerData> playerDataList = new List<PlayerData>();
             if (Singleton<PlayerManager>.Instance.thePlayers == null)
             {
-                return playerDataList;
+                return;
             }
 
             foreach (XPlayer player in Singleton<PlayerManager>.Instance.thePlayers.Values)
             {
-                PlayerData playerData = CreatePlayerData(player, camera);
-                if (playerData != null)
+                if (Players.ContainsKey(player.PlayerID))
                 {
-                    playerDataList.Add(CreatePlayerData(player, camera));
+                    UpdatePlayerData(Players[player.PlayerID], player, camera);
+                }
+                else
+                {
+                    PlayerData playerData = CreatePlayerData(player, camera);
+                    if (playerData == null)
+                    {
+                        return;
+                    }
+
+                    Players.Add(player.PlayerID, playerData);
                 }
             }
-
-            return playerDataList;
         }
 
-        private void UpdateCurrentQuarry()
+        private uint GetQuarry()
         {
             if (QuarryBar != null)
             {
-                CurrentQuarry = (uint)(QuarryBar.GetFieldValue("quarryID"));
+                return (uint)(QuarryBar.GetFieldValue("quarryID"));
             }
             else
             {
-                CurrentQuarry = null;
+                return 0;
             }
         }
 
-        private void UpdateHunterList()
+        private List<uint> GetHunterIDs()
         {
-            HunterIDs.Clear();
+            List<uint> hunters = new List<uint>();
             if (HunterHUD != null)
             {
                 object hunterDetails = HunterHUD.GetFieldValue("hunterDetails");
@@ -146,11 +172,23 @@
                     foreach (object obj in (hunterDetails as IEnumerable))
                     {
                         Type objType = obj.GetType();
-                        HunterIDs.Add((uint)(objType.GetField("hunterID").GetValue(obj)));
+                        hunters.Add((uint)(objType.GetField("hunterID").GetValue(obj)));
                         objIndex++;
                     }
                 }
             }
+
+            return hunters;
+        }
+
+        private void UpdatePlayerData(PlayerData playerData, XPlayer player, Camera camera)
+        {
+            playerData.IsAlive = player.IsAlive;
+            playerData.IsHunterForLocal = HunterIDs.Contains(player.PlayerID);
+            playerData.IsQuarryForLocal = player.PlayerID == CurrentQuarry;
+            playerData.PlayerPerk = player.PlayerPerk;
+            playerData.DisplayName = SetDisplayName(playerData);
+            playerData.OnScreenPosition = camera.WorldToScreenPoint(playerData.Transform.position);
         }
 
         private PlayerData CreatePlayerData(XPlayer player, Camera camera)
@@ -174,14 +212,14 @@
                 IsHunterForLocal = HunterIDs.Contains(player.PlayerID),
                 IsQuarryForLocal = player.PlayerID == CurrentQuarry,
                 // Note: use characterTransform.position (not transform.position)
-                Position = characterTransform.position,
+                Transform = characterTransform,
                 CharacterMovement = xCharacterMovement,
                 CharacterAbilities = xCharacterMovement.Abilities,
                 PlayerPerk = player.PlayerPerk,
             };
 
             playerData.DisplayName = SetDisplayName(playerData);
-            playerData.OnScreenPosition = camera.WorldToScreenPoint(playerData.Position);
+            playerData.OnScreenPosition = camera.WorldToScreenPoint(playerData.Transform.position);
             return playerData;
         }
 

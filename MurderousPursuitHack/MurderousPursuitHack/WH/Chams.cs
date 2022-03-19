@@ -56,7 +56,7 @@
                 return;
             }
 
-            foreach (PlayerData playerInfo in HackManager.Instance.Players)
+            foreach (PlayerData playerInfo in HackManager.Instance.Players.Values)
             {
                 UpdateGlow(playerInfo);
             }
@@ -161,7 +161,7 @@
 
         private void ClearQuarryChams()
         {
-            foreach (PlayerData playerData in HackManager.Instance.Players)
+            foreach (PlayerData playerData in HackManager.Instance.Players.Values)
             {
                 XPlayer player = playerData.Player;
                 if (playerData.IsQuarryForLocal)
@@ -173,7 +173,7 @@
 
         private void ClearHunterChams()
         {
-            foreach (PlayerData playerData in HackManager.Instance.Players)
+            foreach (PlayerData playerData in HackManager.Instance.Players.Values)
             {
                 XPlayer player = playerData.Player;
                 if (playerData.IsHunterForLocal)
@@ -185,7 +185,7 @@
 
         private void ClearNeutralChams()
         {
-            foreach (PlayerData playerData in HackManager.Instance.Players)
+            foreach (PlayerData playerData in HackManager.Instance.Players.Values)
             {
                 XPlayer player = playerData.Player;
                 if (!playerData.IsHunterForLocal && !playerData.IsHunterForLocal)

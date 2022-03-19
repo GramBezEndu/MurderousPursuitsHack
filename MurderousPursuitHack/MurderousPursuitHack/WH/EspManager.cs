@@ -41,7 +41,7 @@
 
         private void DrawPlayerESP()
         {
-            foreach (PlayerData p in HackManager.Instance.Players)
+            foreach (PlayerData p in HackManager.Instance.Players.Values)
             {
                 // Unity returns Vector3.zero when out off screen
                 if (p.OnScreenPosition == Vector3.zero)
@@ -112,7 +112,7 @@
 
         private int DistanceToLocalPlayer(PlayerData p)
         {
-            return (int)Vector3.Distance(HackManager.Instance.LocalPlayer.transform.position, p.Position);
+            return (int)Vector3.Distance(HackManager.Instance.LocalPlayer.transform.position, p.Transform.position);
         }
 
         private string FormatDistance(int distance)

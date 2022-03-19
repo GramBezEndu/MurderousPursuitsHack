@@ -3,6 +3,7 @@
     using ProjectX.Abilities;
     using ProjectX.Player;
     using System;
+    using System.Linq;
     using System.Reflection;
     using UnityEngine;
 
@@ -22,7 +23,7 @@
                 return false;
             }
 
-            PlayerData playerData = HackManager.Instance.Players.Find(x => x.IsLocalPlayer);
+            PlayerData playerData = HackManager.Instance.Players[HackManager.Instance.LocalPlayerId];
             if (playerData == null)
             {
                 return false;
@@ -45,7 +46,7 @@
                 return false;
             }
 
-            PlayerData playerData = HackManager.Instance.Players.Find(x => x.IsLocalPlayer);
+            PlayerData playerData = HackManager.Instance.Players[HackManager.Instance.LocalPlayerId];
             if (playerData == null)
             {
                 return false;
@@ -85,7 +86,7 @@
                 return false;
             }
 
-            PlayerData playerData = HackManager.Instance.Players.Find(x => x.IsLocalPlayer);
+            PlayerData playerData = HackManager.Instance.Players[HackManager.Instance.LocalPlayerId];
             if (playerData == null)
             {
                 return false;

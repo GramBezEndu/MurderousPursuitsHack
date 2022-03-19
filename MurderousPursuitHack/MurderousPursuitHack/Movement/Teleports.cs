@@ -14,7 +14,7 @@
                 return false;
             }
 
-            PlayerData target = HackManager.Instance.Players.Find(x => x.IsQuarryForLocal);
+            PlayerData target = HackManager.Instance.Players[HackManager.Instance.CurrentQuarry];
             if (target == null)
             {
                 return false;
@@ -46,7 +46,7 @@
                 return false;
             }
 
-            PlayerData quarry = HackManager.Instance.Players.Find(x => x.IsQuarryForLocal);
+            PlayerData quarry = HackManager.Instance.Players[HackManager.Instance.CurrentQuarry];
             if (quarry == null)
             {
                 return false;
@@ -73,7 +73,7 @@
 
         public static bool TeleportPlayerToLocal(PlayerData from, bool attackAutomatically)
         {
-            if (TeleportPlayer(from, HackManager.Instance.Players.Find(x => x.IsLocalPlayer).Position))
+            if (TeleportPlayer(from, HackManager.Instance.Players[HackManager.Instance.LocalPlayerId].Transform.position))
             {
                 if (attackAutomatically)
                 {
@@ -92,7 +92,7 @@
 
         private static bool TeleportLocalToPlayer(PlayerData to, bool attackAutomatically)
         {
-            if (TeleportLocalPlayer(to.Position))
+            if (TeleportLocalPlayer(to.Transform.position))
             {
                 if (attackAutomatically)
                 {
@@ -111,7 +111,7 @@
 
         private static bool TeleportLocalPlayer(Vector3 position)
         {
-            return TeleportPlayer(HackManager.Instance.Players.Find(x => x.IsLocalPlayer), position);
+            return TeleportPlayer(HackManager.Instance.Players[HackManager.Instance.LocalPlayerId], position);
         }
 
         private static bool TeleportPlayer(PlayerData playerData, Vector3 position)
@@ -133,7 +133,7 @@
 
         public static PlayerData GetClosestHunter()
         {
-            PlayerData[] hunters = HackManager.Instance.Players.FindAll(x => x.IsHunterForLocal).ToArray();
+            PlayerData[] hunters = HackManager.Instance.Hunters.ToArray();
             if (hunters == null || hunters.Length == 0)
             {
                 return null;
@@ -148,7 +148,7 @@
             float[] distanceData = new float[hunters.Length];
             for (int i = 0; i < hunters.Length; i++)
             {
-                distanceData[i] = Vector3.Distance(localPosition, hunters[i].Position);
+                distanceData[i] = Vector3.Distance(localPosition, hunters[i].Transform.position);
             }
 
             float minDistance = distanceData.Min();

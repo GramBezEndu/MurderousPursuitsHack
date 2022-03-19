@@ -2,6 +2,7 @@
 {
     using MurderousPursuitHack.Managers;
     using ProjectX.Player;
+    using System.Linq;
     using UnityEngine;
 
     public class SpeedhackManager : MonoBehaviour
@@ -52,7 +53,7 @@
 
         public void EnableSpeedhack()
         {
-            PlayerData local = HackManager.Instance.Players.Find(x => x.IsLocalPlayer);
+            PlayerData local = HackManager.Instance.Players[HackManager.Instance.LocalPlayerId];
             float multiplier = Settings.Current.SpeedMultiplier;
 
             local.CharacterMovement.SetFieldValue("defaultRunMoveSpeed", multiplier * defaultRunMoveSpeed);
@@ -66,7 +67,7 @@
 
         public void DisableSpeedhack()
         {
-            PlayerData local = HackManager.Instance.Players.Find(x => x.IsLocalPlayer);
+            PlayerData local = HackManager.Instance.Players[HackManager.Instance.LocalPlayerId];
             local.CharacterMovement.SetFieldValue("defaultRunMoveSpeed", defaultRunMoveSpeed);
             local.CharacterMovement.SetFieldValue("defaultFastWalkMoveSpeed", defaultFastWalkMoveSpeed);
             local.CharacterMovement.SetFieldValue("nimbleRunMoveSpeed", nimbleRunMoveSpeed);
@@ -93,7 +94,7 @@
                 return false;
             }
 
-            XCharacterMovement characterMovement = HackManager.Instance.Players[0].CharacterMovement;
+            XCharacterMovement characterMovement = HackManager.Instance.Players.Values.First().CharacterMovement;
             defaultRunMoveSpeed = (float)(characterMovement.GetFieldValue("defaultRunMoveSpeed"));
             defaultFastWalkMoveSpeed = (float)(characterMovement.GetFieldValue("defaultFastWalkMoveSpeed"));
 
