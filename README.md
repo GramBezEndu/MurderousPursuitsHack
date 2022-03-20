@@ -4,7 +4,7 @@
 
 Mod for "Murderous Pursuits". Tested on <b>1.7.0</b> version of the game.
 
-[![Video unavailable :(](http://img.youtube.com/vi/59iM_78QYgI/0.jpg)](https://youtu.be/59iM_78QYgI)
+[![Video unavailable :(](http://img.youtube.com/vi/WeWN4Axz8Dw/0.jpg)](https://youtu.be/WeWN4Axz8Dw)
 
 ### Main Features:
 - Chams
