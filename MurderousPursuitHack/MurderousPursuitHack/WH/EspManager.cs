@@ -76,7 +76,7 @@
                     continue;
                 }
 
-                if (!settings.NeutralChams && (!p.IsHunterForLocal && !p.IsQuarryForLocal))
+                if (!settings.NeutralEsp && (!p.IsHunterForLocal && !p.IsQuarryForLocal))
                 {
                     continue;
                 }

@@ -3,10 +3,17 @@
     using ProjectX.Abilities;
     using ProjectX.Perks;
     using ProjectX.Player;
+    using System;
     using UnityEngine;
 
     public class PlayerData
     {
+        public event EventHandler OnPlayerTypeChanged;
+
+        private bool isHunterForLocal;
+
+        private bool isQuarryForLocal;
+
         public uint PlayerId { get; set; }
 
         public XPlayer Player { get; set; }
@@ -19,9 +26,31 @@
 
         public bool IsLocalPlayer { get; set; }
 
-        public bool IsHunterForLocal { get; set; }
+        public bool IsHunterForLocal 
+        { 
+            get => isHunterForLocal;
+            set
+            {
+                if (isHunterForLocal != value)
+                {
+                    isHunterForLocal = value;
+                    OnPlayerTypeChanged?.Invoke(this, new EventArgs());
+                }
+            }
+        }
 
-        public bool IsQuarryForLocal { get; set; }
+        public bool IsQuarryForLocal 
+        { 
+            get => isQuarryForLocal; 
+            set
+            {
+                if (isQuarryForLocal != value)
+                {
+                    isQuarryForLocal = value;
+                    OnPlayerTypeChanged?.Invoke(this, new EventArgs());
+                }
+            }
+        }
 
         public Transform Transform { get; set; }
 
