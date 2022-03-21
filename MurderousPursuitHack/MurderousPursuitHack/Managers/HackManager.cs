@@ -2,6 +2,7 @@
 {
     using BG.UI;
     using BG.Utils;
+    using MurderousPursuitHack.Players;
     using ProjectX;
     using ProjectX.Levels;
     using ProjectX.Player;
@@ -17,6 +18,8 @@
         private bool inGame;
 
         private GameObject canvasGameplayHUD;
+
+        public event EventHandler<PlayerArgs> OnPlayerTypeChanged;
 
         public static HackManager Instance { get; private set; }
 
@@ -93,7 +96,12 @@
 
                 HunterIDs = GetHunterIDs();
                 QuarryId = GetQuarry();
-                Camera camera = Camera.main;
+                Camera camera = Opsive.ThirdPersonController.Utility.GetComponentForType<XPlayerCamera>(this.LocalPlayer.gameObject).PlayerCamera;
+                if (camera == null)
+                {
+                    return;
+                }
+
                 UpdatePlayersData(camera);
                 AliveHunters = UpdateHuntersList();
             }
@@ -239,6 +247,7 @@
 
             playerData.DisplayName = SetDisplayName(playerData);
             playerData.OnScreenPosition = camera.WorldToScreenPoint(playerData.Transform.position);
+            playerData.OnPlayerTypeChanged += (o, e) => OnPlayerTypeChanged?.Invoke(this, new PlayerArgs(playerData));
             return playerData;
         }
 

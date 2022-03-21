@@ -1,8 +1,10 @@
 ﻿namespace MurderousPursuitHack.WH
 {
     using MurderousPursuitHack.Managers;
+    using MurderousPursuitHack.Players;
     using MurderousPursuitHack.Visuals;
     using ProjectX.Player;
+    using System;
     using UnityEngine;
 
     public class Chams : MonoBehaviour
@@ -32,6 +34,7 @@
             quarryChams = CloneMaterial(neutralChams, settings.QuarryGlow.Color);
             localPlayerChams = CloneMaterial(neutralChams, settings.LocalGlow.Color);
 
+            HackManager.Instance.OnPlayerTypeChanged += (o, e) => HandlePlayerTypeChanged(e);
             SubscribeToChamsSettingsChange();
         }
 
@@ -199,6 +202,24 @@
         {
             XPlayer player = HackManager.Instance.LocalPlayer;
             Skins.RestoreSkin(player);
+        }
+
+        private void HandlePlayerTypeChanged(PlayerArgs e)
+        {
+            Settings settings = Settings.Current;
+
+            if (e.PlayerData.IsHunterForLocal && !settings.HunterChams)
+            {
+                Skins.RestoreSkin(e.PlayerData.Player);
+            }
+            else if (e.PlayerData.IsQuarryForLocal && !settings.QuarryChams)
+            {
+                Skins.RestoreSkin(e.PlayerData.Player);
+            }
+            else if (!e.PlayerData.IsQuarryForLocal && !e.PlayerData.IsHunterForLocal && !e.PlayerData.IsLocalPlayer && !settings.NeutralChams)
+            {
+                Skins.RestoreSkin(e.PlayerData.Player);
+            }
         }
     }
 }
